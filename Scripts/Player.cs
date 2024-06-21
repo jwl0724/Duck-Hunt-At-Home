@@ -2,14 +2,21 @@ using Godot;
 using System;
 
 public partial class Player : CharacterBody3D
-{
+{	// exported variables
 	[Export] public float Gravity = -20f;
 	[Export] public float Speed = 100f;
 	[Export] public float JumpSpeed = 12.5f;
 	[Export] public float MouseSensitivity = 0.1f;
+	[Export] public int Health = 300;
+	[Export] public int Attack = 25;
+
+	// signals
+	[Signal] public delegate void PlayerShootEventHandler();
+
+	// instance variables
 	private Vector3 direction = new();
 	private Camera3D camera;
-
+	
 	public override void _Ready() {
 		camera = GetNode<Camera3D>("Camera");
 		Input.MouseMode = Input.MouseModeEnum.Captured;
@@ -55,7 +62,7 @@ public partial class Player : CharacterBody3D
 		velocity = velocity.Lerp(direction * Speed, 5);
 		float Xcomponent = velocity.X * delta;
 		float Zcomponent = velocity.Z * delta;
-		
+
 		Velocity = new(Xcomponent, Ycomponent, Zcomponent);		
 		MoveAndSlide();
 	}
@@ -67,7 +74,7 @@ public partial class Player : CharacterBody3D
 		// handle up/down camera movement
 		float rotationDegreesX = Mathf.Clamp(
 			Mathf.DegToRad(-movement.Relative.Y * MouseSensitivity) + camera.Rotation.X, 
-			Mathf.DegToRad(-75), Mathf.DegToRad(75)
+			Mathf.DegToRad(-85), Mathf.DegToRad(85)
 		);
 
 		// normalize vector components
