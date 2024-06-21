@@ -3,40 +3,79 @@ using System;
 
 public partial class Player : CharacterBody3D
 {
-	public const float Speed = 5.0f;
-	public const float JumpVelocity = 4.5f;
+	[Export] public float Gravity = -20f;
+	[Export] public float MaxSpeed = 20f;
+	[Export] public float JumpSpeed = 18f;
+	[Export] public float Acceleration = 5f;
+	[Export] public float Decceleration = 15f;
+	[Export] public float MouseSensitivity = 0.05f;
+	[Export] public float MaxSlopAngle = 40f;
+	private Vector3 direction = new();
+	private Camera3D camera;
 
-	// Get the gravity from the project settings to be synced with RigidBody nodes.
-	public float gravity = ProjectSettings.GetSetting("physics/3d/default_gravity").AsSingle();
+	public override void _Ready() {
+		camera = GetNode<Camera3D>("Camera");
+		Input.MouseMode = Input.MouseModeEnum.Captured;
+	}
 
-	public override void _PhysicsProcess(double delta)
-	{
-		Vector3 velocity = Velocity;
+	public override void _PhysicsProcess(double delta) {
+		ProcessInput();
+		ProcessMovement((float) delta);
+	}
 
-		// Add the gravity.
-		if (!IsOnFloor())
-			velocity.Y -= gravity * (float)delta;
+	public override void _Input(InputEvent mouseMovement) {
+		if (mouseMovement is not InputEventMouseMotion) return;
+		if (Input.MouseMode != Input.MouseModeEnum.Captured) return;
+		ProcessMouse(mouseMovement as InputEventMouseMotion);
+	}
 
-		// Handle Jump.
-		if (Input.IsActionJustPressed("ui_accept") && IsOnFloor())
-			velocity.Y = JumpVelocity;
+	private void ProcessInput() {
+		direction = new();
+		Vector2 groundVector = new();
+		if (Input.IsActionPressed("forward")) groundVector.Y += 1;
+		if (Input.IsActionPressed("backward")) groundVector.Y -= 1;
+		if (Input.IsActionPressed("left")) groundVector.X -= 1;
+		if (Input.IsActionPressed("right")) groundVector.X += 1;
+		groundVector = groundVector.Normalized();
 
-		// Get the input direction and handle the movement/deceleration.
-		// As good practice, you should replace UI actions with custom gameplay actions.
-		Vector2 inputDir = Input.GetVector("ui_left", "ui_right", "ui_up", "ui_down");
-		Vector3 direction = (Transform.Basis * new Vector3(inputDir.X, 0, inputDir.Y)).Normalized();
-		if (direction != Vector3.Zero)
-		{
-			velocity.X = direction.X * Speed;
-			velocity.Z = direction.Z * Speed;
+		// check if player jumped
+		if (IsOnFloor()) {
+			if (Input.IsActionJustPressed("jump")) 
+				Velocity = new Vector3(Velocity.X, JumpSpeed, Velocity.Z);
 		}
-		else
-		{
-			velocity.X = Mathf.MoveToward(Velocity.X, 0, Speed);
-			velocity.Z = Mathf.MoveToward(Velocity.Z, 0, Speed);
-		}
 
-		Velocity = velocity;
+		// TODO: why????
+		Transform3D cameraPosition = camera.GetCameraTransform();
+		direction += cameraPosition.Basis.X * groundVector.X;
+		direction += cameraPosition.Basis.Y * groundVector.Y;
+
+		// pause game (free cursor)
+		if (Input.IsActionJustPressed("pause")) {
+			if (Input.MouseMode == Input.MouseModeEnum.Visible)
+				Input.MouseMode = Input.MouseModeEnum.Captured;
+			else Input.MouseMode = Input.MouseModeEnum.Visible;
+		}
+	}
+
+	private void ProcessMovement(float delta) {
+		float Ycomponent = delta * Gravity + Velocity.Y;
+
+		// TODO: WHY??????
+		float acceleration;
+		Vector3 interpolatedVector = new(Velocity.X, 0, Velocity.Z);
+		if (direction.Dot(Velocity) > 0) acceleration = Acceleration;
+		else acceleration = Decceleration;
+		
+		interpolatedVector = interpolatedVector.Lerp(direction * MaxSpeed, acceleration);
+		float Xcomponent = interpolatedVector.X;
+		float Zcomponent = interpolatedVector.Z;
+		Velocity = new(Xcomponent, Ycomponent, Zcomponent);
+
 		MoveAndSlide();
+	}
+
+	private void ProcessMouse(InputEventMouseMotion movement) {
+		camera.RotateX(Mathf.DegToRad(movement.Relative.Y * MouseSensitivity));
+		camera.RotateY(Mathf.DegToRad(-movement.Relative.X * MouseSensitivity));
 	}
 }
