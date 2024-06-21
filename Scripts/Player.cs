@@ -4,12 +4,9 @@ using System;
 public partial class Player : CharacterBody3D
 {
 	[Export] public float Gravity = -20f;
-	[Export] public float MaxSpeed = 20f;
-	[Export] public float JumpSpeed = 18f;
-	[Export] public float Acceleration = 5f;
-	[Export] public float Decceleration = 15f;
-	[Export] public float MouseSensitivity = 0.05f;
-	[Export] public float MaxSlopAngle = 40f;
+	[Export] public float Speed = 50f;
+	[Export] public float JumpSpeed = 14f;
+	[Export] public float MouseSensitivity = 0.1f;
 	private Vector3 direction = new();
 	private Camera3D camera;
 
@@ -60,22 +57,26 @@ public partial class Player : CharacterBody3D
 	private void ProcessMovement(float delta) {
 		float Ycomponent = delta * Gravity + Velocity.Y;
 
-		// TODO: WHY??????
-		float acceleration;
-		Vector3 interpolatedVector = new(Velocity.X, 0, Velocity.Z);
-		if (direction.Dot(Velocity) > 0) acceleration = Acceleration;
-		else acceleration = Decceleration;
-		
-		interpolatedVector = interpolatedVector.Lerp(direction * MaxSpeed, acceleration);
-		float Xcomponent = interpolatedVector.X;
-		float Zcomponent = interpolatedVector.Z;
+		// TODO: WHY??????	
+		float Xcomponent = direction.X * Speed * delta;
+		float Zcomponent = direction.Z * Speed * delta;
 		Velocity = new(Xcomponent, Ycomponent, Zcomponent);
 
 		MoveAndSlide();
 	}
 
 	private void ProcessMouse(InputEventMouseMotion movement) {
-		camera.RotateX(Mathf.DegToRad(movement.Relative.Y * MouseSensitivity));
-		camera.RotateY(Mathf.DegToRad(-movement.Relative.X * MouseSensitivity));
+		// handle left/right camera movement
+		float rotationDegreesY = camera.Rotation.Y + Mathf.DegToRad(-movement.Relative.X * MouseSensitivity);
+
+		// handle up/down camera movement
+		float rotationDegreesX = Mathf.Clamp(
+			Mathf.DegToRad(-movement.Relative.Y * MouseSensitivity) + camera.Rotation.X, 
+			Mathf.DegToRad(-75), Mathf.DegToRad(75)
+		);
+
+		// normalize vector components
+		Vector2 normalizeVectors = new(rotationDegreesX, rotationDegreesY);
+		camera.Rotation = new Vector3(normalizeVectors.X, normalizeVectors.Y, 0);
 	}
 }
