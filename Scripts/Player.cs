@@ -4,8 +4,8 @@ using System;
 public partial class Player : CharacterBody3D
 {
 	[Export] public float Gravity = -20f;
-	[Export] public float Speed = 50f;
-	[Export] public float JumpSpeed = 14f;
+	[Export] public float Speed = 100f;
+	[Export] public float JumpSpeed = 12.5f;
 	[Export] public float MouseSensitivity = 0.1f;
 	private Vector3 direction = new();
 	private Camera3D camera;
@@ -28,12 +28,6 @@ public partial class Player : CharacterBody3D
 
 	private void ProcessInput() {
 		direction = new();
-		Vector2 groundVector = new();
-		if (Input.IsActionPressed("forward")) groundVector.Y += 1;
-		if (Input.IsActionPressed("backward")) groundVector.Y -= 1;
-		if (Input.IsActionPressed("left")) groundVector.X -= 1;
-		if (Input.IsActionPressed("right")) groundVector.X += 1;
-		groundVector = groundVector.Normalized();
 
 		// check if player jumped
 		if (IsOnFloor()) {
@@ -41,10 +35,9 @@ public partial class Player : CharacterBody3D
 				Velocity = new Vector3(Velocity.X, JumpSpeed, Velocity.Z);
 		}
 
-		// TODO: why????
-		Transform3D cameraPosition = camera.GetCameraTransform();
-		direction += cameraPosition.Basis.X * groundVector.X;
-		direction += cameraPosition.Basis.Y * groundVector.Y;
+		// Account for camera rotation (multiply Basis by input vector = always forward)
+		Vector2 inputVector = Input.GetVector("left", "right", "forward", "backward");
+		direction = camera.Transform.Basis * new Vector3(inputVector.X, 0, inputVector.Y);
 
 		// pause game (free cursor)
 		if (Input.IsActionJustPressed("pause")) {
@@ -57,11 +50,13 @@ public partial class Player : CharacterBody3D
 	private void ProcessMovement(float delta) {
 		float Ycomponent = delta * Gravity + Velocity.Y;
 
-		// TODO: WHY??????	
-		float Xcomponent = direction.X * Speed * delta;
-		float Zcomponent = direction.Z * Speed * delta;
-		Velocity = new(Xcomponent, Ycomponent, Zcomponent);
-
+		// interpolate for smoother movement
+		Vector3 velocity = Velocity;
+		velocity = velocity.Lerp(direction * Speed, 5);
+		float Xcomponent = velocity.X * delta;
+		float Zcomponent = velocity.Z * delta;
+		
+		Velocity = new(Xcomponent, Ycomponent, Zcomponent);		
 		MoveAndSlide();
 	}
 
