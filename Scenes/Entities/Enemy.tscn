@@ -12,6 +12,8 @@ radius = 0.8
 radius = 0.45
 
 [node name="Enemy" type="CharacterBody3D"]
+collision_layer = 0
+floor_constant_speed = true
 script = ExtResource("1_dxy1a")
 metadata/_edit_group_ = true
 
@@ -33,3 +35,4 @@ script = ExtResource("3_u2o6a")
 shape = SubResource("CylinderShape3D_24c10")
 
 [node name="Model" parent="." instance=ExtResource("1_g0gds")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0)
