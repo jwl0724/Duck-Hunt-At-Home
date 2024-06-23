@@ -1,6 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://co8ky5tqvx0io"]
+[gd_scene load_steps=7 format=3 uid="uid://co8ky5tqvx0io"]
 
 [ext_resource type="PackedScene" uid="uid://bjxi3yjg0rb46" path="res://Scenes/Entities/Player.tscn" id="1_hki0v"]
+[ext_resource type="Script" path="res://Scripts/GameManager.cs" id="1_qhil5"]
+[ext_resource type="PackedScene" uid="uid://g7arj8tp83bn" path="res://Scenes/Entities/Enemy.tscn" id="1_t4ccb"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_qnmof"]
 size = Vector3(100, 0, 100)
@@ -8,13 +10,33 @@ size = Vector3(100, 0, 100)
 [sub_resource type="BoxMesh" id="BoxMesh_wmei1"]
 size = Vector3(100, 0, 100)
 
-[sub_resource type="CapsuleMesh" id="CapsuleMesh_ocbgj"]
-radius = 1.955
-height = 20.182
+[sub_resource type="Environment" id="Environment_tqbxr"]
+ambient_light_source = 3
+ambient_light_color = Color(1, 1, 1, 1)
+ambient_light_sky_contribution = 0.5
+ambient_light_energy = 1.25
+reflected_light_source = 2
+glow_enabled = true
+glow_normalized = true
+glow_intensity = 0.42
+glow_strength = 1.26
+fog_light_color = Color(0, 0.85098, 1, 1)
+fog_light_energy = 3.47
+fog_sun_scatter = 0.15
+fog_sky_affect = 0.88
+volumetric_fog_enabled = true
+volumetric_fog_albedo = Color(0.0941176, 0.686275, 1, 1)
+volumetric_fog_emission = Color(0.52549, 1, 1, 1)
+volumetric_fog_emission_energy = 2.0
+volumetric_fog_detail_spread = 0.803831
+volumetric_fog_ambient_inject = 1.2
 
 [node name="TestLevel" type="Node"]
+script = ExtResource("1_qhil5")
 
 [node name="Player" parent="." instance=ExtResource("1_hki0v")]
+Speed = 100.0
+JumpSpeed = 10.0
 
 [node name="Ground" type="StaticBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
@@ -25,10 +47,13 @@ shape = SubResource("BoxShape3D_qnmof")
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Ground"]
 mesh = SubResource("BoxMesh_wmei1")
 
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+[node name="Enemy" parent="." instance=ExtResource("1_t4ccb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 5.40761)
+motion_mode = 1
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_tqbxr")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="WorldEnvironment"]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 25, 0)
 shadow_enabled = true
-
-[node name="CSGMesh3D" type="CSGMesh3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.49461, 23.4769)
-mesh = SubResource("CapsuleMesh_ocbgj")
