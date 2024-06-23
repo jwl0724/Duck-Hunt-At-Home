@@ -7,8 +7,6 @@ public partial class EnemyAnimator : Node {
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready() {
 		animator = GetNode<AnimationPlayer>("Animation");
-		
-		// connect shoot signal 
 		Connect("EnemyShoot", Callable.From(() => animator.Play("shoot")));
 	}
 
