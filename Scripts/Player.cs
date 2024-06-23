@@ -12,6 +12,7 @@ public partial class Player : CharacterBody3D
 
 	// signals
 	[Signal] public delegate void PlayerShootEventHandler();
+	[Signal] public delegate void PlayerDiedEventHandler();
 
 	// instance variables
 	private Vector3 direction = new();
@@ -23,6 +24,10 @@ public partial class Player : CharacterBody3D
 	}
 
 	public override void _PhysicsProcess(double delta) {
+		if (Health <= 0) {
+			EmitSignal(SignalName.PlayerDied);
+			return;
+		}
 		ProcessInput();
 		ProcessMovement((float) delta);
 	}
@@ -43,6 +48,7 @@ public partial class Player : CharacterBody3D
 		}
 
 		// Account for camera rotation (multiply Basis by input vector = always forward)
+		// TODO: FIX BUG WHERE LOOKING DOWN CAUSES FORWARD MOVEMENT TO SLOW
 		Vector2 inputVector = Input.GetVector("left", "right", "forward", "backward");
 		direction = camera.Transform.Basis * new Vector3(inputVector.X, 0, inputVector.Y);
 
