@@ -2,18 +2,20 @@ using Godot;
 using System;
 
 public partial class Enemy : CharacterBody3D {
-	[Export] public float Gravity = -5f;
-	
+	// exported variables
+	[Export] public float FallSpeed = -35f; // different from gravity, constant fall rate
+
 	// signals
 	[Signal] public delegate void EnemyShootEventHandler();
 	[Signal] public delegate void EnemyDiedEventHandler();
 	
 	// instance variables
-	public int Health { get; private set; }
-	public int Attack { get; private set; }
-	public float Speed { get; private set; }
-	private Vector3 direction = new();
+	public int Health { get; private set; } = 500;
+	public int Attack { get; private set; } = 50;
+	public float Speed { get; private set; } = 90;
+	private Vector3 direction = new(0, 0, 0);
 	private EnemyType type;
+	private CharacterBody3D player;
 
 	// timers
 	private float attackTimer = 0;
@@ -28,18 +30,33 @@ public partial class Enemy : CharacterBody3D {
 	}
 
     public override void _Ready() {
-        // Add stuff later depending on whats needed later
+		player = GetParent().GetNode<CharacterBody3D>("Player");
     }
 
 	public void SetEnemyProperties(EnemyType type) {
 		if (type == EnemyType.Melee) {
-			
+			Health = 500;
+			Speed = 90;
+			Attack = 50;
+
 		} else if (type == EnemyType.Charger) {
+			Health = 400;
+			Speed = 70;
+			Attack = 75;
+			attackCD = 10f;
 
 		} else if (type == EnemyType.Shooter) {
+			Health = 300;
+			Speed = 50;
+			Attack = 30;
+			attackCD = 2.5f;
 
 		} else {
-
+			// boss properties
+			Health = 2000;
+			Speed = 80;
+			Attack = 100;
+			attackCD = 5f;
 		}
 	}
 
@@ -51,15 +68,46 @@ public partial class Enemy : CharacterBody3D {
 		}
 		ProcessAttack((float) delta);
         ProcessMovement((float) delta);
+		ProcessVisuals();
     }
 
+	// SIGNAL HANDLERS
+	private void OnShot(int damage, bool headshot = false) {
+		if (headshot) Health -= damage * 2;
+		else Health -= damage;
+	}
+
+	// HELPER FUNCTIONS
 	private void ProcessAttack(float delta) {
-		if (attackTimer >= attackCD) 
-			EmitSignal(SignalName.EnemyShoot);
-		else attackTimer += delta;
+		if (type == EnemyType.Melee) return;
+		if (type == EnemyType.Shooter) {
+			if (attackTimer >= attackCD) {
+				EmitSignal(SignalName.EnemyShoot);
+				attackTimer = 0;
+			}
+		} else if (type == EnemyType.Charger) {
+			
+		} else {
+			// handle boss attacks
+		}
+		
+		attackTimer += delta;
+	}
+
+	private void ProcessVisuals() {		
+		LookAt(player.Position);
+		Rotation = new Vector3(0, Rotation.Y, 0);
 	}
 
 	private void ProcessMovement(float delta) {
+		float Ycomponent;
+		if (!IsOnFloor()) Ycomponent = FallSpeed * delta;
+		else Ycomponent = 0;
+		
+		Vector3 playerPosition = player.Position;
+		direction = Position.DirectionTo(playerPosition);
+		
+		Velocity = new(direction.X * Speed * delta, Ycomponent, direction.Z * delta * Speed);
 		MoveAndSlide();
 	}
 
@@ -69,7 +117,7 @@ public partial class Enemy : CharacterBody3D {
 		if (type == EnemyType.Charger) score = 20;
 		else if (type == EnemyType.Shooter) score = 25;
 		else if (type == EnemyType.Boss) score = 50;
-		else score = 10;
+		else score = 10; // melee enemy score
 
 		EmitSignal(SignalName.EnemyDied, score);
 		QueueFree();
