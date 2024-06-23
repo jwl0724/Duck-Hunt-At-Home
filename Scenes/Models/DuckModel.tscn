@@ -1,23 +1,47 @@
-[gd_scene load_steps=6 format=3 uid="uid://dskgymvjnsfn3"]
+[gd_scene load_steps=13 format=3 uid="uid://dskgymvjnsfn3"]
 
 [sub_resource type="SphereMesh" id="SphereMesh_d3wpk"]
 radius = 0.45
 height = 0.9
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_phx8p"]
+albedo_color = Color(0.901961, 0.745098, 0, 1)
+
 [sub_resource type="SphereMesh" id="SphereMesh_r5gqq"]
 radius = 0.7
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_16cyr"]
+albedo_color = Color(0.901961, 0.745098, 0, 1)
 
 [sub_resource type="SphereMesh" id="SphereMesh_g6l2b"]
 radius = 0.05
 height = 0.1
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_btmve"]
+albedo_color = Color(0.0392157, 0.0392157, 0.0392157, 1)
+clearcoat_enabled = true
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_22yi5"]
+albedo_color = Color(0.0392157, 0.0392157, 0.0392157, 1)
+clearcoat_enabled = true
+
 [sub_resource type="SphereMesh" id="SphereMesh_vhlin"]
 radius = 0.25
 height = 0.3
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_jjt76"]
+albedo_color = Color(1, 0.490196, 0.027451, 1)
+clearcoat_enabled = true
+
 [sub_resource type="SphereMesh" id="SphereMesh_i7u5h"]
 radius = 0.4
 height = 0.5
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ely6a"]
+albedo_color = Color(0.901961, 0.745098, 0, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_2dpxn"]
+albedo_color = Color(0.901961, 0.745098, 0, 1)
 
 [node name="Duck" type="Node"]
 
@@ -25,28 +49,35 @@ height = 0.5
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.78295, 0.471314)
 calculate_tangents = false
 mesh = SubResource("SphereMesh_d3wpk")
+material = SubResource("StandardMaterial3D_phx8p")
 
 [node name="Body" type="CSGMesh3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.258, 0)
 calculate_tangents = false
 mesh = SubResource("SphereMesh_r5gqq")
+material = SubResource("StandardMaterial3D_16cyr")
 
 [node name="RightEye" type="CSGMesh3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.355485, 0.945, 0.667)
 mesh = SubResource("SphereMesh_g6l2b")
+material = SubResource("StandardMaterial3D_btmve")
 
 [node name="LeftEye" type="CSGMesh3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.346126, 0.945229, 0.666775)
 mesh = SubResource("SphereMesh_g6l2b")
+material = SubResource("StandardMaterial3D_22yi5")
 
 [node name="Beak" type="CSGMesh3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00354135, 0.811366, 0.835061)
 mesh = SubResource("SphereMesh_vhlin")
+material = SubResource("StandardMaterial3D_jjt76")
 
 [node name="LeftWing" type="CSGMesh3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.483, 0.256, 0)
 mesh = SubResource("SphereMesh_i7u5h")
+material = SubResource("StandardMaterial3D_ely6a")
 
 [node name="RightWing" type="CSGMesh3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.473673, 0.256, 0)
 mesh = SubResource("SphereMesh_i7u5h")
+material = SubResource("StandardMaterial3D_2dpxn")
