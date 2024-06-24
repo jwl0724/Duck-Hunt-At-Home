@@ -1,83 +1,413 @@
-[gd_scene load_steps=13 format=3 uid="uid://dskgymvjnsfn3"]
+[gd_scene load_steps=18 format=3 uid="uid://dskgymvjnsfn3"]
 
-[sub_resource type="SphereMesh" id="SphereMesh_d3wpk"]
-radius = 0.45
-height = 0.9
+[ext_resource type="Script" path="res://Scripts/EnemyAnimator.cs" id="1_d3axa"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_phx8p"]
 albedo_color = Color(0.901961, 0.745098, 0, 1)
 
-[sub_resource type="SphereMesh" id="SphereMesh_r5gqq"]
-radius = 0.7
+[sub_resource type="SphereMesh" id="SphereMesh_d3wpk"]
+material = SubResource("StandardMaterial3D_phx8p")
+radius = 0.45
+height = 0.9
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_16cyr"]
 albedo_color = Color(0.901961, 0.745098, 0, 1)
 
-[sub_resource type="SphereMesh" id="SphereMesh_g6l2b"]
-radius = 0.05
-height = 0.1
+[sub_resource type="SphereMesh" id="SphereMesh_r5gqq"]
+material = SubResource("StandardMaterial3D_16cyr")
+radius = 0.7
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_btmve"]
 albedo_color = Color(0.0392157, 0.0392157, 0.0392157, 1)
 clearcoat_enabled = true
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_22yi5"]
-albedo_color = Color(0.0392157, 0.0392157, 0.0392157, 1)
-clearcoat_enabled = true
-
-[sub_resource type="SphereMesh" id="SphereMesh_vhlin"]
-radius = 0.25
-height = 0.3
+[sub_resource type="SphereMesh" id="SphereMesh_g6l2b"]
+material = SubResource("StandardMaterial3D_btmve")
+radius = 0.05
+height = 0.1
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_jjt76"]
 albedo_color = Color(1, 0.490196, 0.027451, 1)
 clearcoat_enabled = true
 
-[sub_resource type="SphereMesh" id="SphereMesh_i7u5h"]
-radius = 0.4
-height = 0.5
+[sub_resource type="SphereMesh" id="SphereMesh_vhlin"]
+material = SubResource("StandardMaterial3D_jjt76")
+radius = 0.25
+height = 0.3
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ely6a"]
 albedo_color = Color(0.901961, 0.745098, 0, 1)
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_2dpxn"]
-albedo_color = Color(0.901961, 0.745098, 0, 1)
+[sub_resource type="SphereMesh" id="SphereMesh_i7u5h"]
+material = SubResource("StandardMaterial3D_ely6a")
+radius = 0.4
+height = 0.5
+
+[sub_resource type="Animation" id="Animation_s6jju"]
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Body:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0.258, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Head:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0.78295, 0.471314)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("RightEye:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(-0.355485, 0.945, 0.667)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("LeftEye:position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0.346126, 0.945229, 0.666775)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("LeftWing:position")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0.483, 0.256, 0)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("RightWing:position")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(-0.473673, 0.256, 0)]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("Beak:position")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0.00354135, 0.811366, 0.835061)]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath(".:rotation")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath(".:scale")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0.85, 0.85, 0.85)]
+}
+
+[sub_resource type="Animation" id="Animation_nfefn"]
+resource_name = "charge"
+length = 1.0001
+loop_mode = 1
+step = 1.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.996544),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(0, -3.14159, 0), Vector3(-18.8496, -3.14159, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0.85, 0.85, 0.85)]
+}
+
+[sub_resource type="Animation" id="Animation_ff4kx"]
+resource_name = "fall"
+length = 0.1
+loop_mode = 2
+step = 10.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("LeftWing:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(0.483, 0.156017, 0), Vector3(0.483, 0.4, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("RightWing:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(-0.474, 0.156017, 0), Vector3(-0.474, 0.4, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Body:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(0, 0.369725, 0), Vector3(0, 0.3, 0)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Head:position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(0, 0.843389, 0.471124), Vector3(0, 0.863, 0.471)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Beak:position")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(0.00354135, 0.877844, 0.835061), Vector3(0.004, 0.868, 0.835)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("RightEye:position")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0, 0.1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(-0.355433, 0.955659, 0.667), Vector3(-0.355, 0.976, 0.667)]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("LeftEye:position")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0, 0.1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(0.346113, 0.955864, 0.666799), Vector3(0.346, 0.976, 0.667)]
+}
+
+[sub_resource type="Animation" id="Animation_ltqiv"]
+resource_name = "duckAnimation"
+length = 1.00002
+loop_mode = 1
+step = 1.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Body:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(0, 0.258, 0), Vector3(0, 0.442949, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Head:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(0, 0.78295, 0.471314), Vector3(0, 0.883, 0.471)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("RightEye:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(-0.355485, 0.945, 0.667), Vector3(-0.355, 1.045, 0.667)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("LeftEye:position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(0.346126, 0.945229, 0.666775), Vector3(0.346, 1.045, 0.667)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("LeftWing:position")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(0.483, 0.156, 0), Vector3(0.483, 0.585, 0)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("RightWing:position")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(-0.474, 0.156, 0), Vector3(-0.474, 0.585, 0)]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("Beak:position")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(0.00354135, 0.811366, 0.835061), Vector3(0.00354135, 0.921413, 0.835061)]
+}
+
+[sub_resource type="Animation" id="Animation_3cg07"]
+resource_name = "shoot"
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_brfyn"]
+_data = {
+"RESET": SubResource("Animation_s6jju"),
+"charge": SubResource("Animation_nfefn"),
+"fall": SubResource("Animation_ff4kx"),
+"shoot": SubResource("Animation_3cg07"),
+"walk": SubResource("Animation_ltqiv")
+}
 
 [node name="Duck" type="CSGCombiner3D"]
+transform = Transform3D(0.85, 0, 0, 0, 0.85, 0, 0, 0, 0.85, 0, 0, 0)
+script = ExtResource("1_d3axa")
 
-[node name="Head" type="CSGMesh3D" parent="."]
+[node name="Head" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.78295, 0.471314)
-calculate_tangents = false
 mesh = SubResource("SphereMesh_d3wpk")
-material = SubResource("StandardMaterial3D_phx8p")
 
-[node name="Body" type="CSGMesh3D" parent="."]
+[node name="Body" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.258, 0)
-calculate_tangents = false
 mesh = SubResource("SphereMesh_r5gqq")
-material = SubResource("StandardMaterial3D_16cyr")
 
-[node name="RightEye" type="CSGMesh3D" parent="."]
+[node name="RightEye" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.355485, 0.945, 0.667)
 mesh = SubResource("SphereMesh_g6l2b")
-material = SubResource("StandardMaterial3D_btmve")
 
-[node name="LeftEye" type="CSGMesh3D" parent="."]
+[node name="LeftEye" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.346126, 0.945229, 0.666775)
 mesh = SubResource("SphereMesh_g6l2b")
-material = SubResource("StandardMaterial3D_22yi5")
 
-[node name="Beak" type="CSGMesh3D" parent="."]
+[node name="Beak" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00354135, 0.811366, 0.835061)
 mesh = SubResource("SphereMesh_vhlin")
-material = SubResource("StandardMaterial3D_jjt76")
 
-[node name="LeftWing" type="CSGMesh3D" parent="."]
+[node name="LeftWing" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.483, 0.256, 0)
 mesh = SubResource("SphereMesh_i7u5h")
-material = SubResource("StandardMaterial3D_ely6a")
 
-[node name="RightWing" type="CSGMesh3D" parent="."]
+[node name="RightWing" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.473673, 0.256, 0)
 mesh = SubResource("SphereMesh_i7u5h")
-material = SubResource("StandardMaterial3D_2dpxn")
+
+[node name="Animation" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_brfyn")
+}
