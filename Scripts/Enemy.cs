@@ -1,21 +1,30 @@
 using Godot;
 using System;
 
+// TODO TODAY:
+// CHARGER LOGIC (WAIT THEN SPIN)
+// PROJECTILE THAT SHOOTS AND GLOWS
+// BOSS THATS BIGGER
+// ADD KNOCKBACK
+// CHANGE COLOR OF DUCK DEPENDING ON ENEMY TYPE
 public partial class Enemy : CharacterBody3D {
 	// exported variables
-	[Export] public float FallSpeed = -35f; // different from gravity, constant fall rate
+	[Export] public float FallSpeed = -50f; // different from gravity, constant fall rate
 
 	// signals
 	[Signal] public delegate void EnemyShootEventHandler();
 	[Signal] public delegate void EnemyDiedEventHandler();
+	[Signal] public delegate void MoveStateChangeEventHandler();
 	
 	// instance variables
 	public int Health { get; private set; } = 500;
 	public int Attack { get; private set; } = 50;
-	public float Speed { get; private set; } = 90;
+	public float Speed { get; private set; } = 150;
 	private Vector3 direction = new(0, 0, 0);
 	private EnemyType type;
 	private CharacterBody3D player;
+	private bool processingAttack = false;
+	public MoveState CurrentState { get; private set; } = MoveState.Idle;
 
 	// timers
 	private float attackTimer = 0;
@@ -28,6 +37,15 @@ public partial class Enemy : CharacterBody3D {
 		Shooter,
 		Boss
 	}
+
+	// possible states
+	public enum MoveState {
+		Walking,
+		Idle,
+		Falling,
+		Charging
+	}
+	
 
     public override void _Ready() {
 		player = GetParent().GetNode<CharacterBody3D>("Player");
@@ -68,13 +86,11 @@ public partial class Enemy : CharacterBody3D {
 		}
 		ProcessAttack((float) delta);
         ProcessMovement((float) delta);
-		ProcessVisuals();
     }
 
 	// SIGNAL HANDLERS
-	private void OnShot(int damage, bool headshot = false) {
-		if (headshot) Health -= damage * 2;
-		else Health -= damage;
+	private void OnShot(int damage) {
+		Health -= damage;
 	}
 
 	// HELPER FUNCTIONS
@@ -86,28 +102,29 @@ public partial class Enemy : CharacterBody3D {
 				attackTimer = 0;
 			}
 		} else if (type == EnemyType.Charger) {
-			
+			CurrentState = MoveState.Charging;
 		} else {
 			// handle boss attacks
 		}
-		
 		attackTimer += delta;
-	}
-
-	private void ProcessVisuals() {		
-		LookAt(player.Position);
-		Rotation = new Vector3(0, Rotation.Y, 0);
 	}
 
 	private void ProcessMovement(float delta) {
 		float Ycomponent;
-		if (!IsOnFloor()) Ycomponent = FallSpeed * delta;
-		else Ycomponent = 0;
-		
+		if (!IsOnFloor()) {
+			Ycomponent = FallSpeed * delta;
+			SetMoveState(MoveState.Falling);
+		} else {
+			Ycomponent = 0;
+			SetMoveState(MoveState.Walking);
+		}
 		Vector3 playerPosition = player.Position;
 		direction = Position.DirectionTo(playerPosition);
 		
 		Velocity = new(direction.X * Speed * delta, Ycomponent, direction.Z * delta * Speed);
+		if (Velocity.IsZeroApprox()) SetMoveState(MoveState.Idle);
+		LookAt(player.Position);
+		Rotation = new Vector3(0, Rotation.Y, 0);
 		MoveAndSlide();
 	}
 
@@ -121,5 +138,12 @@ public partial class Enemy : CharacterBody3D {
 
 		EmitSignal(SignalName.EnemyDied, score);
 		QueueFree();
+	}
+
+	private void SetMoveState(MoveState state) {
+		if (CurrentState != state) {
+			CurrentState = state;
+			EmitSignal(SignalName.MoveStateChange);
+		}
 	}
 }
