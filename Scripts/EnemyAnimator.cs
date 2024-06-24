@@ -7,7 +7,7 @@ public partial class EnemyAnimator : Node {
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready() {
 		animator = GetNode<AnimationPlayer>("Animation");
-		Connect("EnemyShoot", Callable.From(() => animator.Play("shoot")));
+		enemy.Connect("EnemyShoot", Callable.From(() => animator.Play("shoot")));
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
