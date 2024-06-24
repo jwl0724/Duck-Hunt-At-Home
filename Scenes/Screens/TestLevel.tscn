@@ -48,8 +48,7 @@ shape = SubResource("BoxShape3D_qnmof")
 mesh = SubResource("BoxMesh_wmei1")
 
 [node name="Enemy" parent="." instance=ExtResource("1_t4ccb")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 5.40761)
-motion_mode = 1
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6.03783, 5.40761)
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_tqbxr")
