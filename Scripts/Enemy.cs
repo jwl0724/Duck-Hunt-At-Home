@@ -52,6 +52,13 @@ public partial class Enemy : CharacterBody3D {
     }
 
 	public void SetEnemyProperties(EnemyType type) {
+		// get model parts and change properties
+		Node3D model = GetNode<Node3D>("Model");
+		MeshInstance3D head = model.GetNode<MeshInstance3D>("Head");
+		MeshInstance3D body = model.GetNode<MeshInstance3D>("Head");
+		MeshInstance3D leftWing = model.GetNode<MeshInstance3D>("Head");
+		MeshInstance3D rightWing = model.GetNode<MeshInstance3D>("Head");
+
 		if (type == EnemyType.Melee) {
 			Health = 500;
 			Speed = 90;
