@@ -21,6 +21,7 @@ public partial class EnemyVisual : Node {
 	// instance variables
 	private AnimationPlayer animator;
 	private bool glowing = false;
+	private StringName previousAnimation = null;
 
 	// enums
 	public enum DuckColors {
@@ -32,11 +33,14 @@ public partial class EnemyVisual : Node {
 
 	public override void _Ready() {
 		animator = GetNode<AnimationPlayer>("Animation");
+
+		// connect signals
 		Enemy.Connect("EnemyShoot", Callable.From(() => animator.Play("shoot")));
 		Enemy.Connect("MoveStateChange", Callable.From(() => OnMoveStateChange()));
+		animator.Connect("animation_finished", Callable.From((StringName name) => OnMoveStateChange()));
 	}
 
-	public void OnMoveStateChange() {
+	private void OnMoveStateChange() {
 		// idle = don't play any animations
 		animator.Stop();
 		if (Enemy.CurrentState == Enemy.MoveState.Walking) {
