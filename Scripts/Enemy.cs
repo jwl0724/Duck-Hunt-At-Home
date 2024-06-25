@@ -60,6 +60,7 @@ public partial class Enemy : CharacterBody3D {
 			Health = 500;
 			Speed = 90;
 			Attack = 50;
+			this.type = type;
 			model.SetColor(EnemyVisual.DuckColors.Default);
 
 		} else if (type == EnemyType.Charger) {
@@ -67,6 +68,7 @@ public partial class Enemy : CharacterBody3D {
 			Speed = 70;
 			Attack = 75;
 			attackCD = 10f;
+			this.type = type;
 			model.SetColor(EnemyVisual.DuckColors.Pink);
 
 		} else if (type == EnemyType.Shooter) {
@@ -74,6 +76,7 @@ public partial class Enemy : CharacterBody3D {
 			Speed = 50;
 			Attack = 30;
 			attackCD = 2.5f;
+			this.type = type;
 			model.SetColor(EnemyVisual.DuckColors.Blue);
 
 		} else {
@@ -82,6 +85,7 @@ public partial class Enemy : CharacterBody3D {
 			Speed = 80;
 			Attack = 100;
 			attackCD = 5f;
+			this.type = type;
 			int scale = Mathf.Min(BossScale, 10);
 			Scale = new Vector3(scale, scale, scale);
 			model.SetColor(EnemyVisual.DuckColors.Green);
@@ -116,7 +120,7 @@ public partial class Enemy : CharacterBody3D {
 				attackTimer = 0;
 			}
 		} else if (type == EnemyType.Charger) {
-			CurrentState = MoveState.Charging;
+			// CurrentState = MoveState.Charging;
 		} else {
 			// handle boss attacks
 		}
