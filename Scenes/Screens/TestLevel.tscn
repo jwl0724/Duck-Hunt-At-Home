@@ -68,7 +68,7 @@ shadow_enabled = true
 wait_time = 120.0
 
 [node name="EnemySpawnTimer" type="Timer" parent="."]
-wait_time = 120.0
+wait_time = 2.0
 
 [node name="Bubble" parent="." instance=ExtResource("3_xqu77")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.89114, 5.41063)
