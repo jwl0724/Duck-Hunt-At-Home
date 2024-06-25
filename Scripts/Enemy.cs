@@ -4,9 +4,7 @@ using System;
 // TODO TODAY:
 // CHARGER LOGIC (WAIT THEN SPIN)
 // PROJECTILE THAT SHOOTS AND GLOWS
-// BOSS THATS BIGGER
 // ADD KNOCKBACK
-// CHANGE COLOR OF DUCK DEPENDING ON ENEMY TYPE
 public partial class Enemy : CharacterBody3D {
 	// exported variables
 	[Export] public float FallSpeed = -50f; // different from gravity, constant fall rate
@@ -34,7 +32,7 @@ public partial class Enemy : CharacterBody3D {
 	private float attackTimer = 0;
 	private float attackCD = 1.5f;
 
-	// enemy types
+	// enemy types, boss needs to always be at the bottom
 	public enum EnemyType {
 		Melee,
 		Charger,
@@ -56,11 +54,7 @@ public partial class Enemy : CharacterBody3D {
 
 	public void SetEnemyProperties(EnemyType type) {
 		// get model parts and change properties
-		Node3D model = GetNode<Node3D>("Model");
-		MeshInstance3D head = model.GetNode<MeshInstance3D>("Head");
-		MeshInstance3D body = model.GetNode<MeshInstance3D>("Head");
-		MeshInstance3D leftWing = model.GetNode<MeshInstance3D>("Head");
-		MeshInstance3D rightWing = model.GetNode<MeshInstance3D>("Head");
+		EnemyVisual model = GetNode<EnemyVisual>("Model");
 
 		if (type == EnemyType.Melee) {
 			Health = 500;
@@ -72,12 +66,16 @@ public partial class Enemy : CharacterBody3D {
 			Speed = 70;
 			Attack = 75;
 			attackCD = 10f;
+			Color red = new(0.816f, 0.055f, 0, 1);
+			model.SetColor(red);
 
 		} else if (type == EnemyType.Shooter) {
 			Health = 300;
 			Speed = 50;
 			Attack = 30;
 			attackCD = 2.5f;
+			Color pink = new(0.925f, 0.412f, 0.929f, 1);
+			model.SetColor(pink);
 
 		} else {
 			// boss properties
@@ -87,6 +85,9 @@ public partial class Enemy : CharacterBody3D {
 			attackCD = 5f;
 			int scale = Mathf.Min(BossScale, 10);
 			Scale = new Vector3(scale, scale, scale);
+			Color green = new(0.067f, 0.753f, 0.071f, 1);
+			model.SetColor(green);
+			model.ToggleGlow(true);
 
 			// increment scale for next boss
 			BossScale++;
