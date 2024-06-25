@@ -19,7 +19,6 @@ public partial class BubbleVisual : MeshInstance3D {
 	}
 
 	public override void _Process(double delta) {
-		GD.Print(Body.LinearVelocity.Y * 0.01f);
 		model.Height = originalHeight * Mathf.Clamp(1 - Body.LinearVelocity.Y * 0.1f, 0.9f, 1.5f);
 		lastFrameVelocity = Body.LinearVelocity.Y;
 	}
