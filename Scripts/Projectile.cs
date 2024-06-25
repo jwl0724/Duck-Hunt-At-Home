@@ -10,14 +10,10 @@ public partial class Projectile : RigidBody3D {
 	
 	public override void _Ready() {
 		// connect signals
-		LifespanTimer.Connect("timeout", Callable.From(() => OnLifeSpanTimeout()));
+		LifespanTimer.Connect("timeout", Callable.From(() => PopBubble()));
 	}
 
 	public void PopBubble() {
-		QueueFree();
-	}
-
-	private void OnLifeSpanTimeout() {
 		QueueFree();
 	}
 }
