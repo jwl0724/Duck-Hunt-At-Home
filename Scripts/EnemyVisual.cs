@@ -1,7 +1,7 @@
 using Godot;
 using System;
 
-public partial class EnemyAnimator : Node {
+public partial class EnemyVisual : Node {
 	[Export] public Enemy enemy;
 	private AnimationPlayer animator;
 
