@@ -152,6 +152,54 @@ tracks/8/keys = {
 "update": 0,
 "values": [Vector3(0.85, 0.85, 0.85)]
 }
+tracks/9/type = "value"
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/path = NodePath("Head:rotation")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(-0.592225, 5.20356e-07, -1.70563e-06)]
+}
+tracks/10/type = "value"
+tracks/10/imported = false
+tracks/10/enabled = true
+tracks/10/path = NodePath("RightEye:rotation")
+tracks/10/interp = 1
+tracks/10/loop_wrap = true
+tracks/10/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(-0.592225, 5.20356e-07, -1.70563e-06)]
+}
+tracks/11/type = "value"
+tracks/11/imported = false
+tracks/11/enabled = true
+tracks/11/path = NodePath("LeftEye:rotation")
+tracks/11/interp = 1
+tracks/11/loop_wrap = true
+tracks/11/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(-0.592225, 5.20356e-07, -1.70563e-06)]
+}
+tracks/12/type = "value"
+tracks/12/imported = false
+tracks/12/enabled = true
+tracks/12/path = NodePath("Beak:rotation")
+tracks/12/interp = 1
+tracks/12/loop_wrap = true
+tracks/12/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
 
 [sub_resource type="Animation" id="Animation_nfefn"]
 resource_name = "charge"
@@ -275,6 +323,104 @@ tracks/6/keys = {
 
 [sub_resource type="Animation" id="Animation_3cg07"]
 resource_name = "shoot"
+length = 0.2
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Head:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(1.13687e-13, 0.78295, 0.471314), Vector3(3.10563e-07, 0.829999, 0.348799), Vector3(-4.11106e-07, 0.714805, 0.633461)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("RightEye:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.15, 0.2),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Vector3(-0.355485, 0.945, 0.667), Vector3(-0.355485, 1.07369, 0.420702), Vector3(-0.4, 0.893, 0.659), Vector3(-0.355486, 0.719711, 0.887487)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("LeftEye:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.15, 0.2),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Vector3(0.346126, 0.945229, 0.666775), Vector3(0.346127, 1.07375, 0.420388), Vector3(0.4, 0.893, 0.659), Vector3(0.346126, 0.720031, 0.887453)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Beak:position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(0.00354135, 0.811366, 0.835061), Vector3(0.00354186, 1.05662, 0.634739), Vector3(0.0035411, 0.510489, 0.935744)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Head:rotation")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(-0.592225, 5.20356e-07, -1.70563e-06), Vector3(0.672336, 7.05211e-07, 2.01817e-06)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("RightEye:rotation")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(-0.592225, 5.20356e-07, -1.70563e-06), Vector3(0.672336, 7.05211e-07, 2.01817e-06)]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("LeftEye:rotation")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(-0.592225, 5.20356e-07, -1.70563e-06), Vector3(0.672336, 7.05211e-07, 2.01817e-06)]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("Beak:rotation")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(-0.591667, 0, 0), Vector3(0.672336, 7.05211e-07, 2.01817e-06)]
+}
 
 [sub_resource type="Animation" id="Animation_ltqiv"]
 resource_name = "duckAnimation"
@@ -380,7 +526,7 @@ transform = Transform3D(-0.85, 0, -2.1549e-06, 0, 0.85, 0, 2.1549e-06, 0, -0.85,
 script = ExtResource("1_d3axa")
 
 [node name="Head" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.78295, 0.471314)
+transform = Transform3D(1, 1.41516e-06, 4.31741e-07, -1.41516e-06, 0.829702, 0.55821, 4.3174e-07, -0.55821, 0.829702, 0, 0.78295, 0.471314)
 mesh = SubResource("SphereMesh_d3wpk")
 
 [node name="Body" type="MeshInstance3D" parent="."]
@@ -388,11 +534,11 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.258, 0)
 mesh = SubResource("SphereMesh_r5gqq")
 
 [node name="RightEye" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.355485, 0.945, 0.667)
+transform = Transform3D(1, 1.41516e-06, 4.31741e-07, -1.41516e-06, 0.829702, 0.55821, 4.3174e-07, -0.55821, 0.829702, -0.355485, 0.945, 0.667)
 mesh = SubResource("SphereMesh_g6l2b")
 
 [node name="LeftEye" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.346126, 0.945229, 0.666775)
+transform = Transform3D(1, 1.41516e-06, 4.31741e-07, -1.41516e-06, 0.829702, 0.55821, 4.3174e-07, -0.55821, 0.829702, 0.346126, 0.945229, 0.666775)
 mesh = SubResource("SphereMesh_g6l2b")
 
 [node name="Beak" type="MeshInstance3D" parent="."]
