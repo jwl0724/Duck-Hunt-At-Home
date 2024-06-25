@@ -1,4 +1,6 @@
-[gd_scene load_steps=4 format=3 uid="uid://ckf4axkvt4sup"]
+[gd_scene load_steps=5 format=3 uid="uid://ckf4axkvt4sup"]
+
+[ext_resource type="Script" path="res://Scripts/Projectile.cs" id="1_i3crb"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_oj5gu"]
 friction = 0.0
@@ -14,6 +16,7 @@ height = 0.5
 [node name="Bubble" type="RigidBody3D"]
 physics_material_override = SubResource("PhysicsMaterial_oj5gu")
 linear_velocity = Vector3(0, -1, 0)
+script = ExtResource("1_i3crb")
 
 [node name="Shape" type="CollisionShape3D" parent="."]
 shape = SubResource("SphereShape3D_ww8xj")
