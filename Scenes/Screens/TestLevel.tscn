@@ -1,8 +1,9 @@
-[gd_scene load_steps=7 format=3 uid="uid://co8ky5tqvx0io"]
+[gd_scene load_steps=8 format=3 uid="uid://co8ky5tqvx0io"]
 
 [ext_resource type="PackedScene" uid="uid://bjxi3yjg0rb46" path="res://Scenes/Entities/Player.tscn" id="1_hki0v"]
 [ext_resource type="Script" path="res://Scripts/GameManager.cs" id="1_qhil5"]
 [ext_resource type="PackedScene" uid="uid://g7arj8tp83bn" path="res://Scenes/Entities/Enemy.tscn" id="1_t4ccb"]
+[ext_resource type="PackedScene" uid="uid://ckf4axkvt4sup" path="res://Scenes/Entities/Bubble.tscn" id="3_xqu77"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_qnmof"]
 size = Vector3(100, 0, 100)
@@ -37,6 +38,9 @@ EnemyScene = ExtResource("1_t4ccb")
 EnemySpawnTimer = NodePath("EnemySpawnTimer")
 BossSpawnTimer = NodePath("BossSpawnTimer")
 
+[node name="Bubble" parent="." instance=ExtResource("3_xqu77")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0614746, 2.17633, 3.66433)
+
 [node name="Player" parent="." instance=ExtResource("1_hki0v")]
 Speed = 100.0
 JumpSpeed = 10.0
@@ -58,6 +62,7 @@ transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 25,
 shadow_enabled = true
 
 [node name="BossSpawnTimer" type="Timer" parent="."]
-wait_time = 60.0
+wait_time = 120.0
 
 [node name="EnemySpawnTimer" type="Timer" parent="."]
+wait_time = 120.0
