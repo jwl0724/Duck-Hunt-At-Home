@@ -55,27 +55,26 @@ public partial class Enemy : CharacterBody3D {
 	public void SetEnemyProperties(EnemyType type) {
 		// get model parts and change properties
 		EnemyVisual model = GetNode<EnemyVisual>("Model");
-
+		
 		if (type == EnemyType.Melee) {
 			Health = 500;
 			Speed = 90;
 			Attack = 50;
+			model.SetColor(EnemyVisual.DuckColors.Default);
 
 		} else if (type == EnemyType.Charger) {
 			Health = 400;
 			Speed = 70;
 			Attack = 75;
 			attackCD = 10f;
-			Color red = new(0.816f, 0.055f, 0, 1);
-			model.SetColor(red);
+			model.SetColor(EnemyVisual.DuckColors.Pink);
 
 		} else if (type == EnemyType.Shooter) {
 			Health = 300;
 			Speed = 50;
 			Attack = 30;
 			attackCD = 2.5f;
-			Color pink = new(0.925f, 0.412f, 0.929f, 1);
-			model.SetColor(pink);
+			model.SetColor(EnemyVisual.DuckColors.Blue);
 
 		} else {
 			// boss properties
@@ -85,9 +84,8 @@ public partial class Enemy : CharacterBody3D {
 			attackCD = 5f;
 			int scale = Mathf.Min(BossScale, 10);
 			Scale = new Vector3(scale, scale, scale);
-			Color green = new(0.067f, 0.753f, 0.071f, 1);
-			model.SetColor(green);
-			model.ToggleGlow(true);
+			model.SetColor(EnemyVisual.DuckColors.Green);
+			model.ToggleGlow();
 
 			// increment scale for next boss
 			BossScale++;
