@@ -31,8 +31,11 @@ volumetric_fog_emission_energy = 2.0
 volumetric_fog_detail_spread = 0.803831
 volumetric_fog_ambient_inject = 1.2
 
-[node name="TestLevel" type="Node"]
+[node name="TestLevel" type="Node" node_paths=PackedStringArray("EnemySpawnTimer", "BossSpawnTimer")]
 script = ExtResource("1_qhil5")
+EnemyScene = ExtResource("1_t4ccb")
+EnemySpawnTimer = NodePath("EnemySpawnTimer")
+BossSpawnTimer = NodePath("BossSpawnTimer")
 
 [node name="Player" parent="." instance=ExtResource("1_hki0v")]
 Speed = 100.0
@@ -60,4 +63,3 @@ shadow_enabled = true
 [node name="BossSpawnTimer" type="Timer" parent="."]
 
 [node name="EnemySpawnTimer" type="Timer" parent="."]
-autostart = true
