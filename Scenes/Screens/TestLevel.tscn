@@ -50,9 +50,6 @@ shape = SubResource("BoxShape3D_qnmof")
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Ground"]
 mesh = SubResource("BoxMesh_wmei1")
 
-[node name="Enemy" parent="." instance=ExtResource("1_t4ccb")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6.03783, 5.40761)
-
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_tqbxr")
 
@@ -61,5 +58,6 @@ transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 25,
 shadow_enabled = true
 
 [node name="BossSpawnTimer" type="Timer" parent="."]
+wait_time = 60.0
 
 [node name="EnemySpawnTimer" type="Timer" parent="."]
