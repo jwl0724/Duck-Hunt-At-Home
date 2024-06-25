@@ -36,7 +36,7 @@ public partial class GameManager : Node {
 		if (!GameRunning) return;
 		Enemy enemy = EnemyScene.Instantiate<Enemy>();
 		Enemy.EnemyType[] enemyTypes = (Enemy.EnemyType[]) Enum.GetValues(typeof(Enemy.EnemyType));
-		Enemy.EnemyType type = enemyTypes[enemyTypes.Length - 1]; // assumes boss is at bottom of enum
+		Enemy.EnemyType type = enemyTypes[GD.Randi() % (enemyTypes.Length - 1)]; // assumes boss is at bottom of enum
 		enemy.SetEnemyProperties(type);
 		enemy.Position = GenerateSpawnPoint();
 		AddChild(enemy);
