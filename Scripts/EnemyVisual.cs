@@ -1,67 +1,77 @@
 using Godot;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 public partial class EnemyVisual : Node {
-	[Export] public Enemy enemy;
+	// exported variables
+	[Export] public Enemy Enemy;
+
+	// static variables
+	private readonly static Dictionary<DuckColors, Color> availableColors = new() {
+		// Default = yellow, which is the original material color
+		{DuckColors.Blue, new Color(0, 0.52f, 1, 1)},
+		{DuckColors.Pink, new Color(0.925f, 0.412f, 0.929f, 1)},
+		{DuckColors.Green, new Color(0.067f, 0.753f, 0.071f, 1)}
+	};
+	private readonly StringName[] ignoredComponents = {
+		"RightEye", "LeftEye", "Beak"
+	};
+	
+	// instance variables
 	private AnimationPlayer animator;
+	private bool glowing = false;
+
+	// enums
+	public enum DuckColors {
+		Blue,
+		Pink,
+		Green,
+		Default
+	}
 
 	public override void _Ready() {
 		animator = GetNode<AnimationPlayer>("Animation");
-		enemy.Connect("EnemyShoot", Callable.From(() => animator.Play("shoot")));
-		enemy.Connect("MoveStateChange", Callable.From(() => OnMoveStateChange()));
+		Enemy.Connect("EnemyShoot", Callable.From(() => animator.Play("shoot")));
+		Enemy.Connect("MoveStateChange", Callable.From(() => OnMoveStateChange()));
 	}
 
 	public void OnMoveStateChange() {
 		// idle = don't play any animations
 		animator.Stop();
-		if (enemy.CurrentState == Enemy.MoveState.Walking) {
+		if (Enemy.CurrentState == Enemy.MoveState.Walking) {
 			animator.Play("walk");
-		} else if (enemy.CurrentState == Enemy.MoveState.Falling) {
+		} else if (Enemy.CurrentState == Enemy.MoveState.Falling) {
 			animator.Play("fall");
-		} else if (enemy.CurrentState == Enemy.MoveState.Charging) {
+		} else if (Enemy.CurrentState == Enemy.MoveState.Charging) {
 			animator.Play("charge");
 		}
 	}
 
 	// This approach too specific to model, next time should use interface
-	public void SetColor(Color color) {
-		// get model components
-		MeshInstance3D head = GetNode<MeshInstance3D>("Head");
-		MeshInstance3D body = GetNode<MeshInstance3D>("Body");
-		MeshInstance3D leftWing = GetNode<MeshInstance3D>("LeftWing");
-		MeshInstance3D rightWing = GetNode<MeshInstance3D>("RightWing");
-
-		// TODO: FIX WHERE CHANGING COLOR CHANGES COLOR OF ALL OBJECTS
-		StandardMaterial3D material = head.Mesh.SurfaceGetMaterial(0) as StandardMaterial3D;
-		StandardMaterial3D newMaterial = new(){ AlbedoColor = color };
-		head.Mesh.SurfaceSetMaterial(0, newMaterial);
-		body.Mesh.SurfaceSetMaterial(0, newMaterial);
-		leftWing.Mesh.SurfaceSetMaterial(0, newMaterial);
-		rightWing.Mesh.SurfaceSetMaterial(0, newMaterial);
-
-
-		// // get material
-		// StandardMaterial3D headMaterial = head.Mesh.SurfaceGetMaterial(0) as StandardMaterial3D;
-		// StandardMaterial3D bodyMaterial = body.Mesh.SurfaceGetMaterial(0) as StandardMaterial3D;
-		// StandardMaterial3D leftWingMaterial = leftWing.Mesh.SurfaceGetMaterial(0) as StandardMaterial3D;
-		// StandardMaterial3D rightWingMaterial = rightWing.Mesh.SurfaceGetMaterial(0) as StandardMaterial3D;
-
-		// // set color
-		// headMaterial.AlbedoColor = color;
-		// bodyMaterial.AlbedoColor = color;
-		// leftWingMaterial.AlbedoColor = color;
-		// rightWingMaterial.AlbedoColor = color;
-	}
-
-	public void ToggleGlow(bool glow) {
+	public void SetColor(DuckColors color) {
+		// dupe materials when spawning to prevent sharing same material
 		foreach (var child in GetChildren()) {
 			if (child is not MeshInstance3D meshInstance) return;
-			if (meshInstance.Mesh.SurfaceGetMaterial(0) is not StandardMaterial3D material) return;
-			Color originalColor = material.AlbedoColor;
-			if (glow)
-				material.AlbedoColor = new Color(originalColor.R * 2, originalColor.G * 2, originalColor.B * 2, 1);
-			else 
-				material.AlbedoColor = new Color(originalColor.R / 2, originalColor.G / 2, originalColor.B / 2, 1);
+
+			Resource originalMaterial = meshInstance.Mesh.SurfaceGetMaterial(0);
+			StandardMaterial3D newMaterial = originalMaterial.Duplicate() as StandardMaterial3D;
+			meshInstance.SetSurfaceOverrideMaterial(0, newMaterial);
+			
+			if (color == DuckColors.Default || ignoredComponents.Contains(meshInstance.Name)) continue;
+			newMaterial.AlbedoColor = availableColors[color];
 		}
+	}
+
+	public void ToggleGlow() {
+		foreach (var child in GetChildren()) {
+			if (child is not MeshInstance3D meshInstance) return;
+			StandardMaterial3D material = meshInstance.GetSurfaceOverrideMaterial(0) as StandardMaterial3D;
+			if (glowing) material.AlbedoColor /= 2;
+			else material.AlbedoColor *= 2;
+		}
+		// set the glowing state after editing
+		if (glowing) glowing = false;
+		else glowing = true;
 	}
 }
