@@ -23,6 +23,8 @@ public partial class GameManager : Node {
 		// connect signals
 		EnemySpawnTimer.Connect("timeout", Callable.From(() => OnEnemySpawn()));
 		BossSpawnTimer.Connect("timeout", Callable.From(() => OnBossSpawn()));
+
+		StartGame();
 	}
 
 	
@@ -36,6 +38,7 @@ public partial class GameManager : Node {
 		Enemy.EnemyType[] enemyTypes = (Enemy.EnemyType[]) Enum.GetValues(typeof(Enemy.EnemyType));
 		Enemy.EnemyType type = enemyTypes[enemyTypes.Length - 1]; // assumes boss is at bottom of enum
 		enemy.SetEnemyProperties(type);
+		enemy.Position = GenerateSpawnPoint();
 		AddChild(enemy);
 	}
 
@@ -43,21 +46,26 @@ public partial class GameManager : Node {
 		if (!GameRunning) return;
 		Enemy enemy = EnemyScene.Instantiate<Enemy>();
 		enemy.SetEnemyProperties(Enemy.EnemyType.Boss);
+		enemy.Position = GenerateSpawnPoint();
 		AddChild(enemy);
 	}
 
 	private Vector3 GenerateSpawnPoint() {
 		// will implement after shooting is done
-		return new Vector3(GD.RandRange(-90,90), GD.RandRange(-90,90), GD.RandRange(-90,90));
+		return new Vector3(GD.RandRange(-25, 25), GD.RandRange(0, 15), GD.RandRange(-25, 25));
 	}
 
 	private void StartGame() {
 		EnemySpawnTimer.Start();
 		BossSpawnTimer.Start();
+
+		GameRunning = true;
 	}
 
 	private void EndGame() {
 		EnemySpawnTimer.Stop();
 		BossSpawnTimer.Stop();
+
+		GameRunning = false;
 	}
 }
