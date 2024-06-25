@@ -1,25 +1,70 @@
-[gd_scene load_steps=5 format=3 uid="uid://ckf4axkvt4sup"]
+[gd_scene load_steps=14 format=3 uid="uid://ckf4axkvt4sup"]
 
 [ext_resource type="Script" path="res://Scripts/Projectile.cs" id="1_i3crb"]
+[ext_resource type="Shader" path="res://Assets/Shaders/Bubble.gdshader" id="2_4mmn6"]
+[ext_resource type="Script" path="res://Scripts/BubbleVisual.cs" id="3_cipio"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_oj5gu"]
 friction = 0.0
-bounce = 1.0
+bounce = 0.99
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_ww8xj"]
 radius = 0.25
 
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_d6itc"]
+noise_type = 0
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_6rpds"]
+seamless = true
+seamless_blend_skirt = 1.0
+as_normal_map = true
+noise = SubResource("FastNoiseLite_d6itc")
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_05iei"]
+noise_type = 0
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_bdvun"]
+noise = SubResource("FastNoiseLite_05iei")
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_rvpx2"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_xl2ja"]
+noise = SubResource("FastNoiseLite_rvpx2")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_jwm06"]
+render_priority = 0
+shader = ExtResource("2_4mmn6")
+shader_parameter/distortionView = 0.05
+shader_parameter/speedView = 0.3
+shader_parameter/tintColor = Color(0.537255, 0.929412, 1, 1)
+shader_parameter/fesnelAmount = 3.0
+shader_parameter/distortionVertex = 0.03
+shader_parameter/speedVertex = 0.1
+shader_parameter/noiseViewX = SubResource("NoiseTexture2D_bdvun")
+shader_parameter/noiseViewY = SubResource("NoiseTexture2D_xl2ja")
+shader_parameter/noiseVertex = SubResource("NoiseTexture2D_6rpds")
+
 [sub_resource type="SphereMesh" id="SphereMesh_np002"]
+material = SubResource("ShaderMaterial_jwm06")
 radius = 0.25
 height = 0.5
 
-[node name="Bubble" type="RigidBody3D"]
+[node name="Bubble" type="RigidBody3D" node_paths=PackedStringArray("LifespanTimer")]
 physics_material_override = SubResource("PhysicsMaterial_oj5gu")
-linear_velocity = Vector3(0, -1, 0)
+gravity_scale = 0.5
 script = ExtResource("1_i3crb")
+LifespanTimer = NodePath("Lifespan")
+metadata/_edit_group_ = true
 
 [node name="Shape" type="CollisionShape3D" parent="."]
 shape = SubResource("SphereShape3D_ww8xj")
 
-[node name="Model" type="MeshInstance3D" parent="."]
+[node name="Model" type="MeshInstance3D" parent="." node_paths=PackedStringArray("Body")]
 mesh = SubResource("SphereMesh_np002")
+script = ExtResource("3_cipio")
+Body = NodePath("..")
+
+[node name="Lifespan" type="Timer" parent="."]
+wait_time = 30.0
+one_shot = true
+autostart = true
