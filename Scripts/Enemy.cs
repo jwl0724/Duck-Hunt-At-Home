@@ -16,6 +16,10 @@ public partial class Enemy : CharacterBody3D {
 	[Signal] public delegate void EnemyDiedEventHandler();
 	[Signal] public delegate void MoveStateChangeEventHandler();
 	
+	// static variables
+	public static int EnemyCount = 0;
+	public static int BossScale = 2;
+
 	// instance variables
 	public int Health { get; private set; } = 500;
 	public int Attack { get; private set; } = 50;
@@ -46,7 +50,6 @@ public partial class Enemy : CharacterBody3D {
 		Charging
 	}
 	
-
     public override void _Ready() {
 		player = GetParent().GetNode<CharacterBody3D>("Player");
     }
@@ -82,6 +85,11 @@ public partial class Enemy : CharacterBody3D {
 			Speed = 80;
 			Attack = 100;
 			attackCD = 5f;
+			int scale = Mathf.Min(BossScale, 10);
+			Scale = new Vector3(scale, scale, scale);
+
+			// increment scale for next boss
+			BossScale++;
 		}
 	}
 
