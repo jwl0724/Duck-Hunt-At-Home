@@ -273,6 +273,9 @@ tracks/6/keys = {
 "values": [Vector3(0.346113, 0.955864, 0.666799), Vector3(0.346, 0.976, 0.667)]
 }
 
+[sub_resource type="Animation" id="Animation_3cg07"]
+resource_name = "shoot"
+
 [sub_resource type="Animation" id="Animation_ltqiv"]
 resource_name = "duckAnimation"
 length = 1.00002
@@ -363,9 +366,6 @@ tracks/6/keys = {
 "values": [Vector3(0.00354135, 0.811366, 0.835061), Vector3(0.00354135, 0.921413, 0.835061)]
 }
 
-[sub_resource type="Animation" id="Animation_3cg07"]
-resource_name = "shoot"
-
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_brfyn"]
 _data = {
 "RESET": SubResource("Animation_s6jju"),
@@ -375,8 +375,8 @@ _data = {
 "walk": SubResource("Animation_ltqiv")
 }
 
-[node name="Duck" type="CSGCombiner3D"]
-transform = Transform3D(-0.85, 0, 7.43094e-08, 0, 0.85, 0, -7.43094e-08, 0, -0.85, 0, 0, 0)
+[node name="Duck" type="Node3D"]
+transform = Transform3D(-0.85, 0, -2.1549e-06, 0, 0.85, 0, 2.1549e-06, 0, -0.85, 0, 0, 0)
 script = ExtResource("1_d3axa")
 
 [node name="Head" type="MeshInstance3D" parent="."]
