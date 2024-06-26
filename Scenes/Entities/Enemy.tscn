@@ -2,27 +2,28 @@
 
 [ext_resource type="Script" path="res://Scripts/Enemy.cs" id="1_dxy1a"]
 [ext_resource type="PackedScene" uid="uid://dskgymvjnsfn3" path="res://Scenes/Models/DuckModel.tscn" id="1_g0gds"]
-[ext_resource type="Script" path="res://Scripts/Hitbox.cs" id="3_u2o6a"]
+[ext_resource type="PackedScene" uid="uid://ckf4axkvt4sup" path="res://Scenes/Entities/Bubble.tscn" id="2_se0m8"]
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_24c10"]
 height = 1.4
 radius = 0.8
 
-[node name="Enemy" type="CharacterBody3D"]
+[node name="Enemy" type="CharacterBody3D" node_paths=PackedStringArray("ProjectileSpawnPoint")]
+collision_layer = 4
+collision_mask = 13
 floor_constant_speed = true
 script = ExtResource("1_dxy1a")
+Projectile = ExtResource("2_se0m8")
+ProjectileSpawnPoint = NodePath("ShootPoint")
 metadata/_edit_group_ = true
 
 [node name="Shape" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.545304, -0.0988116)
 shape = SubResource("CylinderShape3D_24c10")
 
-[node name="Hitbox" type="Area3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.545, -0.0985796)
-script = ExtResource("3_u2o6a")
-
-[node name="HitboxShape" type="CollisionShape3D" parent="Hitbox"]
-shape = SubResource("CylinderShape3D_24c10")
-
 [node name="Model" parent="." node_paths=PackedStringArray("Enemy") instance=ExtResource("1_g0gds")]
+transform = Transform3D(-0.85, 0, -2.1549e-06, 0, 0.85, 0, 2.1549e-06, 0, -0.85, 0, 0, 0)
 Enemy = NodePath("..")
+
+[node name="ShootPoint" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.528603, -1.05564)
