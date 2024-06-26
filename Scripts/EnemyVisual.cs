@@ -56,7 +56,7 @@ public partial class EnemyVisual : Node {
 	public void SetColor(DuckColors color) {
 		// dupe materials when spawning to prevent sharing same material
 		foreach (var child in GetChildren()) {
-			if (child is not MeshInstance3D meshInstance) return;
+			if (child is not MeshInstance3D meshInstance) continue;
 
 			Resource originalMaterial = meshInstance.Mesh.SurfaceGetMaterial(0);
 			StandardMaterial3D newMaterial = originalMaterial.Duplicate() as StandardMaterial3D;
@@ -69,7 +69,7 @@ public partial class EnemyVisual : Node {
 
 	public void ToggleGlow() {
 		foreach (var child in GetChildren()) {
-			if (child is not MeshInstance3D meshInstance) return;
+			if (child is not MeshInstance3D meshInstance) continue;
 			StandardMaterial3D material = meshInstance.GetSurfaceOverrideMaterial(0) as StandardMaterial3D;
 			if (glowing) material.AlbedoColor /= 2;
 			else material.AlbedoColor *= 2;
