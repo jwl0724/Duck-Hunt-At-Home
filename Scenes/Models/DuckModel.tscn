@@ -526,7 +526,7 @@ transform = Transform3D(-0.85, 0, -2.1549e-06, 0, 0.85, 0, 2.1549e-06, 0, -0.85,
 script = ExtResource("1_d3axa")
 
 [node name="Head" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 1.41516e-06, 4.31741e-07, -1.41516e-06, 0.829702, 0.55821, 4.3174e-07, -0.55821, 0.829702, 0, 0.78295, 0.471314)
+transform = Transform3D(1, 1.41517e-06, 4.31741e-07, -1.41516e-06, 0.829702, 0.55821, 4.31741e-07, -0.55821, 0.829702, 0, 0.78295, 0.471314)
 mesh = SubResource("SphereMesh_d3wpk")
 
 [node name="Body" type="MeshInstance3D" parent="."]
@@ -534,11 +534,11 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.258, 0)
 mesh = SubResource("SphereMesh_r5gqq")
 
 [node name="RightEye" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 1.41516e-06, 4.31741e-07, -1.41516e-06, 0.829702, 0.55821, 4.3174e-07, -0.55821, 0.829702, -0.355485, 0.945, 0.667)
+transform = Transform3D(1, 1.41517e-06, 4.31741e-07, -1.41516e-06, 0.829702, 0.55821, 4.31741e-07, -0.55821, 0.829702, -0.355485, 0.945, 0.667)
 mesh = SubResource("SphereMesh_g6l2b")
 
 [node name="LeftEye" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 1.41516e-06, 4.31741e-07, -1.41516e-06, 0.829702, 0.55821, 4.3174e-07, -0.55821, 0.829702, 0.346126, 0.945229, 0.666775)
+transform = Transform3D(1, 1.41517e-06, 4.31741e-07, -1.41516e-06, 0.829702, 0.55821, 4.31741e-07, -0.55821, 0.829702, 0.346126, 0.945229, 0.666775)
 mesh = SubResource("SphereMesh_g6l2b")
 
 [node name="Beak" type="MeshInstance3D" parent="."]
