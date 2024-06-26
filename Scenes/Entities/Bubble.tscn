@@ -50,8 +50,11 @@ radius = 0.25
 height = 0.5
 
 [node name="Bubble" type="RigidBody3D" node_paths=PackedStringArray("LifespanTimer")]
+collision_layer = 2
+collision_mask = 11
 physics_material_override = SubResource("PhysicsMaterial_oj5gu")
 gravity_scale = 0.5
+linear_damp_mode = 1
 script = ExtResource("1_i3crb")
 LifespanTimer = NodePath("Lifespan")
 metadata/_edit_group_ = true
