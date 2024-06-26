@@ -3,11 +3,12 @@ using System;
 
 // TODO TODAY:
 // CHARGER LOGIC (WAIT THEN SPIN)
-// PROJECTILE THAT SHOOTS AND GLOWS
 // ADD KNOCKBACK
 public partial class Enemy : CharacterBody3D {
 	// exported variables
 	[Export] public float FallSpeed = -50f; // different from gravity, constant fall rate
+	[Export] public PackedScene Projectile;
+	[Export] public Node3D ProjectileSpawnPoint;
 
 	// signals
 	[Signal] public delegate void EnemyShootEventHandler();
@@ -17,6 +18,7 @@ public partial class Enemy : CharacterBody3D {
 	// static variables
 	public static int EnemyCount = 0;
 	public static int BossScale = 2;
+	private static int projectileSpeed = 500;
 
 	// instance variables
 	public int Health { get; private set; } = 500;
@@ -117,6 +119,7 @@ public partial class Enemy : CharacterBody3D {
 		if (type == EnemyType.Shooter) {
 			if (attackTimer >= attackCD) {
 				EmitSignal(SignalName.EnemyShoot);
+				ShootProjectile(delta);
 				attackTimer = 0;
 			}
 		} else if (type == EnemyType.Charger) {
@@ -125,6 +128,14 @@ public partial class Enemy : CharacterBody3D {
 			// handle boss attacks
 		}
 		attackTimer += delta;
+	}
+
+	private void ShootProjectile(float delta) {
+		Projectile projectile = Projectile.Instantiate<Projectile>();
+		projectile.Damage = Attack;
+		projectile.Position = ProjectileSpawnPoint.Position;
+		projectile.LinearVelocity = Position.DirectionTo(player.Position) * projectileSpeed * delta;
+		AddChild(projectile);
 	}
 
 	private void ProcessMovement(float delta) {
