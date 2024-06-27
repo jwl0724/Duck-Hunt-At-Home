@@ -1,6 +1,13 @@
 using Godot;
 using System;
 
+// TODO:
+// IMPLEMENT ACTUAL SHOOTING MECHANICS
+// ADD RELOADING MECHANICS
+// HAVE A GUN MODEL IN CAMERA VIEW
+// ADD THROWING GERNADE
+// ADD GRAPPLING HOOK MECHANIC
+// HAVE HUD WITH RELEVANT INFO
 public partial class Player : CharacterBody3D
 {	// exported variables
 	[Export] public float Gravity = -20f;
@@ -9,6 +16,7 @@ public partial class Player : CharacterBody3D
 	[Export] public float MouseSensitivity = 0.1f;
 	[Export] public int Health = 500;
 	[Export] public int Attack = 25;
+	[Export] public Timer IFrameTimer;
 
 	// signals
 	[Signal] public delegate void PlayerShootEventHandler();
@@ -18,7 +26,6 @@ public partial class Player : CharacterBody3D
 	private Vector3 direction = new();
 	private Vector3 knockbackVector = new();
 	private Camera3D camera;
-	
 
 	public override void _Ready() {
 		camera = GetNode<Camera3D>("Camera");
@@ -95,14 +102,20 @@ public partial class Player : CharacterBody3D
 	}
 
 	private void HandleCollision() {
+		if (IFrameTimer.TimeLeft != 0) return;
 		var collidingObject = GetLastSlideCollision().GetCollider();
 		if (collidingObject is CharacterBody3D) {
 			if (collidingObject is not Enemy enemy) return;
+
+			// if iframe timer is not running
+			if (IFrameTimer.TimeLeft == 0) IFrameTimer.Start();
 			Health -= enemy.Attack;
 			ApplyKnockback(enemy.Velocity, enemy.KnockbackStrength);
 
 		} else if (collidingObject is RigidBody3D) {
 			if (collidingObject is not Projectile projectile) return;
+
+			if (IFrameTimer.TimeLeft == 0) IFrameTimer.Start();
 			Health -= projectile.Damage;
 			ApplyKnockback(projectile.LinearVelocity, Projectile.KnockbackStrength);
 		}
@@ -111,7 +124,8 @@ public partial class Player : CharacterBody3D
 	private void ApplyKnockback(Vector3 movementDirection, int knockbackStrength) {
 		int knockbackHeight = (int) Mathf.Min(knockbackStrength * 1.5f, 20);
 		Velocity = new Vector3(Velocity.X, knockbackHeight, Velocity.Z);
-		Vector3 knockbackDirection = movementDirection.Normalized();
-		knockbackVector += new Vector3(knockbackDirection.X * knockbackStrength, 0, knockbackDirection.Z * knockbackStrength);
+		float Xcomponent = Mathf.Clamp(movementDirection.Normalized().X * knockbackStrength + knockbackVector.X, -35, 35);
+		float Zcomponent = Mathf.Clamp(movementDirection.Normalized().X * knockbackStrength + knockbackVector.X, -35, 35);
+		knockbackVector = new Vector3(Xcomponent, 0, Zcomponent);
 	}
 }
