@@ -3,7 +3,6 @@ using System;
 
 // TODO TODAY:
 // CHARGER LOGIC (WAIT THEN SPIN)
-// ADD KNOCKBACK
 public partial class Enemy : CharacterBody3D {
 	// exported variables
 	[Export] public float FallSpeed = -50f; // different from gravity, constant fall rate
@@ -88,7 +87,7 @@ public partial class Enemy : CharacterBody3D {
 			Speed = 80;
 			Attack = 100;
 			attackCD = 5f;
-			KnockbackStrength = 20;
+			KnockbackStrength = 15;
 			this.type = type;
 			int scale = Mathf.Min(BossScale, 10);
 			Scale = new Vector3(scale, scale, scale);
