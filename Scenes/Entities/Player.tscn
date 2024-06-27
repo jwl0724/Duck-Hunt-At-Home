@@ -4,11 +4,12 @@
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_56r0q"]
 
-[node name="Player" type="CharacterBody3D"]
+[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("IFrameTimer")]
 collision_layer = 8
-collision_mask = 7
+collision_mask = 23
 script = ExtResource("1_auq8a")
 Speed = 300.0
+IFrameTimer = NodePath("IframeTimer")
 metadata/_edit_group_ = true
 
 [node name="Shape" type="CollisionShape3D" parent="."]
@@ -16,3 +17,7 @@ shape = SubResource("CapsuleShape3D_56r0q")
 
 [node name="Camera" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.381661, 0)
+
+[node name="IframeTimer" type="Timer" parent="."]
+wait_time = 0.5
+one_shot = true
