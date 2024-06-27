@@ -109,7 +109,7 @@ public partial class Player : CharacterBody3D
 	}
 
 	private void ApplyKnockback(Vector3 movementDirection, int knockbackStrength) {
-		int knockbackHeight = Mathf.Min(knockbackStrength, 20);
+		int knockbackHeight = (int) Mathf.Min(knockbackStrength * 1.5f, 20);
 		Velocity = new Vector3(Velocity.X, knockbackHeight, Velocity.Z);
 		Vector3 knockbackDirection = movementDirection.Normalized();
 		knockbackVector += new Vector3(knockbackDirection.X * knockbackStrength, 0, knockbackDirection.Z * knockbackStrength);
