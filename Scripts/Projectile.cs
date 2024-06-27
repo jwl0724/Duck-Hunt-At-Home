@@ -1,19 +1,20 @@
 using Godot;
 using System;
 
+// TODO FIX BUG WHERE PROJECTILES GET AFFECTED BY PLAYER MOVEMENT?
 public partial class Projectile : RigidBody3D {
 	// exported variables
 	[Export] public Timer LifespanTimer;
 
 	// static variables
-	public static readonly int knockbackStrength = 10;
+	public static readonly int KnockbackStrength = 5;
 
 	// instance variables
 	public int Damage { get; set; } = 25;
 
 	public override void _Ready() {
 		ContactMonitor = true;
-		MaxContactsReported = 2;
+		MaxContactsReported = 10;
 		// connect signals
 		LifespanTimer.Connect("timeout", Callable.From(() => PopBubble()));
 		Connect("body_entered", Callable.From((PhysicsBody3D body) => OnCollision(body)));
