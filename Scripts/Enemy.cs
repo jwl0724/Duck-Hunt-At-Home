@@ -24,6 +24,7 @@ public partial class Enemy : CharacterBody3D {
 	public int Health { get; private set; } = 500;
 	public int Attack { get; private set; } = 50;
 	public float Speed { get; private set; } = 150;
+	public int KnockbackStrength { get; private set; } = 5;
 	private Vector3 direction = new(0, 0, 0);
 	private EnemyType type;
 	private CharacterBody3D player;
@@ -87,6 +88,7 @@ public partial class Enemy : CharacterBody3D {
 			Speed = 80;
 			Attack = 100;
 			attackCD = 5f;
+			KnockbackStrength = 20;
 			this.type = type;
 			int scale = Mathf.Min(BossScale, 10);
 			Scale = new Vector3(scale, scale, scale);
