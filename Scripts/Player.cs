@@ -7,7 +7,7 @@ public partial class Player : CharacterBody3D
 	[Export] public float Speed = 100f;
 	[Export] public float JumpSpeed = 12.5f;
 	[Export] public float MouseSensitivity = 0.1f;
-	[Export] public int Health = 300;
+	[Export] public int Health = 500;
 	[Export] public int Attack = 25;
 
 	// signals
@@ -16,8 +16,10 @@ public partial class Player : CharacterBody3D
 
 	// instance variables
 	private Vector3 direction = new();
+	private Vector3 knockbackVector = new();
 	private Camera3D camera;
 	
+
 	public override void _Ready() {
 		camera = GetNode<Camera3D>("Camera");
 		Input.MouseMode = Input.MouseModeEnum.Captured;
@@ -38,9 +40,8 @@ public partial class Player : CharacterBody3D
 		ProcessMouse(mouseMovement as InputEventMouseMotion);
 	}
 
+	// HELPER FUNCTIONS
 	private void ProcessInput() {
-		direction = new();
-
 		// check if player jumped
 		if (IsOnFloor()) {
 			if (Input.IsActionJustPressed("jump")) 
@@ -63,14 +64,19 @@ public partial class Player : CharacterBody3D
 	private void ProcessMovement(float delta) {
 		float Ycomponent = delta * Gravity + Velocity.Y;
 
-		// interpolate for smoother movement
-		Vector3 velocity = Velocity;
-		velocity = velocity.Lerp(direction * Speed, 5);
-		float Xcomponent = velocity.X * delta;
-		float Zcomponent = velocity.Z * delta;
+		// calcualte velocity via interpolation
+		Vector3 velocity = Velocity.Lerp(direction * Speed, 5);
+		float Xcomponent = velocity.X * delta + knockbackVector.X;
+		float Zcomponent = velocity.Z * delta + knockbackVector.Z;
+		Velocity = new(Xcomponent, Ycomponent, Zcomponent);
 
-		Velocity = new(Xcomponent, Ycomponent, Zcomponent);		
-		MoveAndSlide();
+		// handle knockback
+		bool collided = MoveAndSlide();
+		if (collided && GetLastSlideCollision().GetCollider() is not StaticBody3D) {
+			HandleCollision();
+			return;
+		}
+		if (IsOnFloor()) knockbackVector = new();
 	}
 
 	private void ProcessMouse(InputEventMouseMotion movement) {
@@ -86,5 +92,26 @@ public partial class Player : CharacterBody3D
 		// normalize vector components
 		Vector2 normalizeVectors = new(rotationDegreesX, rotationDegreesY);
 		camera.Rotation = new Vector3(normalizeVectors.X, normalizeVectors.Y, 0);
+	}
+
+	private void HandleCollision() {
+		var collidingObject = GetLastSlideCollision().GetCollider();
+		if (collidingObject is CharacterBody3D) {
+			if (collidingObject is not Enemy enemy) return;
+			Health -= enemy.Attack;
+			ApplyKnockback(enemy.Velocity, enemy.KnockbackStrength);
+
+		} else if (collidingObject is RigidBody3D) {
+			if (collidingObject is not Projectile projectile) return;
+			Health -= projectile.Damage;
+			ApplyKnockback(projectile.LinearVelocity, Projectile.KnockbackStrength);
+		}
+	}
+
+	private void ApplyKnockback(Vector3 movementDirection, int knockbackStrength) {
+		int knockbackHeight = Mathf.Min(knockbackStrength, 20);
+		Velocity = new Vector3(Velocity.X, knockbackHeight, Velocity.Z);
+		Vector3 knockbackDirection = movementDirection.Normalized();
+		knockbackVector += new Vector3(knockbackDirection.X * knockbackStrength, 0, knockbackDirection.Z * knockbackStrength);
 	}
 }
