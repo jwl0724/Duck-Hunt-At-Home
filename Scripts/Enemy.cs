@@ -11,6 +11,7 @@ public partial class Enemy : CharacterBody3D {
 	// signals
 	[Signal] public delegate void EnemyShootEventHandler();
 	[Signal] public delegate void EnemyDiedEventHandler();
+	[Signal] public delegate void EnemyDamagedEventHandler();
 	[Signal] public delegate void MoveStateChangeEventHandler();
 	
 	// static variables
@@ -113,9 +114,9 @@ public partial class Enemy : CharacterBody3D {
         ProcessMovement((float) delta);
     }
 
-	// SIGNAL HANDLERS
-	private void OnShot(int damage) {
+	public void OnShot(int damage) {
 		Health -= damage;
+		EmitSignal(SignalName.EnemyDamaged);
 	}
 
 	// HELPER FUNCTIONS
