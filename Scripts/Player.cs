@@ -35,7 +35,7 @@ public partial class Player : CharacterBody3D
 		GunModel.Animator.Connect("animation_finished", Callable.From((StringName name) => OnGunAnimationFinished(name)));
 	}
 
-	public override void _PhysicsProcess(double delta) {
+    public override void _PhysicsProcess(double delta) {
 		if (Health <= 0) {
 			EmitSignal(SignalName.PlayerDied);
 			return;
@@ -63,15 +63,14 @@ public partial class Player : CharacterBody3D
 			if (Input.IsActionJustPressed("jump")) 
 				Velocity = new Vector3(Velocity.X, JumpSpeed, Velocity.Z);
 		}
-
 		// check reloading
 		if (Input.IsActionJustPressed("reload") && !reloading) {
+			reloading = true;
 			EmitSignal(SignalName.PlayerReload);
 			// TODO: ADD RELOAD FUNCTIONALITY
 		} 
-
 		// check shooting
-		if (Input.IsActionJustPressed("shoot")) {
+		if (Input.IsActionJustPressed("shoot") && !reloading) {
 			EmitSignal(SignalName.PlayerShoot);
 			// TODO: ADD SHOOTING FUNCTIONALITY
 		}
@@ -123,20 +122,11 @@ public partial class Player : CharacterBody3D
 
 		// turn gun slightly when turning
 		float tiltZ = 0, tiltY = 0;
-		if (movement.Relative.X < -10) tiltY = 0.261799f;
-		else if (movement.Relative.X > 10) tiltY = -0.261799f;
-		if (movement.Relative.Y < -10) tiltZ = 0.261799f;
-		else if (movement.Relative.Y > 0) tiltZ = -0.261799f;
-		GunModel.Rotation = GunModel.Rotation.Lerp(new Vector3(0, tiltY, tiltZ), 0.1f);
-		// GD.Print(movement.Relative);
-		// Node3D gunPositioner = GunModel.GetParent<Node3D>();
-		// GD.Print(tiltZ, tiltY);
-		
-		// GunModel.Rotation = GunModel.Rotation.Lerp(
-		// 	new Vector3(0, Mathf.Clamp(RotationalHelper.Rotation.Y, -0.261799f, 0.261799f),
-		// 	Mathf.Clamp(RotationalHelper.Rotation.Z, -0.261799f, 0.261799f)
-		// ), 0.1f);
-		// GunModel.Rotation = GunModel.Rotation.Lerp(new Vector3(0, tiltY, tiltZ), 0.1f);
+		if (movement.Relative.X < -75) tiltY = 0.261799f;
+		else if (movement.Relative.X > 75) tiltY = -0.261799f;
+		if (movement.Relative.Y < -75) tiltZ = 0.261799f;
+		else if (movement.Relative.Y > 75) tiltZ = -0.261799f;
+		GunModel.Rotation = GunModel.Rotation.Lerp(new Vector3(0, tiltY, tiltZ), 1);
 	}
 
 	private void HandleCollision() {
