@@ -4,7 +4,6 @@ using System;
 // TODO:
 // IMPLEMENT ACTUAL SHOOTING MECHANICS
 // ADD RELOADING MECHANICS
-// HAVE A GUN MODEL IN CAMERA VIEW
 // ADD THROWING GERNADE
 // ADD GRAPPLING HOOK MECHANIC
 // HAVE HUD WITH RELEVANT INFO
@@ -17,19 +16,23 @@ public partial class Player : CharacterBody3D
 	[Export] public int Health = 500;
 	[Export] public int Attack = 25;
 	[Export] public Timer IFrameTimer;
+	[Export] public GunVisual GunModel;
 
 	// signals
 	[Signal] public delegate void PlayerShootEventHandler();
 	[Signal] public delegate void PlayerDiedEventHandler();
+	[Signal] public delegate void PlayerReloadEventHandler();
 
 	// instance variables
 	private Vector3 direction = new();
 	private Vector3 knockbackVector = new();
-	private Camera3D camera;
+	private Node3D RotationalHelper;
+	private bool reloading = false;
 
 	public override void _Ready() {
-		camera = GetNode<Camera3D>("Camera");
+		RotationalHelper = GetNode<Node3D>("RotationalHelper");
 		Input.MouseMode = Input.MouseModeEnum.Captured;
+		GunModel.Animator.Connect("animation_finished", Callable.From((StringName name) => OnGunAnimationFinished(name)));
 	}
 
 	public override void _PhysicsProcess(double delta) {
@@ -47,6 +50,12 @@ public partial class Player : CharacterBody3D
 		ProcessMouse(mouseMovement as InputEventMouseMotion);
 	}
 
+	// SIGNAL HANDLERS
+	private void OnGunAnimationFinished(StringName animationName) {
+		if (animationName != "reload") return;
+		reloading = false;
+	}
+
 	// HELPER FUNCTIONS
 	private void ProcessInput() {
 		// check if player jumped
@@ -55,10 +64,22 @@ public partial class Player : CharacterBody3D
 				Velocity = new Vector3(Velocity.X, JumpSpeed, Velocity.Z);
 		}
 
+		// check reloading
+		if (Input.IsActionJustPressed("reload") && !reloading) {
+			EmitSignal(SignalName.PlayerReload);
+			// TODO: ADD RELOAD FUNCTIONALITY
+		} 
+
+		// check shooting
+		if (Input.IsActionJustPressed("shoot")) {
+			EmitSignal(SignalName.PlayerShoot);
+			// TODO: ADD SHOOTING FUNCTIONALITY
+		}
+
 		// Account for camera rotation (multiply Basis by input vector = always forward)
 		// TODO: FIX BUG WHERE LOOKING DOWN CAUSES FORWARD MOVEMENT TO SLOW
 		Vector2 inputVector = Input.GetVector("left", "right", "forward", "backward");
-		direction = camera.Transform.Basis * new Vector3(inputVector.X, 0, inputVector.Y);
+		direction = RotationalHelper.Transform.Basis * new Vector3(inputVector.X, 0, inputVector.Y);
 
 		// pause game (free cursor)
 		if (Input.IsActionJustPressed("pause")) {
@@ -88,17 +109,34 @@ public partial class Player : CharacterBody3D
 
 	private void ProcessMouse(InputEventMouseMotion movement) {
 		// handle left/right camera movement
-		float rotationDegreesY = camera.Rotation.Y + Mathf.DegToRad(-movement.Relative.X * MouseSensitivity);
+		float rotationDegreesY = RotationalHelper.Rotation.Y + Mathf.DegToRad(-movement.Relative.X * MouseSensitivity);
 
 		// handle up/down camera movement
 		float rotationDegreesX = Mathf.Clamp(
-			Mathf.DegToRad(-movement.Relative.Y * MouseSensitivity) + camera.Rotation.X, 
+			Mathf.DegToRad(-movement.Relative.Y * MouseSensitivity) + RotationalHelper.Rotation.X, 
 			Mathf.DegToRad(-85), Mathf.DegToRad(85)
 		);
 
 		// normalize vector components
 		Vector2 normalizeVectors = new(rotationDegreesX, rotationDegreesY);
-		camera.Rotation = new Vector3(normalizeVectors.X, normalizeVectors.Y, 0);
+		RotationalHelper.Rotation = new Vector3(normalizeVectors.X, normalizeVectors.Y, 0);
+
+		// turn gun slightly when turning
+		float tiltZ = 0, tiltY = 0;
+		if (movement.Relative.X < -10) tiltY = 0.261799f;
+		else if (movement.Relative.X > 10) tiltY = -0.261799f;
+		if (movement.Relative.Y < -10) tiltZ = 0.261799f;
+		else if (movement.Relative.Y > 0) tiltZ = -0.261799f;
+		GunModel.Rotation = GunModel.Rotation.Lerp(new Vector3(0, tiltY, tiltZ), 0.1f);
+		// GD.Print(movement.Relative);
+		// Node3D gunPositioner = GunModel.GetParent<Node3D>();
+		// GD.Print(tiltZ, tiltY);
+		
+		// GunModel.Rotation = GunModel.Rotation.Lerp(
+		// 	new Vector3(0, Mathf.Clamp(RotationalHelper.Rotation.Y, -0.261799f, 0.261799f),
+		// 	Mathf.Clamp(RotationalHelper.Rotation.Z, -0.261799f, 0.261799f)
+		// ), 0.1f);
+		// GunModel.Rotation = GunModel.Rotation.Lerp(new Vector3(0, tiltY, tiltZ), 0.1f);
 	}
 
 	private void HandleCollision() {
