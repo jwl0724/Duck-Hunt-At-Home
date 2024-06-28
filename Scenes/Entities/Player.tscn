@@ -1,7 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://bjxi3yjg0rb46"]
+[gd_scene load_steps=6 format=3 uid="uid://bjxi3yjg0rb46"]
 
 [ext_resource type="Script" path="res://Scripts/Player.cs" id="1_auq8a"]
 [ext_resource type="PackedScene" uid="uid://bghcfb4t3i5p7" path="res://Scenes/Models/GunModel.tscn" id="2_i0g63"]
+[ext_resource type="Script" path="res://Scripts/Hitscan.cs" id="3_fak1h"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_56r0q"]
 
@@ -17,7 +18,7 @@ collision_mask = 23
 script = ExtResource("1_auq8a")
 Speed = 300.0
 IFrameTimer = NodePath("IframeTimer")
-GunModel = NodePath("RotationalHelper/GunParent/Gun")
+GunModel = NodePath("RotationalHelper/Gun/Model")
 metadata/_edit_group_ = true
 
 [node name="Shape" type="CollisionShape3D" parent="."]
@@ -25,16 +26,23 @@ shape = SubResource("CapsuleShape3D_56r0q")
 
 [node name="RotationalHelper" type="Node3D" parent="."]
 
-[node name="GunParent" type="Node3D" parent="RotationalHelper"]
+[node name="Gun" type="Node3D" parent="RotationalHelper"]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0.295292, 0.493266, -0.41)
 
-[node name="Gun" parent="RotationalHelper/GunParent" node_paths=PackedStringArray("Player") instance=ExtResource("2_i0g63")]
+[node name="Model" parent="RotationalHelper/Gun" node_paths=PackedStringArray("Player") instance=ExtResource("2_i0g63")]
 Player = NodePath("../../..")
 
 [node name="Camera" type="Camera3D" parent="RotationalHelper"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.634554, 0)
 attributes = SubResource("CameraAttributesPractical_w1wl2")
 doppler_tracking = 2
+
+[node name="HitscanLine" type="RayCast3D" parent="RotationalHelper" node_paths=PackedStringArray("Player")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.634554, 0)
+target_position = Vector3(0, 0, -100)
+collision_mask = 6
+script = ExtResource("3_fak1h")
+Player = NodePath("../..")
 
 [node name="IframeTimer" type="Timer" parent="."]
 wait_time = 0.5
