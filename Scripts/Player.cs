@@ -122,11 +122,11 @@ public partial class Player : CharacterBody3D
 
 		// turn gun slightly when turning
 		float tiltZ = 0, tiltY = 0;
-		if (movement.Relative.X < -75) tiltY = 0.261799f;
-		else if (movement.Relative.X > 75) tiltY = -0.261799f;
-		if (movement.Relative.Y < -75) tiltZ = 0.261799f;
-		else if (movement.Relative.Y > 75) tiltZ = -0.261799f;
-		GunModel.Rotation = GunModel.Rotation.Lerp(new Vector3(0, tiltY, tiltZ), 1);
+		if (movement.Relative.X < -50) tiltY = 0.261799f;
+		else if (movement.Relative.X > 50) tiltY = -0.261799f;
+		if (movement.Relative.Y < -50) tiltZ = 0.261799f;
+		else if (movement.Relative.Y > 50) tiltZ = -0.261799f;
+		GunModel.Rotation = GunModel.Rotation.Lerp(new Vector3(0, tiltY, tiltZ), 0.3f);
 	}
 
 	private void HandleCollision() {
