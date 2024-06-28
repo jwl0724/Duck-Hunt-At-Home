@@ -202,7 +202,7 @@ length = 0.1
 step = 0.05
 tracks/0/type = "value"
 tracks/0/imported = false
-tracks/0/enabled = true
+tracks/0/enabled = false
 tracks/0/path = NodePath(".:position")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
@@ -284,8 +284,9 @@ _data = {
 "reload": SubResource("Animation_dtx1l")
 }
 
-[node name="Gun" type="Node3D"]
+[node name="Gun" type="Node3D" node_paths=PackedStringArray("Animator")]
 script = ExtResource("1_gux62")
+Animator = NodePath("Animation")
 
 [node name="Chamber" type="MeshInstance3D" parent="."]
 mesh = SubResource("BoxMesh_25qo0")
