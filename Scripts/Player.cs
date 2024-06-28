@@ -2,8 +2,6 @@ using Godot;
 using System;
 
 // TODO:
-// IMPLEMENT ACTUAL SHOOTING MECHANICS
-// ADD RELOADING MECHANICS
 // ADD THROWING GERNADE
 // ADD GRAPPLING HOOK MECHANIC
 // HAVE HUD WITH RELEVANT INFO
@@ -14,7 +12,7 @@ public partial class Player : CharacterBody3D
 	[Export] public float JumpSpeed = 12.5f;
 	[Export] public float MouseSensitivity = 0.1f;
 	[Export] public int Health = 500;
-	[Export] public int Attack = 25;
+	[Export] public int Attack = 75;
 	[Export] public Timer IFrameTimer;
 	[Export] public GunVisual GunModel;
 
@@ -22,12 +20,17 @@ public partial class Player : CharacterBody3D
 	[Signal] public delegate void PlayerShootEventHandler();
 	[Signal] public delegate void PlayerDiedEventHandler();
 	[Signal] public delegate void PlayerReloadEventHandler();
+	[Signal] public delegate void PlayerEmptyMagEventHandler();
+
+	// static variables
+	private static readonly int clipSize = 25;
 
 	// instance variables
 	private Vector3 direction = new();
 	private Vector3 knockbackVector = new();
 	private Node3D RotationalHelper;
 	private bool reloading = false;
+	private int bullets = clipSize;
 
 	public override void _Ready() {
 		RotationalHelper = GetNode<Node3D>("RotationalHelper");
@@ -63,16 +66,23 @@ public partial class Player : CharacterBody3D
 			if (Input.IsActionJustPressed("jump")) 
 				Velocity = new Vector3(Velocity.X, JumpSpeed, Velocity.Z);
 		}
+
 		// check reloading
 		if (Input.IsActionJustPressed("reload") && !reloading) {
 			reloading = true;
+			bullets = clipSize;
 			EmitSignal(SignalName.PlayerReload);
 			// TODO: ADD RELOAD FUNCTIONALITY
 		} 
+
 		// check shooting
 		if (Input.IsActionJustPressed("shoot") && !reloading) {
+			if (bullets < 0) {
+				EmitSignal(SignalName.PlayerEmptyMag);
+				return;
+			}
 			EmitSignal(SignalName.PlayerShoot);
-			// TODO: ADD SHOOTING FUNCTIONALITY
+			bullets--;
 		}
 
 		// Account for camera rotation (multiply Basis by input vector = always forward)
