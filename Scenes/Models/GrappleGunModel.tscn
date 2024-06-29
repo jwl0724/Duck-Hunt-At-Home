@@ -1,6 +1,8 @@
-[gd_scene load_steps=21 format=3 uid="uid://chxaw8ej02n74"]
+[gd_scene load_steps=22 format=3 uid="uid://chxaw8ej02n74"]
 
 [ext_resource type="Script" path="res://Scripts/GrappleVisual.cs" id="1_j6afy"]
+
+[sub_resource type="ImmediateMesh" id="ImmediateMesh_7c88q"]
 
 [sub_resource type="NoiseTexture2D" id="NoiseTexture2D_1nnsg"]
 
@@ -241,9 +243,11 @@ _data = {
 "lift": SubResource("Animation_n0ecu")
 }
 
-[node name="Node3D" type="Node3D" node_paths=PackedStringArray("Animator")]
+[node name="GrappleGun" type="Node3D" node_paths=PackedStringArray("Animator", "LineSpawnPoint")]
 script = ExtResource("1_j6afy")
 Animator = NodePath("Animation")
+LineSpawnPoint = NodePath("LineSpawnPoint")
+LineMesh = SubResource("ImmediateMesh_7c88q")
 metadata/_edit_group_ = true
 
 [node name="Barrel" type="MeshInstance3D" parent="."]
@@ -271,6 +275,12 @@ mesh = SubResource("CylinderMesh_3il4t")
 
 [node name="LineSpawnPoint" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0307971, 0, 0)
+
+[node name="RightSide" type="Node3D" parent="LineSpawnPoint"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.00776081)
+
+[node name="LeftSide" type="Node3D" parent="LineSpawnPoint"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.008)
 
 [node name="Animation" type="AnimationPlayer" parent="."]
 libraries = {
