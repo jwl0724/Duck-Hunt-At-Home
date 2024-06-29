@@ -2,9 +2,10 @@ using Godot;
 using System;
 
 // TODO:
-// ADD THROWING GERNADE
-// ADD GRAPPLING HOOK MECHANIC
+// ADD RAGDOLL EFFECT ON ENEMY KILLED
 // HAVE HUD WITH RELEVANT INFO
+// ADD LINGERING BULLET TRAIL EFFECT
+// FIX BUG WHERE ENEMIES KILLED DESPAWNS BUBBLES IT SHOT
 public partial class Player : CharacterBody3D
 {	// exported variables
 	[Export] public float Gravity = -20f;
@@ -15,17 +16,23 @@ public partial class Player : CharacterBody3D
 	[Export] public int Attack = 75;
 	[Export] public Timer IFrameTimer;
 	[Export] public GunVisual GunModel;
+	[Export] public GrappleVisual GrappleGunModel;
 
 	// signals
 	[Signal] public delegate void PlayerShootEventHandler();
 	[Signal] public delegate void PlayerDiedEventHandler();
+	[Signal] public delegate void PlayerDamagedEventHandler();
 	[Signal] public delegate void PlayerReloadEventHandler();
 	[Signal] public delegate void PlayerEmptyMagEventHandler();
+	[Signal] public delegate void PlayerGrappleEventHandler();
 
 	// static variables
 	private static readonly int clipSize = 25;
+	private static readonly int acceleration = 10;
+	private static readonly int decceleration = 15;
 
 	// instance variables
+	public bool Grappled = false;
 	private Vector3 direction = new();
 	private Vector3 knockbackVector = new();
 	private Node3D RotationalHelper;
@@ -61,20 +68,13 @@ public partial class Player : CharacterBody3D
 
 	// HELPER FUNCTIONS
 	private void ProcessInput() {
-		// check if player jumped
-		if (IsOnFloor()) {
-			if (Input.IsActionJustPressed("jump")) 
-				Velocity = new Vector3(Velocity.X, JumpSpeed, Velocity.Z);
+		// pause game (free cursor)
+		if (Input.IsActionJustPressed("pause")) {
+			if (Input.MouseMode == Input.MouseModeEnum.Visible)
+				Input.MouseMode = Input.MouseModeEnum.Captured;
+			else Input.MouseMode = Input.MouseModeEnum.Visible;
+			return;
 		}
-
-		// check reloading
-		if (Input.IsActionJustPressed("reload") && !reloading) {
-			if (bullets == clipSize) return;
-			reloading = true;
-			bullets = clipSize;
-			EmitSignal(SignalName.PlayerReload);
-		} 
-
 		// check shooting
 		if (Input.IsActionJustPressed("shoot") && !reloading) {
 			if (bullets < 0) {
@@ -84,36 +84,58 @@ public partial class Player : CharacterBody3D
 			EmitSignal(SignalName.PlayerShoot);
 			bullets--;
 		}
+		// check reloading
+		if (Input.IsActionJustPressed("reload") && !reloading) {
+			if (bullets == clipSize) return;
+			reloading = true;
+			bullets = clipSize;
+			EmitSignal(SignalName.PlayerReload);
+		} 
+		// check grapple, everything past grapple not allowed when grappled
+		if (Input.IsActionPressed("grapple")) {
+			if (Grappled) return;
+			Grappled = true;
+			direction = new();
+			EmitSignal(SignalName.PlayerGrapple);
 
+		} else if (Input.IsActionJustReleased("grapple")) {
+			Grappled = false;
+			EmitSignal(SignalName.PlayerGrapple);
+		}
+		// check if player jumped
+		if (IsOnFloor()) {
+			if (Input.IsActionJustPressed("jump")) 
+				Velocity = new Vector3(Velocity.X, JumpSpeed, Velocity.Z);
+		}
 		// Account for camera rotation (multiply Basis by input vector = always forward)
-		// TODO: FIX BUG WHERE LOOKING DOWN CAUSES FORWARD MOVEMENT TO SLOW
+		// TODO: fix bug where looking up and down slows movement
 		Vector2 inputVector = Input.GetVector("left", "right", "forward", "backward");
 		direction = RotationalHelper.Transform.Basis * new Vector3(inputVector.X, 0, inputVector.Y);
-
-		// pause game (free cursor)
-		if (Input.IsActionJustPressed("pause")) {
-			if (Input.MouseMode == Input.MouseModeEnum.Visible)
-				Input.MouseMode = Input.MouseModeEnum.Captured;
-			else Input.MouseMode = Input.MouseModeEnum.Visible;
-		}
 	}
 
 	private void ProcessMovement(float delta) {
 		float Ycomponent = delta * Gravity + Velocity.Y;
 
 		// calcualte velocity via interpolation
-		Vector3 velocity = Velocity.Lerp(direction * Speed, 5);
-		float Xcomponent = velocity.X * delta + knockbackVector.X;
-		float Zcomponent = velocity.Z * delta + knockbackVector.Z;
-		Velocity = new(Xcomponent, Ycomponent, Zcomponent);
+		if (IsOnFloor() && !Grappled) {
+			float lerpSpeed;
+			if (direction.Dot(Velocity) > 0) lerpSpeed = acceleration;
+			else lerpSpeed = decceleration;
+			
+			Vector3 velocity = Velocity.Lerp(direction * Speed, lerpSpeed);
+			float Xcomponent = velocity.X * delta + knockbackVector.X;
+			float Zcomponent = velocity.Z * delta + knockbackVector.Z;
+			Velocity = new(Xcomponent, Ycomponent, Zcomponent);
 
+		} else if (!Grappled) Velocity = new(Velocity.X, Ycomponent, Velocity.Z);
+		
 		// handle knockback
 		bool collided = MoveAndSlide();
 		if (collided && GetLastSlideCollision().GetCollider() is not StaticBody3D) {
 			HandleCollision();
 			return;
 		}
-		if (IsOnFloor()) knockbackVector = new();
+		if (IsOnFloor() && !Grappled) knockbackVector = new();
 	}
 
 	private void ProcessMouse(InputEventMouseMotion movement) {
@@ -149,6 +171,7 @@ public partial class Player : CharacterBody3D
 			if (IFrameTimer.TimeLeft == 0) IFrameTimer.Start();
 			Health -= enemy.Attack;
 			ApplyKnockback(enemy.Velocity, enemy.KnockbackStrength);
+			EmitSignal(SignalName.PlayerDamaged);
 
 		} else if (collidingObject is RigidBody3D) {
 			if (collidingObject is not Projectile projectile) return;
@@ -156,6 +179,7 @@ public partial class Player : CharacterBody3D
 			if (IFrameTimer.TimeLeft == 0) IFrameTimer.Start();
 			Health -= projectile.Damage;
 			ApplyKnockback(projectile.LinearVelocity, Projectile.KnockbackStrength);
+			EmitSignal(SignalName.PlayerDamaged);
 		}
 	}
 
