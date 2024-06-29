@@ -8,9 +8,9 @@ using System;
 // FIX BUG WHERE ENEMIES KILLED DESPAWNS BUBBLES IT SHOT
 public partial class Player : CharacterBody3D
 {	// exported variables
-	[Export] public float Gravity = -20f;
+	[Export] public float Gravity = -12f;
 	[Export] public float Speed = 100f;
-	[Export] public float JumpSpeed = 12.5f;
+	[Export] public float JumpSpeed = 5f;
 	[Export] public float MouseSensitivity = 0.1f;
 	[Export] public int Health = 500;
 	[Export] public int Attack = 75;
@@ -30,9 +30,11 @@ public partial class Player : CharacterBody3D
 	private static readonly int clipSize = 25;
 	private static readonly int acceleration = 10;
 	private static readonly int decceleration = 15;
+	private static readonly int grappleSpeed = 2000;
 
 	// instance variables
 	public bool Grappled = false;
+	public Vector3 GrapplePoint = new();
 	private Vector3 direction = new();
 	private Vector3 knockbackVector = new();
 	private Node3D RotationalHelper;
@@ -75,6 +77,7 @@ public partial class Player : CharacterBody3D
 			else Input.MouseMode = Input.MouseModeEnum.Visible;
 			return;
 		}
+
 		// check shooting
 		if (Input.IsActionJustPressed("shoot") && !reloading) {
 			if (bullets < 0) {
@@ -84,30 +87,34 @@ public partial class Player : CharacterBody3D
 			EmitSignal(SignalName.PlayerShoot);
 			bullets--;
 		}
+
 		// check reloading
 		if (Input.IsActionJustPressed("reload") && !reloading) {
 			if (bullets == clipSize) return;
 			reloading = true;
 			bullets = clipSize;
 			EmitSignal(SignalName.PlayerReload);
-		} 
+		}
+
 		// check grapple, everything past grapple not allowed when grappled
 		if (Input.IsActionPressed("grapple")) {
-			if (Grappled) return;
-			Grappled = true;
-			direction = new();
-			EmitSignal(SignalName.PlayerGrapple);
+			if (!Grappled) {
+				Grappled = true;
+				EmitSignal(SignalName.PlayerGrapple);
+			}
 
 		} else if (Input.IsActionJustReleased("grapple")) {
 			Grappled = false;
+			GrapplePoint = new();
 			EmitSignal(SignalName.PlayerGrapple);
 		}
+
 		// check if player jumped
 		if (IsOnFloor()) {
-			if (Input.IsActionJustPressed("jump")) 
+			if (Input.IsActionJustPressed("jump") && GrapplePoint.IsZeroApprox()) 
 				Velocity = new Vector3(Velocity.X, JumpSpeed, Velocity.Z);
 		}
-		// Account for camera rotation (multiply Basis by input vector = always forward)
+		// Account for camera rotation
 		// TODO: fix bug where looking up and down slows movement
 		Vector2 inputVector = Input.GetVector("left", "right", "forward", "backward");
 		direction = RotationalHelper.Transform.Basis * new Vector3(inputVector.X, 0, inputVector.Y);
@@ -116,8 +123,12 @@ public partial class Player : CharacterBody3D
 	private void ProcessMovement(float delta) {
 		float Ycomponent = delta * Gravity + Velocity.Y;
 
-		// calcualte velocity via interpolation
-		if (IsOnFloor() && !Grappled) {
+		if (Grappled && !GrapplePoint.IsZeroApprox()) {
+			// player is grappled
+			Velocity = Position.DirectionTo(GrapplePoint).Normalized() * grappleSpeed * delta;
+
+		} else if (IsOnFloor()) {
+			// player is moving on ground
 			float lerpSpeed;
 			if (direction.Dot(Velocity) > 0) lerpSpeed = acceleration;
 			else lerpSpeed = decceleration;
@@ -127,15 +138,15 @@ public partial class Player : CharacterBody3D
 			float Zcomponent = velocity.Z * delta + knockbackVector.Z;
 			Velocity = new(Xcomponent, Ycomponent, Zcomponent);
 
-		} else if (!Grappled) Velocity = new(Velocity.X, Ycomponent, Velocity.Z);
-		
+		} else Velocity = new(Velocity.X, Ycomponent, Velocity.Z); // player is midair
+			
 		// handle knockback
 		bool collided = MoveAndSlide();
 		if (collided && GetLastSlideCollision().GetCollider() is not StaticBody3D) {
 			HandleCollision();
 			return;
 		}
-		if (IsOnFloor() && !Grappled) knockbackVector = new();
+		if (IsOnFloor()) knockbackVector = new();
 	}
 
 	private void ProcessMouse(InputEventMouseMotion movement) {
