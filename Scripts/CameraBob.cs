@@ -4,43 +4,44 @@ using System;
 public partial class CameraBob : Camera3D {
 	// exported variables
 	[Export] public Player Player;
-	[Export] public Node3D RotationalHelper;
+	[Export] public Hitscan HitscanLine;
 
 	// static variables
-	private static readonly float headbobAngle = Mathf.DegToRad(2);
+	private static readonly float headbobAngle = Mathf.DegToRad(0.3f);
 	private static readonly float maxFallingAngle = Mathf.DegToRad(5);
 	private static readonly float bobSpeed = 10;
-	
-	public override void _Ready() {
 
-	}
+	// instance variables
+	private float currentAngle = headbobAngle;
 
 	public override void _Process(double delta) {
-		Vector3 parentRotation = RotationalHelper.Rotation;
 		if (!Player.Velocity.IsZeroApprox() && Player.IsOnFloor()) {
 			// moving on the ground
-			if (Rotation.X <= parentRotation.X - headbobAngle) {
-				Rotation = Rotation.Lerp(
-					new Vector3(parentRotation.X + headbobAngle, parentRotation.Y, parentRotation.Z), 
-					bobSpeed * (float) delta
-				);
-				
-			} else if (Rotation.X >= parentRotation.X + headbobAngle){
-				Rotation = Rotation.Lerp(
-					new Vector3(RotationalHelper.Rotation.X - headbobAngle, parentRotation.Y, parentRotation.Z),
-					bobSpeed * (float) delta
-				);
+			if (Rotation.X > headbobAngle + Mathf.DegToRad(0.1f)) {
+				// restore original rotation after falling
+				Rotation = Rotation.Lerp(new Vector3(), bobSpeed * (float) delta);
+				return;
 			}
+
+			if (!IsBetween(Rotation.X, -headbobAngle, headbobAngle) && Rotation.X < 0)
+				currentAngle = headbobAngle;
+			else if (!IsBetween(Rotation.X, -headbobAngle, headbobAngle) && Rotation.X > 0) 
+				currentAngle = -headbobAngle;
+			Rotation = Rotation.Lerp(new Vector3(Rotation.X + currentAngle, Rotation.Y, Rotation.Z), bobSpeed * (float) delta);
 
 		} else if (!Player.IsOnFloor()) {
 			// falling
-			Rotation = Rotation.Lerp(new Vector3(parentRotation.X + maxFallingAngle, parentRotation.Y, parentRotation.Z),
-			bobSpeed / 10 * (float) delta
-		);
+			Rotation = Rotation.Lerp(new Vector3(Rotation.X + maxFallingAngle, Rotation.Y, Rotation.Z), bobSpeed / 10 * (float) delta);
 
 		} else {
 			// not moving
-			Rotation = Rotation.Lerp(parentRotation, bobSpeed * (float) delta);
+			Rotation = Rotation.Lerp(new Vector3(), bobSpeed * (float) delta);
 		}
+		// adjust rotation of hitscan line so it matches reticle
+		HitscanLine.Rotation = HitscanLine.Rotation.Lerp(Rotation, bobSpeed * (float) delta);
+	}
+
+	private static bool IsBetween(float number, float min, float max) {
+		return min <= number && number <= max;
 	}
 }
