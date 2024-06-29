@@ -7,11 +7,9 @@ public partial class ShootVisualEffects : Node3D {
 	[Export] public MeshInstance3D MuzzleFlashModel;
 
 	// static variables
-	private static readonly float trailDuration = 0.02f;
 	private static readonly float muzzleFlashDuration = 0.1f;
 
 	// timers
-	private float trailTimer = 0;
 	private float muzzleFlashTimer = 0;
 
 	public override void _Ready() {
