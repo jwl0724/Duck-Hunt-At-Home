@@ -1,13 +1,27 @@
-[gd_scene load_steps=9 format=3 uid="uid://bjxi3yjg0rb46"]
+[gd_scene load_steps=13 format=3 uid="uid://bjxi3yjg0rb46"]
 
 [ext_resource type="Script" path="res://Scripts/Player.cs" id="1_auq8a"]
 [ext_resource type="PackedScene" uid="uid://bghcfb4t3i5p7" path="res://Scenes/Models/GunModel.tscn" id="2_i0g63"]
 [ext_resource type="Script" path="res://Scripts/Hitscan.cs" id="3_fak1h"]
+[ext_resource type="Script" path="res://Scripts/ShootVisualEffects.cs" id="3_kvw6a"]
 [ext_resource type="Script" path="res://Scripts/CameraBob.cs" id="3_vnrey"]
 [ext_resource type="Texture2D" uid="uid://boeqo87na44x3" path="res://Assets/Images/Crosshair.png" id="4_1t3ti"]
 [ext_resource type="Script" path="res://Scripts/HUD.cs" id="4_3c0q6"]
+[ext_resource type="Shader" path="res://Assets/Shaders/Muzzleflash.gdshader" id="4_h5n5u"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_56r0q"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_u7xc2"]
+render_priority = 0
+shader = ExtResource("4_h5n5u")
+shader_parameter/particles_anim_h_frames = null
+shader_parameter/particles_anim_v_frames = null
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_dxv43"]
+material = SubResource("ShaderMaterial_u7xc2")
+top_radius = 0.02
+bottom_radius = 0.01
+height = 0.05
 
 [sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_w1wl2"]
 exposure_multiplier = 2.0
@@ -35,13 +49,23 @@ transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0.2952
 [node name="Model" parent="RotationalHelper/Gun" node_paths=PackedStringArray("Player") instance=ExtResource("2_i0g63")]
 Player = NodePath("../../..")
 
-[node name="Camera" type="Camera3D" parent="RotationalHelper" node_paths=PackedStringArray("Player", "HitscanLine")]
+[node name="BulletTrail" type="Node3D" parent="RotationalHelper/Gun" node_paths=PackedStringArray("Player", "MuzzleFlashModel")]
+script = ExtResource("3_kvw6a")
+Player = NodePath("../../..")
+MuzzleFlashModel = NodePath("MuzzleFlash")
+
+[node name="MuzzleFlash" type="MeshInstance3D" parent="RotationalHelper/Gun/BulletTrail"]
+transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, -0.216497, 0.0196694, 0)
+mesh = SubResource("CylinderMesh_dxv43")
+
+[node name="Camera" type="Camera3D" parent="RotationalHelper" node_paths=PackedStringArray("Player", "HitscanLine", "BulletTrail")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.634554, 0)
 attributes = SubResource("CameraAttributesPractical_w1wl2")
 doppler_tracking = 2
 script = ExtResource("3_vnrey")
 Player = NodePath("../..")
 HitscanLine = NodePath("../HitscanLine")
+BulletTrail = NodePath("../Gun/BulletTrail")
 
 [node name="HitscanLine" type="RayCast3D" parent="RotationalHelper" node_paths=PackedStringArray("Player")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.634554, 0)
