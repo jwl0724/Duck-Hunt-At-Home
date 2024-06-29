@@ -1,12 +1,15 @@
 using Godot;
 using System;
 
-public partial class BulletTrail : MeshInstance3D {
+public partial class BulletTrail : Node3D {
 	// exported variables
 	[Export] public Player Player;
+	[Export] public MeshInstance3D TrailModel;
+	[Export] public MeshInstance3D MuzzleFlash;
 
 	// static variables
 	private static readonly float trailDuration = 0.02f;
+	private static readonly float muzzleFlashDuration = 0.01f;
 
 	// timers
 	private float trailTimer = 0;
