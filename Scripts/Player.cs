@@ -5,7 +5,6 @@ using System;
 // ADD RAGDOLL EFFECT ON ENEMY KILLED
 // HAVE HUD WITH RELEVANT INFO
 // ADD LINGERING BULLET TRAIL EFFECT
-// FIX BUG WHERE ENEMIES KILLED DESPAWNS BUBBLES IT SHOT
 public partial class Player : CharacterBody3D
 {	// exported variables
 	[Export] public float Gravity = -12f;
