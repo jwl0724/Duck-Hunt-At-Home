@@ -10,7 +10,7 @@ public partial class CameraBob : Camera3D {
 
 	// static variables
 	private static readonly float headbobAngle = Mathf.DegToRad(0.3f);
-	private static readonly float maxFallingAngle = Mathf.DegToRad(5);
+	private static readonly float maxFallingAngle = Mathf.DegToRad(15);
 	private static readonly float bobSpeed = 10;
 
 	// instance variables
@@ -37,6 +37,7 @@ public partial class CameraBob : Camera3D {
 
 		} else if (!Player.IsOnFloor()) {
 			// falling
+			if (Rotation.X >= maxFallingAngle) return;
 			Rotation = Rotation.Lerp(new Vector3(Rotation.X + maxFallingAngle, Rotation.Y, Rotation.Z), bobSpeed / 10 * (float) delta);
 
 		} else {
