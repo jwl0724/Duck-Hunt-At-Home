@@ -38,7 +38,7 @@ public partial class CameraBob : Camera3D {
 		} else if (!Player.IsOnFloor()) {
 			// falling
 			if (Rotation.X >= maxFallingAngle) return;
-			Rotation = Rotation.Lerp(new Vector3(Rotation.X + maxFallingAngle, Rotation.Y, Rotation.Z), bobSpeed / 10 * (float) delta);
+			Rotation = Rotation.Lerp(new Vector3(Rotation.X + maxFallingAngle, Rotation.Y, Rotation.Z), bobSpeed / 25 * (float) delta);
 
 		} else {
 			// not moving
