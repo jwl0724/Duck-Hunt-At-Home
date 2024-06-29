@@ -69,10 +69,10 @@ public partial class Player : CharacterBody3D
 
 		// check reloading
 		if (Input.IsActionJustPressed("reload") && !reloading) {
+			if (bullets == clipSize) return;
 			reloading = true;
 			bullets = clipSize;
 			EmitSignal(SignalName.PlayerReload);
-			// TODO: ADD RELOAD FUNCTIONALITY
 		} 
 
 		// check shooting
