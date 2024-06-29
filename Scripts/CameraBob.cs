@@ -5,6 +5,7 @@ public partial class CameraBob : Camera3D {
 	// exported variables
 	[Export] public Player Player;
 	[Export] public Hitscan HitscanLine;
+	[Export] public Node3D BulletTrail;
 
 	// static variables
 	private static readonly float headbobAngle = Mathf.DegToRad(0.3f);
@@ -39,6 +40,7 @@ public partial class CameraBob : Camera3D {
 		}
 		// adjust rotation of hitscan line so it matches reticle
 		HitscanLine.Rotation = HitscanLine.Rotation.Lerp(Rotation, bobSpeed * (float) delta);
+		BulletTrail.Rotation = new Vector3(0, 0, -Rotation.X);
 	}
 
 	private static bool IsBetween(float number, float min, float max) {
