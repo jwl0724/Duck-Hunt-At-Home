@@ -6,6 +6,7 @@ public partial class CameraBob : Camera3D {
 	[Export] public Player Player;
 	[Export] public Hitscan HitscanLine;
 	[Export] public Node3D BulletTrail;
+	[Export] public AnimationPlayer Animator;
 
 	// static variables
 	private static readonly float headbobAngle = Mathf.DegToRad(0.3f);
@@ -14,6 +15,10 @@ public partial class CameraBob : Camera3D {
 
 	// instance variables
 	private float currentAngle = headbobAngle;
+
+	public override void _Ready() {
+		Player.Connect("PlayerDamaged", Callable.From(() => Animator.Play("damaged")));
+	}
 
 	public override void _Process(double delta) {
 		if (!Player.Velocity.IsZeroApprox() && Player.IsOnFloor()) {
