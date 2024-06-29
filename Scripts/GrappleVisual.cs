@@ -17,6 +17,7 @@ public partial class GrappleVisual : Node3D {
 	private Node3D lineTriangleRightSide;
 
 	public override void _Ready() {
+		Visible = false;
 		Animator.Play("holster"); // hide grapple when first loading in
 
 		// connect signals
