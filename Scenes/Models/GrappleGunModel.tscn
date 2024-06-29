@@ -241,9 +241,10 @@ _data = {
 "lift": SubResource("Animation_n0ecu")
 }
 
-[node name="Node3D" type="Node3D"]
+[node name="Node3D" type="Node3D" node_paths=PackedStringArray("Animator")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 script = ExtResource("1_j6afy")
+Animator = NodePath("Animation")
 metadata/_edit_group_ = true
 
 [node name="Barrel" type="MeshInstance3D" parent="."]
