@@ -17,14 +17,14 @@ public partial class Enemy : CharacterBody3D {
 	// static variables
 	public static int EnemyCount = 0;
 	private static int bossScale = 2;
-	private static readonly int projectileSpeed = 500;
-	private static int chargeTime = 5;
+	private static readonly int projectileSpeed = 250;
+	private static int chargeTime = 1;
 	private static int chargeDelay = 2;
 
 	// instance variables
 	public int Health { get; private set; } = 500;
 	public int Attack { get; private set; } = 50;
-	public float Speed { get; private set; } = 150;
+	public float Speed { get; private set; } = 400;
 	public int KnockbackStrength { get; private set; } = 5;
 	private Vector3 direction = new(0, 0, 0);
 	private EnemyType type;
@@ -74,7 +74,7 @@ public partial class Enemy : CharacterBody3D {
 			Health = 400;
 			Speed = 70;
 			Attack = 75;
-			attackCD = 10f;
+			attackCD = 4f;
 			this.type = type;
 			model.SetColor(EnemyVisual.DuckColors.Pink);
 
@@ -170,8 +170,10 @@ public partial class Enemy : CharacterBody3D {
 
 			// disable collision with other enemies
 			SetCollisionMaskValue(3, false);
+			SetCollisionLayerValue(3, false);
+
 			Velocity = Position.DirectionTo(player.Position).Normalized();
-			Velocity *= Speed * delta * 20;
+			Velocity *= Speed * delta * 50;
 			SetMoveState(MoveState.Charging);
 		}
 
@@ -187,6 +189,7 @@ public partial class Enemy : CharacterBody3D {
 		model.ToggleGlow();
 
 		// re-enable collision with other enemies
+		SetCollisionLayerValue(3, true);
 		SetCollisionMaskValue(3, true);
 		
 		processingAttack = false;
@@ -207,12 +210,12 @@ public partial class Enemy : CharacterBody3D {
 	private void ShootProjectile(float delta) {
 		Projectile projectile = Projectile.Instantiate<Projectile>();
 		projectile.Damage = Attack;
-		projectile.Position = ProjectileSpawnPoint.Position;
-		projectile.LinearVelocity = Position.DirectionTo(player.Position) * projectileSpeed * delta;
+		projectile.Position = ProjectileSpawnPoint.GlobalPosition;
+		projectile.LinearVelocity = Position.DirectionTo(player.Position) + Velocity * projectileSpeed * delta;
 
 		// make projectile bigger if enemy is boss
 		if (type == EnemyType.Boss) projectile.Scale *= bossScale;
-		AddChild(projectile);
+		(Engine.GetMainLoop() as SceneTree).Root.AddChild(projectile);
 	}
 
 	private void ProcessMovement(float delta) {
@@ -231,7 +234,10 @@ public partial class Enemy : CharacterBody3D {
 			FacePlayer();
 			Vector3 playerPosition = player.Position;
 			direction = Position.DirectionTo(playerPosition);
-			Velocity = new(direction.X * Speed * delta, Ycomponent, direction.Z * delta * Speed);
+			Vector3 velocity = Velocity.Lerp(direction * Speed, 10);
+			float Xcomponent = velocity.X * delta;
+			float Zcomponent = velocity.Z * delta;
+			Velocity = new(Xcomponent, Ycomponent, Zcomponent);
 		}
 
 		if (Velocity.IsZeroApprox() && !processingAttack) SetMoveState(MoveState.Idle);
