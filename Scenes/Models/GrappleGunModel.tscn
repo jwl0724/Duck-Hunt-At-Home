@@ -1,0 +1,278 @@
+[gd_scene load_steps=21 format=3 uid="uid://chxaw8ej02n74"]
+
+[ext_resource type="Script" path="res://Scripts/GrappleVisual.cs" id="1_j6afy"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_1nnsg"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_fne46"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_cmq2n"]
+albedo_color = Color(1, 0.0352941, 0.231373, 1)
+metallic = 1.0
+metallic_specular = 1.0
+metallic_texture = SubResource("NoiseTexture2D_1nnsg")
+metallic_texture_channel = 4
+roughness_texture = SubResource("NoiseTexture2D_fne46")
+roughness_texture_channel = 4
+rim_enabled = true
+rim_tint = 0.0
+clearcoat_enabled = true
+clearcoat_roughness = 1.0
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_owpom"]
+material = SubResource("StandardMaterial3D_cmq2n")
+top_radius = 0.01
+bottom_radius = 0.01
+height = 0.05
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_lbfto"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_7f62f"]
+albedo_color = Color(0.699654, 0.699653, 0.699653, 1)
+metallic = 1.0
+metallic_specular = 1.0
+metallic_texture = SubResource("NoiseTexture2D_lbfto")
+rim_enabled = true
+rim_tint = 1.0
+clearcoat_enabled = true
+clearcoat_roughness = 1.0
+
+[sub_resource type="BoxMesh" id="BoxMesh_p1xvo"]
+material = SubResource("StandardMaterial3D_7f62f")
+size = Vector3(0.05, 0.01, 0.025)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gmmx3"]
+albedo_color = Color(0.439049, 0.439049, 0.439049, 1)
+metallic = 1.0
+metallic_specular = 1.0
+metallic_texture = SubResource("NoiseTexture2D_lbfto")
+rim_enabled = true
+rim_tint = 1.0
+clearcoat_enabled = true
+clearcoat_roughness = 1.0
+
+[sub_resource type="SphereMesh" id="SphereMesh_4xjm8"]
+material = SubResource("StandardMaterial3D_gmmx3")
+radius = 0.015
+height = 0.03
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_j614b"]
+metallic = 1.0
+metallic_specular = 1.0
+metallic_texture = SubResource("NoiseTexture2D_lbfto")
+rim_enabled = true
+rim_tint = 1.0
+clearcoat_enabled = true
+clearcoat_roughness = 1.0
+
+[sub_resource type="BoxMesh" id="BoxMesh_jutea"]
+material = SubResource("StandardMaterial3D_j614b")
+size = Vector3(0.003, 0.02, 0.003)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_3oksr"]
+albedo_color = Color(1, 0.0352941, 0.231373, 1)
+metallic = 1.0
+metallic_specular = 1.0
+metallic_texture = SubResource("NoiseTexture2D_1nnsg")
+metallic_texture_channel = 4
+roughness_texture = SubResource("NoiseTexture2D_fne46")
+roughness_texture_channel = 4
+rim_enabled = true
+rim_tint = 0.0
+clearcoat_enabled = true
+clearcoat_roughness = 1.0
+
+[sub_resource type="BoxMesh" id="BoxMesh_apy71"]
+material = SubResource("StandardMaterial3D_3oksr")
+size = Vector3(0.01, 0.04, 0.01)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_v7u8o"]
+albedo_color = Color(0.699654, 0.699653, 0.699653, 1)
+metallic = 1.0
+metallic_specular = 1.0
+metallic_texture = SubResource("NoiseTexture2D_lbfto")
+rim_enabled = true
+rim_tint = 1.0
+clearcoat_enabled = true
+clearcoat_roughness = 1.0
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_3il4t"]
+material = SubResource("StandardMaterial3D_v7u8o")
+top_radius = 0.02
+bottom_radius = 0.015
+height = 0.005
+
+[sub_resource type="Animation" id="Animation_n0ecu"]
+resource_name = "store"
+length = 0.4
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Vector3(0, 0, -1.38277), Vector3(0, 0, -0.958744), Vector3(0, 0, -0.703629), Vector3(0, 0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Vector3(0.032847, -0.190864, 0), Vector3(0.032847, -0.0326128, 0), Vector3(0, 0, 0), Vector3(0, 0, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Pin:rotation")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0.3, 0.35, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(0, 0, -0.709372), Vector3(0, 0, -1.08397), Vector3(0, 0, -0.709372)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Pin:position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0.3, 0.35, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(0.0401239, 0.0144114, 0), Vector3(0.0457041, 0.0125256, 0), Vector3(0.0401239, 0.0144114, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_v02pf"]
+resource_name = "lift"
+length = 0.3
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0, 0, 0), Vector3(0.032847, -0.0326128, 0), Vector3(0.032847, -0.190864, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0, 0, -0.703629), Vector3(0, 0, -0.958744), Vector3(0, 0, -1.38277)]
+}
+
+[sub_resource type="Animation" id="Animation_d8agv"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Pin:rotation")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, -0.709372)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Pin:position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0.0401239, 0.0144114, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_o37gn"]
+_data = {
+"RESET": SubResource("Animation_d8agv"),
+"holster": SubResource("Animation_v02pf"),
+"lift": SubResource("Animation_n0ecu")
+}
+
+[node name="Node3D" type="Node3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+script = ExtResource("1_j6afy")
+metadata/_edit_group_ = true
+
+[node name="Barrel" type="MeshInstance3D" parent="."]
+transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+mesh = SubResource("CylinderMesh_owpom")
+
+[node name="Trim" type="MeshInstance3D" parent="."]
+mesh = SubResource("BoxMesh_p1xvo")
+
+[node name="Connector" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0.03, 0, 0)
+mesh = SubResource("SphereMesh_4xjm8")
+
+[node name="Pin" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.758771, 0.651357, 0, -0.651357, 0.758771, 0, 0, 0, 1, 0.0401239, 0.0144114, 0)
+mesh = SubResource("BoxMesh_jutea")
+
+[node name="Handle" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.898296, -0.439391, 0, 0.439391, 0.898296, 0, 0, 0, 1, 0.0378616, -0.0158334, 0)
+mesh = SubResource("BoxMesh_apy71")
+
+[node name="BarrelTrim" type="MeshInstance3D" parent="."]
+transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, -0.0270944, 0, 0)
+mesh = SubResource("CylinderMesh_3il4t")
+
+[node name="LineSpawnPoint" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0307971, 0, 0)
+
+[node name="Animation" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_o37gn")
+}
