@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://g7arj8tp83bn"]
+[gd_scene load_steps=7 format=3 uid="uid://g7arj8tp83bn"]
 
 [ext_resource type="Script" path="res://Scripts/Enemy.cs" id="1_dxy1a"]
 [ext_resource type="PackedScene" uid="uid://dskgymvjnsfn3" path="res://Scenes/Models/DuckModel.tscn" id="1_g0gds"]
@@ -8,7 +8,14 @@
 height = 1.4
 radius = 0.8
 
-[node name="Enemy" type="CharacterBody3D" node_paths=PackedStringArray("ProjectileSpawnPoint", "Hurtbox")]
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_kaqjq"]
+friction = 0.0
+bounce = 0.5
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_2muaf"]
+radius = 0.8
+
+[node name="Enemy" type="CharacterBody3D" node_paths=PackedStringArray("ProjectileSpawnPoint", "Hurtbox", "Ragdoll", "DeleteDelayTimer", "Model")]
 collision_layer = 4
 collision_mask = 5
 floor_constant_speed = true
@@ -16,15 +23,31 @@ script = ExtResource("1_dxy1a")
 Projectile = ExtResource("2_se0m8")
 ProjectileSpawnPoint = NodePath("ShootPoint")
 Hurtbox = NodePath("Hurtbox")
+Ragdoll = NodePath("Ragdoll")
+DeleteDelayTimer = NodePath("DeleteDelay")
+Model = NodePath("Ragdoll/Model")
 metadata/_edit_group_ = true
 
 [node name="Shape" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.545304, -0.0988116)
 shape = SubResource("CylinderShape3D_24c10")
 
-[node name="Model" parent="." node_paths=PackedStringArray("Enemy") instance=ExtResource("1_g0gds")]
-transform = Transform3D(-0.85, 0, -2.1549e-06, 0, 0.85, 0, 2.1549e-06, 0, -0.85, 0, 0, 0)
-Enemy = NodePath("..")
+[node name="Ragdoll" type="RigidBody3D" parent="."]
+process_mode = 4
+process_physics_priority = 1
+transform = Transform3D(1, 0, 2.27374e-13, 0, 1, 0, -2.27374e-13, 0, 1, 0, 0.545304, -0.0988116)
+collision_mask = 9
+mass = 0.01
+physics_material_override = SubResource("PhysicsMaterial_kaqjq")
+gravity_scale = 2.0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ragdoll"]
+shape = SubResource("SphereShape3D_2muaf")
+
+[node name="Model" parent="Ragdoll" node_paths=PackedStringArray("Enemy") instance=ExtResource("1_g0gds")]
+process_mode = 1
+transform = Transform3D(-0.85, 0, -2.1549e-06, 0, 0.85, 0, 2.1549e-06, 0, -0.85, -2.24672e-14, -0.545304, 0.0988116)
+Enemy = NodePath("../..")
 
 [node name="ShootPoint" type="Node3D" parent="."]
 
@@ -35,3 +58,7 @@ collision_mask = 8
 
 [node name="Shape" type="CollisionShape3D" parent="Hurtbox"]
 shape = SubResource("CylinderShape3D_24c10")
+
+[node name="DeleteDelay" type="Timer" parent="."]
+wait_time = 4.0
+one_shot = true
