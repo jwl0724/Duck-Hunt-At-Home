@@ -2,9 +2,7 @@ using Godot;
 using System;
 
 // TODO:
-// ADD RAGDOLL EFFECT ON ENEMY KILLED
 // HAVE HUD WITH RELEVANT INFO
-// ADD LINGERING BULLET TRAIL EFFECT
 public partial class Player : CharacterBody3D
 {	// exported variables
 	[Export] public float Gravity = -12f;
