@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://dskgymvjnsfn3"]
+[gd_scene load_steps=19 format=3 uid="uid://dskgymvjnsfn3"]
 
 [ext_resource type="Script" path="res://Scripts/EnemyVisual.cs" id="1_d3axa"]
 
@@ -512,10 +512,27 @@ tracks/6/keys = {
 "values": [Vector3(0.00354135, 0.811366, 0.835061), Vector3(0.00354135, 0.921413, 0.835061)]
 }
 
+[sub_resource type="Animation" id="Animation_rlmcs"]
+resource_name = "dead"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(0.85, 0.85, 0.85), Vector3(0, 0, 0)]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_brfyn"]
 _data = {
 "RESET": SubResource("Animation_s6jju"),
 "charge": SubResource("Animation_nfefn"),
+"dead": SubResource("Animation_rlmcs"),
 "fall": SubResource("Animation_ff4kx"),
 "shoot": SubResource("Animation_3cg07"),
 "walk": SubResource("Animation_ltqiv")
