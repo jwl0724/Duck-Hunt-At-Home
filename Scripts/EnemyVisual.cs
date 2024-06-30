@@ -37,11 +37,16 @@ public partial class EnemyVisual : Node {
 		// connect signals
 		Enemy.Connect("EnemyShoot", Callable.From(() => animator.Play("shoot")));
 		Enemy.Connect("MoveStateChange", Callable.From(() => OnMoveStateChange()));
-		animator.Connect("animation_finished", Callable.From((StringName name) => OnMoveStateChange()));
+		animator.Connect("animation_finished", Callable.From((StringName name) => OnAnimationFinished(name)));
+	}
+
+	private void OnAnimationFinished(StringName name) {
+		if (name == "dead") Enemy.DeleteEnemy();
+		else OnMoveStateChange();
 	}
 
 	private void OnMoveStateChange() {
-		// idle = don't play any animations
+		// idle or ragdoll = don't play any animations
 		animator.Stop();
 		if (Enemy.CurrentState == Enemy.MoveState.Walking) {
 			animator.Play("walk");
@@ -49,6 +54,8 @@ public partial class EnemyVisual : Node {
 			animator.Play("fall");
 		} else if (Enemy.CurrentState == Enemy.MoveState.Charging) {
 			animator.Play("charge");
+		} else if (Enemy.CurrentState == Enemy.MoveState.Dead) {
+			animator.Play("dead");
 		}
 	}
 
