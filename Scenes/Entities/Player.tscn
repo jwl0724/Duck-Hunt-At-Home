@@ -86,8 +86,9 @@ shape = SubResource("CapsuleShape3D_56r0q")
 [node name="Gun" type="Node3D" parent="RotationalHelper"]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0.295292, 0.493266, -0.41)
 
-[node name="Model" parent="RotationalHelper/Gun" node_paths=PackedStringArray("Player") instance=ExtResource("2_i0g63")]
+[node name="Model" parent="RotationalHelper/Gun" node_paths=PackedStringArray("Player", "HitscanLine") instance=ExtResource("2_i0g63")]
 Player = NodePath("../../..")
+HitscanLine = NodePath("../../HitscanLine")
 
 [node name="BulletTrail" type="Node3D" parent="RotationalHelper/Gun" node_paths=PackedStringArray("Player", "MuzzleFlashModel")]
 script = ExtResource("3_kvw6a")
@@ -119,6 +120,9 @@ target_position = Vector3(0, 0, -100)
 collision_mask = 7
 script = ExtResource("3_fak1h")
 Player = NodePath("../..")
+
+[node name="HitscanEndPoint" type="Node3D" parent="RotationalHelper/HitscanLine"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -100)
 
 [node name="GrappleGun" type="Node3D" parent="RotationalHelper"]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -0.0842588, 0.588518, -0.112403)
