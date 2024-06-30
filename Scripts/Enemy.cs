@@ -7,6 +7,9 @@ public partial class Enemy : CharacterBody3D {
 	[Export] public PackedScene Projectile;
 	[Export] public Node3D ProjectileSpawnPoint;
 	[Export] public Area3D Hurtbox;
+	[Export] public RigidBody3D Ragdoll;
+	[Export] public Timer DeleteDelayTimer;
+	[Export] public EnemyVisual Model;
 
 	// signals
 	[Signal] public delegate void EnemyShootEventHandler();
@@ -51,24 +54,26 @@ public partial class Enemy : CharacterBody3D {
 		Walking,
 		Idle,
 		Falling,
-		Charging
+		Charging,
+		Dead,
+		Ragdoll
 	}
 	
     public override void _Ready() {
 		player = GetParent().GetNode<CharacterBody3D>("Player");
 		Hurtbox.Connect("body_entered", Callable.From((PhysicsBody3D body) => HandleCollisionWithPlayer(body)));
+		DeleteDelayTimer.Connect("timeout", Callable.From(() => SetMoveState(MoveState.Dead)));
     }
 
 	public void SetEnemyProperties(EnemyType type) {
-		// get model parts and change properties
-		EnemyVisual model = GetNode<EnemyVisual>("Model");
+		// change properties
 		
 		if (type == EnemyType.Melee) {
 			Health = 500;
 			Speed = 90;
 			Attack = 50;
 			this.type = type;
-			model.SetColor(EnemyVisual.DuckColors.Default);
+			Model.SetColor(EnemyVisual.DuckColors.Default);
 
 		} else if (type == EnemyType.Charger) {
 			Health = 400;
@@ -76,7 +81,7 @@ public partial class Enemy : CharacterBody3D {
 			Attack = 75;
 			attackCD = 4f;
 			this.type = type;
-			model.SetColor(EnemyVisual.DuckColors.Pink);
+			Model.SetColor(EnemyVisual.DuckColors.Pink);
 
 		} else if (type == EnemyType.Shooter) {
 			Health = 300;
@@ -84,7 +89,7 @@ public partial class Enemy : CharacterBody3D {
 			Attack = 30;
 			attackCD = 2.5f;
 			this.type = type;
-			model.SetColor(EnemyVisual.DuckColors.Blue);
+			Model.SetColor(EnemyVisual.DuckColors.Blue);
 
 		} else {
 			// boss properties
@@ -96,8 +101,8 @@ public partial class Enemy : CharacterBody3D {
 			this.type = type;
 			int scale = Mathf.Min(bossScale, 10);
 			Scale = new Vector3(scale, scale, scale);
-			model.SetColor(EnemyVisual.DuckColors.Green);
-			model.ToggleGlow();
+			Model.SetColor(EnemyVisual.DuckColors.Green);
+			Model.ToggleGlow();
 
 			// increment scale for next boss
 			bossScale++;
@@ -117,6 +122,10 @@ public partial class Enemy : CharacterBody3D {
 	public void OnShot(int damage) {
 		Health -= damage;
 		EmitSignal(SignalName.EnemyDamaged);
+	}
+
+	public void DeleteEnemy() {
+		QueueFree();
 	}
 
 	// HELPER FUNCTIONS
@@ -164,8 +173,7 @@ public partial class Enemy : CharacterBody3D {
 
 		// begin charging
 		if (chargeTimer == 0) {
-			EnemyVisual model = GetNode<EnemyVisual>("Model");
-			model.ToggleGlow();
+			Model.ToggleGlow();
 			Attack = 100;
 
 			// disable collision with other enemies
@@ -185,8 +193,7 @@ public partial class Enemy : CharacterBody3D {
 	}
 
 	private void ResetChargeState() {
-		EnemyVisual model = GetNode<EnemyVisual>("Model");
-		model.ToggleGlow();
+		Model.ToggleGlow();
 
 		// re-enable collision with other enemies
 		SetCollisionLayerValue(3, true);
@@ -245,20 +252,27 @@ public partial class Enemy : CharacterBody3D {
 	}
 
 	private void FacePlayer() {
+		// TODO: FIX NativeCalls.cs:6354 @ void Godot.NativeCalls.godot_icall_3_706(nint, nint, Godot.Vector3*, Godot.Vector3*, Godot.NativeInterop.godot_bool): The target vector and up vector can't be parallel to each other.
 		LookAt(player.Position);
 		Rotation = new Vector3(0, Rotation.Y, 0); // rotate only left or right
 	}
 
 	private void ProcessDeath() {
+		if (CurrentState == MoveState.Ragdoll || CurrentState == MoveState.Dead) return;
+		SetMoveState(MoveState.Ragdoll);
+		Ragdoll.ProcessMode = ProcessModeEnum.Inherit;
+		Ragdoll.LinearVelocity = Velocity;
+		Ragdoll.AngularVelocity = Velocity * Vector3.Back;
+
 		// determine score amount
 		int score;
 		if (type == EnemyType.Charger) score = 20;
 		else if (type == EnemyType.Shooter) score = 25;
 		else if (type == EnemyType.Boss) score = 50;
 		else score = 10; // melee enemy score
-
+		
 		EmitSignal(SignalName.EnemyDied, score);
-		QueueFree();
+		DeleteDelayTimer.Start();
 	}
 
 	private void SetMoveState(MoveState state) {
