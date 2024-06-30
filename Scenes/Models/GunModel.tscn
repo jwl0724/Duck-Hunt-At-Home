@@ -1,6 +1,7 @@
-[gd_scene load_steps=29 format=3 uid="uid://bghcfb4t3i5p7"]
+[gd_scene load_steps=30 format=3 uid="uid://bghcfb4t3i5p7"]
 
 [ext_resource type="Script" path="res://Scripts/GunVisual.cs" id="1_gux62"]
+[ext_resource type="PackedScene" uid="uid://cstm7nulh7ohh" path="res://Scenes/Models/BulletTrailModel.tscn" id="2_vxrvx"]
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_1b82w"]
 noise_type = 3
@@ -287,6 +288,7 @@ _data = {
 [node name="Gun" type="Node3D" node_paths=PackedStringArray("Animator")]
 script = ExtResource("1_gux62")
 Animator = NodePath("Animation")
+BulletTrailModel = ExtResource("2_vxrvx")
 
 [node name="Chamber" type="MeshInstance3D" parent="."]
 mesh = SubResource("BoxMesh_25qo0")
