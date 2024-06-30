@@ -5,6 +5,7 @@ public partial class GunVisual : Node3D {
 	// exported variables
 	[Export] public Player Player;
 	[Export] public AnimationPlayer Animator;
+	[Export] public Hitscan HitscanLine;
 	[Export] public PackedScene BulletTrailModel;
 	
 	public override void _Ready() {
@@ -21,12 +22,22 @@ public partial class GunVisual : Node3D {
 
 	private void OnPlayerShoot() {
 		Animator.Play("fire");
+	
 		Node3D trailModel = BulletTrailModel.Instantiate<Node3D>();
+		Node3D trailWrapper = new(); // need parent to rotate animation
+		trailWrapper.AddChild(trailModel);
+		(Engine.GetMainLoop() as SceneTree).Root.AddChild(trailWrapper);
+
+		// position model
 		MeshInstance3D barrel = GetNode<MeshInstance3D>("Barrel");
-		(Engine.GetMainLoop() as SceneTree).Root.AddChild(trailModel);
-		trailModel.Position = barrel.GlobalPosition;
-		// trailModel.Rotation = new Vector3(Player.GlobalRotation.X, Player.GlobalRotation.Y, Player.GlobalRotation.Z);
-		Node3D rotationalHelper = Player.GetNode<Node3D>("RotationalHelper");
-		trailModel.Rotation = new Vector3(rotationalHelper.Rotation.X, rotationalHelper.Rotation.Y + Mathf.DegToRad(-90), rotationalHelper.Rotation.Z);
+		trailWrapper.Position = barrel.GlobalPosition; // trail wrapper at root
+		if (HitscanLine.IsColliding()) {
+			trailWrapper.LookAt(HitscanLine.GetCollisionPoint());
+
+		} else {
+			Node3D lineEndPoint = HitscanLine.GetNode<Node3D>("HitscanEndPoint");
+			trailWrapper.LookAt(lineEndPoint.GlobalPosition);
+		}
+		trailModel.Rotate(Vector3.Up, Mathf.DegToRad(-90));
 	}
 }
