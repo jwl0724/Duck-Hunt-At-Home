@@ -8,6 +8,9 @@ public partial class HUD : Control {
 	
 	// HUD elements
 	[Export] public Control ReticleParent;
+	[Export] public Control HealthBar;
+	[Export] public Control AmmoCounter;
+	[Export] public Control TimerAndScore;
 
 	public override void _Ready() {
 		// connect signals
