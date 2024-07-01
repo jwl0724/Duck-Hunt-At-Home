@@ -5,12 +5,6 @@ using System;
 // HAVE HUD WITH RELEVANT INFO
 public partial class Player : CharacterBody3D {	
 	// exported variables
-	[Export] public float Gravity = -12f;
-	[Export] public float Speed = 100f;
-	[Export] public float JumpSpeed = 5f;
-	[Export] public float MouseSensitivity = 0.1f;
-	[Export] public int Health = 500;
-	[Export] public int Attack = 75;
 	[Export] public Timer IFrameTimer;
 	[Export] public GunVisual GunModel;
 	[Export] public GrappleVisual GrappleGunModel;
@@ -30,6 +24,13 @@ public partial class Player : CharacterBody3D {
 	private static readonly int grappleSpeed = 2000;
 
 	// instance variables
+	public int MaxHealth { get; private set; } = 500;
+	public int Health { get; private set; }
+	public float Gravity { get; private set; } = -12f;
+	public int Attack { get; private set; } = 100;
+	public float Speed { get; private set; } = 100f;
+	public float JumpSpeed { get; private set; } = 5f;
+	public float MouseSensitivity { get; private set; } = 0.1f;
 	public bool Grappled = false;
 	public Vector3 GrapplePoint = new();
 	private Vector3 direction = new();
@@ -42,6 +43,7 @@ public partial class Player : CharacterBody3D {
 		RotationalHelper = GetNode<Node3D>("RotationalHelper");
 		Input.MouseMode = Input.MouseModeEnum.Captured;
 		GunModel.Animator.Connect("animation_finished", Callable.From((StringName name) => OnGunAnimationFinished(name)));
+		ResetPlayerState();
 	}
 
     public override void _PhysicsProcess(double delta) {
@@ -57,6 +59,11 @@ public partial class Player : CharacterBody3D {
 		if (mouseMovement is not InputEventMouseMotion) return;
 		if (Input.MouseMode != Input.MouseModeEnum.Captured) return;
 		ProcessMouse(mouseMovement as InputEventMouseMotion);
+	}
+
+	public void ResetPlayerState() {
+		// TODO, ADD MORE STUFF HERE THAT NEEDS TO BE RESET
+		Health = MaxHealth;
 	}
 
 	// SIGNAL HANDLERS
