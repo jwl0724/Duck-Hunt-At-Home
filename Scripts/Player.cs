@@ -3,8 +3,8 @@ using System;
 
 // TODO:
 // HAVE HUD WITH RELEVANT INFO
-public partial class Player : CharacterBody3D
-{	// exported variables
+public partial class Player : CharacterBody3D {	
+	// exported variables
 	[Export] public float Gravity = -12f;
 	[Export] public float Speed = 100f;
 	[Export] public float JumpSpeed = 5f;
