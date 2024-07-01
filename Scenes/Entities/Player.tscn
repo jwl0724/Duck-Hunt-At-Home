@@ -1,4 +1,4 @@
-[gd_scene load_steps=56 format=3 uid="uid://bjxi3yjg0rb46"]
+[gd_scene load_steps=63 format=3 uid="uid://bjxi3yjg0rb46"]
 
 [ext_resource type="Script" path="res://Scripts/Player.cs" id="1_auq8a"]
 [ext_resource type="PackedScene" uid="uid://bghcfb4t3i5p7" path="res://Scenes/Models/GunModel.tscn" id="2_i0g63"]
@@ -31,6 +31,8 @@
 [ext_resource type="Texture2D" uid="uid://c0wilf8s14kh" path="res://Assets/Images/PlayerPortraitFrames/LowHealthIdle4.png" id="29_u6kmm"]
 [ext_resource type="Script" path="res://Scripts/Portrait.cs" id="30_yaq0s"]
 [ext_resource type="Script" path="res://Scripts/HealthBar.cs" id="31_jcyti"]
+[ext_resource type="FontFile" uid="uid://b4vgy4vusco5g" path="res://Assets/Fonts/Touchscreen-Regular.ttf" id="32_ao81m"]
+[ext_resource type="Script" path="res://Scripts/AmmoCounter.cs" id="33_7t1kl"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_56r0q"]
 
@@ -255,6 +257,25 @@ colors = PackedColorArray(0.227451, 1, 0.184314, 1, 0.141176, 0.878431, 0.505882
 [sub_resource type="GradientTexture1D" id="GradientTexture1D_5x7vw"]
 gradient = SubResource("Gradient_rlg6x")
 
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_brq4b"]
+radius = 60.0
+height = 250.0
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_p7hvg"]
+radius = 40.0
+height = 200.0
+
+[sub_resource type="Gradient" id="Gradient_vvxrv"]
+offsets = PackedFloat32Array(0.568548)
+colors = PackedColorArray(0.286717, 0.186397, 0.253268, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_ibpj3"]
+gradient = SubResource("Gradient_vvxrv")
+
+[sub_resource type="LabelSettings" id="LabelSettings_c78pq"]
+font = ExtResource("32_ao81m")
+font_size = 55
+
 [node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("IFrameTimer", "GunModel", "GrappleGunModel")]
 collision_layer = 8
 collision_mask = 23
@@ -264,7 +285,7 @@ GunModel = NodePath("RotationalHelper/Gun/Model")
 GrappleGunModel = NodePath("RotationalHelper/GrappleGun/Model")
 metadata/_edit_group_ = true
 metadata/_edit_horizontal_guides_ = [693.0]
-metadata/_edit_vertical_guides_ = [580.0]
+metadata/_edit_vertical_guides_ = [1632.0]
 
 [node name="Shape" type="CollisionShape3D" parent="."]
 shape = SubResource("CapsuleShape3D_56r0q")
@@ -438,17 +459,42 @@ anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -40.0
-offset_top = -40.0
+offset_left = -270.0
+offset_top = -133.0
 grow_horizontal = 0
 grow_vertical = 0
+
+[node name="Background" type="Node2D" parent="HUD/Ammo"]
+metadata/_edit_group_ = true
+
+[node name="BackgroundFrame" type="MeshInstance2D" parent="HUD/Ammo/Background"]
+position = Vector2(136, 67)
+rotation = 1.5708
+mesh = SubResource("CapsuleMesh_brq4b")
+texture = SubResource("GradientTexture1D_d2fci")
+
+[node name="Backdrop" type="MeshInstance2D" parent="HUD/Ammo/Background"]
+position = Vector2(135, 67)
+rotation = 1.5708
+mesh = SubResource("CapsuleMesh_p7hvg")
+texture = SubResource("GradientTexture1D_ibpj3")
+
+[node name="AmmoCounter" type="Label" parent="HUD/Ammo"]
+offset_left = 50.0
+offset_top = 31.0
+offset_right = 220.0
+offset_bottom = 103.0
+text = "25/25"
+label_settings = SubResource("LabelSettings_c78pq")
+horizontal_alignment = 1
+script = ExtResource("33_7t1kl")
 
 [node name="TimerAndScore" type="Control" parent="HUD"]
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = -20.0
-offset_right = 20.0
-offset_bottom = 40.0
+offset_left = -241.0
+offset_right = 241.0
+offset_bottom = 133.0
 grow_horizontal = 2
