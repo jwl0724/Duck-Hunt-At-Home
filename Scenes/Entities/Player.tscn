@@ -1,4 +1,4 @@
-[gd_scene load_steps=63 format=3 uid="uid://bjxi3yjg0rb46"]
+[gd_scene load_steps=65 format=3 uid="uid://bjxi3yjg0rb46"]
 
 [ext_resource type="Script" path="res://Scripts/Player.cs" id="1_auq8a"]
 [ext_resource type="PackedScene" uid="uid://bghcfb4t3i5p7" path="res://Scenes/Models/GunModel.tscn" id="2_i0g63"]
@@ -276,13 +276,22 @@ gradient = SubResource("Gradient_vvxrv")
 font = ExtResource("32_ao81m")
 font_size = 55
 
-[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("IFrameTimer", "GunModel", "GrappleGunModel")]
+[sub_resource type="LabelSettings" id="LabelSettings_f7qu2"]
+font = ExtResource("32_ao81m")
+font_size = 45
+
+[sub_resource type="LabelSettings" id="LabelSettings_4qijx"]
+font = ExtResource("32_ao81m")
+font_size = 45
+
+[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("IFrameTimer", "GunModel", "GrappleGunModel", "HUD")]
 collision_layer = 8
 collision_mask = 23
 script = ExtResource("1_auq8a")
 IFrameTimer = NodePath("IframeTimer")
 GunModel = NodePath("RotationalHelper/Gun/Model")
 GrappleGunModel = NodePath("RotationalHelper/GrappleGun/Model")
+HUD = NodePath("HUD")
 metadata/_edit_group_ = true
 metadata/_edit_horizontal_guides_ = [693.0]
 metadata/_edit_vertical_guides_ = [1632.0]
@@ -343,7 +352,7 @@ Player = NodePath("../../..")
 wait_time = 0.5
 one_shot = true
 
-[node name="HUD" type="Control" parent="." node_paths=PackedStringArray("Player", "HitscanLine", "ReticleParent")]
+[node name="HUD" type="Control" parent="." node_paths=PackedStringArray("Player", "HitscanLine", "ReticleParent", "TimeAndScore")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -354,6 +363,7 @@ script = ExtResource("4_3c0q6")
 Player = NodePath("..")
 HitscanLine = NodePath("../RotationalHelper/HitscanLine")
 ReticleParent = NodePath("Reticle")
+TimeAndScore = NodePath("TimeAndScore")
 metadata/_edit_use_anchors_ = true
 
 [node name="Reticle" type="Control" parent="HUD"]
@@ -369,6 +379,7 @@ offset_right = 40.0
 offset_bottom = 40.0
 grow_horizontal = 2
 grow_vertical = 2
+metadata/_edit_group_ = true
 
 [node name="ReticleSprite" type="AnimatedSprite2D" parent="HUD/Reticle"]
 position = Vector2(40, 40)
@@ -399,6 +410,7 @@ anchor_bottom = 1.0
 offset_top = -133.0
 offset_right = 482.0
 grow_vertical = 0
+metadata/_edit_group_ = true
 
 [node name="BarFrame" type="Node2D" parent="HUD/HeatlhBar"]
 position = Vector2(214, 57)
@@ -463,6 +475,7 @@ offset_left = -270.0
 offset_top = -133.0
 grow_horizontal = 0
 grow_vertical = 0
+metadata/_edit_group_ = true
 
 [node name="Background" type="Node2D" parent="HUD/Ammo"]
 metadata/_edit_group_ = true
@@ -479,7 +492,7 @@ rotation = 1.5708
 mesh = SubResource("CapsuleMesh_p7hvg")
 texture = SubResource("GradientTexture1D_ibpj3")
 
-[node name="AmmoCounter" type="Label" parent="HUD/Ammo"]
+[node name="AmmoCounter" type="Label" parent="HUD/Ammo" node_paths=PackedStringArray("Player")]
 offset_left = 50.0
 offset_top = 31.0
 offset_right = 220.0
@@ -488,8 +501,9 @@ text = "25/25"
 label_settings = SubResource("LabelSettings_c78pq")
 horizontal_alignment = 1
 script = ExtResource("33_7t1kl")
+Player = NodePath("../../..")
 
-[node name="TimerAndScore" type="Control" parent="HUD"]
+[node name="TimeAndScore" type="Control" parent="HUD"]
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
@@ -498,3 +512,29 @@ offset_left = -241.0
 offset_right = 241.0
 offset_bottom = 133.0
 grow_horizontal = 2
+
+[node name="ScoreLabel" type="Label" parent="HUD/TimeAndScore"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -182.0
+offset_right = 182.0
+offset_bottom = 59.0
+grow_horizontal = 2
+text = "Score: 500000"
+label_settings = SubResource("LabelSettings_f7qu2")
+horizontal_alignment = 1
+
+[node name="TimeLabel" type="Label" parent="HUD/TimeAndScore"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -70.0
+offset_top = 60.0
+offset_right = 70.0
+offset_bottom = 119.0
+grow_horizontal = 2
+text = "60:00"
+label_settings = SubResource("LabelSettings_4qijx")
