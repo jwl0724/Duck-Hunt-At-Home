@@ -274,6 +274,7 @@ public partial class Enemy : CharacterBody3D {
 		else if (type == EnemyType.Boss) score = 50;
 		else score = 10; // melee enemy score
 		
+		// TODO: FIX BUG WHERE BOSS KILLED REVERTS BACK TO TINY SIZE
 		EmitSignal(SignalName.EnemyDied, score);
 		DeleteDelayTimer.Start();
 	}
