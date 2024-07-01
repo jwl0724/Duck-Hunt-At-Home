@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=3 uid="uid://bjxi3yjg0rb46"]
+[gd_scene load_steps=56 format=3 uid="uid://bjxi3yjg0rb46"]
 
 [ext_resource type="Script" path="res://Scripts/Player.cs" id="1_auq8a"]
 [ext_resource type="PackedScene" uid="uid://bghcfb4t3i5p7" path="res://Scenes/Models/GunModel.tscn" id="2_i0g63"]
@@ -12,6 +12,25 @@
 [ext_resource type="Texture2D" uid="uid://cstyoeha8c2xr" path="res://Assets/Images/ReticleFrames/Reticle2.png" id="10_ptpjr"]
 [ext_resource type="Texture2D" uid="uid://cxv86ietrslwd" path="res://Assets/Images/ReticleFrames/Reticle3.png" id="11_d53ii"]
 [ext_resource type="Texture2D" uid="uid://baluk4j7alkor" path="res://Assets/Images/ReticleFrames/Reticle4.png" id="12_uxnee"]
+[ext_resource type="Shader" path="res://Assets/Shaders/CircleFrame.gdshader" id="13_neca7"]
+[ext_resource type="Texture2D" uid="uid://bguxhs1c5olo4" path="res://Assets/Images/PlayerPortraitFrames/Damaged1.png" id="14_p2gpl"]
+[ext_resource type="Texture2D" uid="uid://co31n4gqfl01d" path="res://Assets/Images/PlayerPortraitFrames/Damaged2.png" id="15_4e1f6"]
+[ext_resource type="Texture2D" uid="uid://cfmn0e5p1arp5" path="res://Assets/Images/PlayerPortraitFrames/Damaged3.png" id="16_dmkc8"]
+[ext_resource type="Texture2D" uid="uid://br5gaxxbyvmig" path="res://Assets/Images/PlayerPortraitFrames/Damaged4.png" id="17_ddmi8"]
+[ext_resource type="Texture2D" uid="uid://dnob0ee70c4bp" path="res://Assets/Images/PlayerPortraitFrames/Idle1.png" id="18_n3aj0"]
+[ext_resource type="Texture2D" uid="uid://dbcda42hgnpey" path="res://Assets/Images/PlayerPortraitFrames/Idle2.png" id="19_o8pvp"]
+[ext_resource type="Texture2D" uid="uid://bhm0udq6ek0r7" path="res://Assets/Images/PlayerPortraitFrames/Idle3.png" id="20_v8yp0"]
+[ext_resource type="Texture2D" uid="uid://bq1ubagakj36a" path="res://Assets/Images/PlayerPortraitFrames/Idle4.png" id="21_is3b6"]
+[ext_resource type="Texture2D" uid="uid://ig63mritn3ur" path="res://Assets/Images/PlayerPortraitFrames/LowHealthDamaged1.png" id="22_1mug3"]
+[ext_resource type="Texture2D" uid="uid://8u7q2oo2rl1q" path="res://Assets/Images/PlayerPortraitFrames/LowHealthDamaged2.png" id="23_xe58f"]
+[ext_resource type="Texture2D" uid="uid://cf3d38x3l3db0" path="res://Assets/Images/PlayerPortraitFrames/LowHealthDamaged3.png" id="24_bx2fh"]
+[ext_resource type="Texture2D" uid="uid://v7ewfgjq3vgq" path="res://Assets/Images/PlayerPortraitFrames/LowHealthDamaged4.png" id="25_pacvv"]
+[ext_resource type="Texture2D" uid="uid://bw61doypeftnj" path="res://Assets/Images/PlayerPortraitFrames/LowHealthIdle1.png" id="26_ae5v5"]
+[ext_resource type="Texture2D" uid="uid://cg7mprigvuiiv" path="res://Assets/Images/PlayerPortraitFrames/LowHealthIdle2.png" id="27_prr2j"]
+[ext_resource type="Texture2D" uid="uid://gsrplqvn3ka1" path="res://Assets/Images/PlayerPortraitFrames/LowHealthIdle3.png" id="28_sv1js"]
+[ext_resource type="Texture2D" uid="uid://c0wilf8s14kh" path="res://Assets/Images/PlayerPortraitFrames/LowHealthIdle4.png" id="29_u6kmm"]
+[ext_resource type="Script" path="res://Scripts/Portrait.cs" id="30_yaq0s"]
+[ext_resource type="Script" path="res://Scripts/HealthBar.cs" id="31_jcyti"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_56r0q"]
 
@@ -91,15 +110,161 @@ animations = [{
 "speed": 8.0
 }]
 
+[sub_resource type="SphereMesh" id="SphereMesh_msurg"]
+radius = 55.0
+height = 110.0
+
+[sub_resource type="Gradient" id="Gradient_ues3k"]
+offsets = PackedFloat32Array(0, 0.618644)
+colors = PackedColorArray(0.332441, 0.405223, 0.544636, 1, 0.555816, 0.420731, 0.594608, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_4tbi0"]
+gradient = SubResource("Gradient_ues3k")
+
+[sub_resource type="BoxMesh" id="BoxMesh_pmdxd"]
+size = Vector3(400, 70, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_d2fci"]
+gradient = SubResource("Gradient_ues3k")
+
+[sub_resource type="PrismMesh" id="PrismMesh_4e7t0"]
+left_to_right = 1.0
+size = Vector3(40, 70, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_oj8x2"]
+gradient = SubResource("Gradient_ues3k")
+
+[sub_resource type="SphereMesh" id="SphereMesh_bnkh7"]
+radius = 40.0
+height = 80.0
+
+[sub_resource type="Gradient" id="Gradient_sc0oi"]
+offsets = PackedFloat32Array(0)
+colors = PackedColorArray(0.184959, 0.350105, 0.547876, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_b0eey"]
+gradient = SubResource("Gradient_sc0oi")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_6vpvc"]
+shader = ExtResource("13_neca7")
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_hu841"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("14_p2gpl")
+}, {
+"duration": 1.0,
+"texture": ExtResource("15_4e1f6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("16_dmkc8")
+}, {
+"duration": 8.0,
+"texture": ExtResource("17_ddmi8")
+}, {
+"duration": 1.0,
+"texture": ExtResource("16_dmkc8")
+}, {
+"duration": 1.0,
+"texture": ExtResource("15_4e1f6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("14_p2gpl")
+}],
+"loop": false,
+"name": &"damaged",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("18_n3aj0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("19_o8pvp")
+}, {
+"duration": 1.0,
+"texture": ExtResource("20_v8yp0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("21_is3b6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("18_n3aj0")
+}],
+"loop": false,
+"name": &"idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("22_1mug3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("23_xe58f")
+}, {
+"duration": 1.0,
+"texture": ExtResource("24_bx2fh")
+}, {
+"duration": 8.0,
+"texture": ExtResource("25_pacvv")
+}, {
+"duration": 1.0,
+"texture": ExtResource("24_bx2fh")
+}, {
+"duration": 1.0,
+"texture": ExtResource("23_xe58f")
+}, {
+"duration": 1.0,
+"texture": ExtResource("22_1mug3")
+}],
+"loop": false,
+"name": &"lowHealthDamaged",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("26_ae5v5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("27_prr2j")
+}, {
+"duration": 1.0,
+"texture": ExtResource("28_sv1js")
+}, {
+"duration": 1.0,
+"texture": ExtResource("29_u6kmm")
+}, {
+"duration": 1.0,
+"texture": ExtResource("26_ae5v5")
+}],
+"loop": false,
+"name": &"lowHealthIdle",
+"speed": 5.0
+}]
+
+[sub_resource type="Gradient" id="Gradient_vk80h"]
+colors = PackedColorArray(0.471131, 0, 0.0870813, 1, 0.69246, 2.69532e-06, 2.88785e-07, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_j4d05"]
+gradient = SubResource("Gradient_vk80h")
+
+[sub_resource type="Gradient" id="Gradient_rlg6x"]
+colors = PackedColorArray(0.227451, 1, 0.184314, 1, 0.141176, 0.878431, 0.505882, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_5x7vw"]
+gradient = SubResource("Gradient_rlg6x")
+
 [node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("IFrameTimer", "GunModel", "GrappleGunModel")]
 collision_layer = 8
 collision_mask = 23
 script = ExtResource("1_auq8a")
-Speed = 300.0
 IFrameTimer = NodePath("IframeTimer")
 GunModel = NodePath("RotationalHelper/Gun/Model")
 GrappleGunModel = NodePath("RotationalHelper/GrappleGun/Model")
 metadata/_edit_group_ = true
+metadata/_edit_horizontal_guides_ = [693.0]
+metadata/_edit_vertical_guides_ = [580.0]
 
 [node name="Shape" type="CollisionShape3D" parent="."]
 shape = SubResource("CapsuleShape3D_56r0q")
@@ -204,3 +369,86 @@ texture = ExtResource("10_ptpjr")
 [node name="HitMarkerDuration" type="Timer" parent="HUD/Reticle"]
 wait_time = 0.1
 one_shot = true
+
+[node name="HeatlhBar" type="Control" parent="HUD"]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -133.0
+offset_right = 482.0
+grow_vertical = 0
+
+[node name="BarFrame" type="Node2D" parent="HUD/HeatlhBar"]
+position = Vector2(214, 57)
+metadata/_edit_group_ = true
+
+[node name="PortraitFrame" type="MeshInstance2D" parent="HUD/HeatlhBar/BarFrame"]
+position = Vector2(-149, 9)
+rotation = 3.14159
+mesh = SubResource("SphereMesh_msurg")
+texture = SubResource("GradientTexture1D_4tbi0")
+
+[node name="BarFrame" type="MeshInstance2D" parent="HUD/HeatlhBar/BarFrame"]
+position = Vector2(35, 29)
+scale = Vector2(0.925, 1)
+mesh = SubResource("BoxMesh_pmdxd")
+texture = SubResource("GradientTexture1D_d2fci")
+
+[node name="BarEdge" type="MeshInstance2D" parent="HUD/HeatlhBar/BarFrame"]
+position = Vector2(240, 29)
+rotation = 3.14159
+mesh = SubResource("PrismMesh_4e7t0")
+texture = SubResource("GradientTexture1D_oj8x2")
+
+[node name="Portrait" type="Node2D" parent="HUD/HeatlhBar"]
+metadata/_edit_group_ = true
+
+[node name="PortraitBackground" type="MeshInstance2D" parent="HUD/HeatlhBar/Portrait"]
+position = Vector2(65, 66)
+rotation = -1.5708
+mesh = SubResource("SphereMesh_bnkh7")
+texture = SubResource("GradientTexture1D_b0eey")
+
+[node name="PortraitSprite" type="AnimatedSprite2D" parent="HUD/HeatlhBar/Portrait" node_paths=PackedStringArray("Player")]
+material = SubResource("ShaderMaterial_6vpvc")
+position = Vector2(65, 63)
+scale = Vector2(0.53125, 0.53125)
+sprite_frames = SubResource("SpriteFrames_hu841")
+animation = &"idle"
+script = ExtResource("30_yaq0s")
+Player = NodePath("../../../..")
+
+[node name="Bar" type="TextureProgressBar" parent="HUD/HeatlhBar" node_paths=PackedStringArray("Player")]
+layout_mode = 0
+offset_left = 124.0
+offset_top = 66.0
+offset_right = 424.0
+offset_bottom = 106.0
+nine_patch_stretch = true
+texture_under = SubResource("GradientTexture1D_j4d05")
+texture_progress = SubResource("GradientTexture1D_5x7vw")
+script = ExtResource("31_jcyti")
+Player = NodePath("../../..")
+
+[node name="Ammo" type="Control" parent="HUD"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -40.0
+offset_top = -40.0
+grow_horizontal = 0
+grow_vertical = 0
+
+[node name="TimerAndScore" type="Control" parent="HUD"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -20.0
+offset_right = 20.0
+offset_bottom = 40.0
+grow_horizontal = 2
