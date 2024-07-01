@@ -13,8 +13,10 @@ public partial class GameManager : Node {
 	// instance variables
 	private Player player;
 	public bool GameRunning { get; private set; } = false;
+	public int Score { get; private set; } = 0;
 
 	// internal timers
+	public float TimeElapsed { get; private set; } = 0;
 
 	
 	public override void _Ready() {
@@ -29,8 +31,10 @@ public partial class GameManager : Node {
 
 	
 	public override void _Process(double delta) {
-		
+		TimeElapsed += (float) delta;
 	}
+
+	
 
 	private void OnEnemySpawn() {
 		if (!GameRunning) return;
@@ -40,6 +44,7 @@ public partial class GameManager : Node {
 		enemy.SetEnemyProperties(type);
 		enemy.Position = GenerateSpawnPoint();
 		AddChild(enemy);
+		enemy.Connect("EnemyDied", Callable.From((int score) => Score += score));
 	}
 
 	private void OnBossSpawn() {
