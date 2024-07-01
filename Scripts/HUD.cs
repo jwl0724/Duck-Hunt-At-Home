@@ -44,6 +44,10 @@ public partial class HUD : Control {
 
 	// HELPER FUNCTIONS
 	private void ProcessReticleColor() {
+		if (Player.Health <= 0) {
+			ReticleParent.GetNode<AnimatedSprite2D>("ReticleSprite").SelfModulate = new Color(); // invisible
+			return;
+		}
 		if (HitscanLine.GetCollider() is Enemy)
 			ReticleParent.GetNode<AnimatedSprite2D>("ReticleSprite").SelfModulate = new Color(1, 0, 0, 1); // red
 		else
