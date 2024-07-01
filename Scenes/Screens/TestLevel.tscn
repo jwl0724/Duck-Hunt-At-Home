@@ -68,10 +68,10 @@ transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 25,
 shadow_enabled = true
 
 [node name="BossSpawnTimer" type="Timer" parent="."]
-wait_time = 5.0
+wait_time = 30.0
 
 [node name="EnemySpawnTimer" type="Timer" parent="."]
-wait_time = 120.0
+wait_time = 2.0
 
 [node name="SoundManager" type="Node3D" parent="."]
 script = ExtResource("4_5v5da")
