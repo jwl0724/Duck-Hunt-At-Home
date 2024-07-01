@@ -31,7 +31,10 @@ public partial class GameManager : Node {
 
 	
 	public override void _Process(double delta) {
+		if (player.Health <= 0) return;
 		TimeElapsed += (float) delta;
+		player.HUD.UpdateScore(Score);
+		player.HUD.UpdateTime(TimeElapsed);
 	}
 
 	
