@@ -1,8 +1,9 @@
-[gd_scene load_steps=14 format=3 uid="uid://ckf4axkvt4sup"]
+[gd_scene load_steps=15 format=3 uid="uid://ckf4axkvt4sup"]
 
 [ext_resource type="Script" path="res://Scripts/Projectile.cs" id="1_i3crb"]
 [ext_resource type="Shader" path="res://Assets/Shaders/Bubble.gdshader" id="2_4mmn6"]
 [ext_resource type="Script" path="res://Scripts/BubbleVisual.cs" id="3_cipio"]
+[ext_resource type="AudioStream" uid="uid://d3nboodt4tu11" path="res://Assets/SFX/BubblePopSFX.mp3" id="4_wydns"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_oj5gu"]
 friction = 0.0
@@ -49,7 +50,7 @@ material = SubResource("ShaderMaterial_jwm06")
 radius = 0.25
 height = 0.5
 
-[node name="Bubble" type="RigidBody3D" node_paths=PackedStringArray("LifespanTimer")]
+[node name="Bubble" type="RigidBody3D" node_paths=PackedStringArray("LifespanTimer", "PopSFX")]
 collision_layer = 2
 collision_mask = 11
 physics_material_override = SubResource("PhysicsMaterial_oj5gu")
@@ -57,6 +58,7 @@ gravity_scale = 0.5
 linear_damp_mode = 1
 script = ExtResource("1_i3crb")
 LifespanTimer = NodePath("Lifespan")
+PopSFX = NodePath("Pop")
 metadata/_edit_group_ = true
 
 [node name="Shape" type="CollisionShape3D" parent="."]
@@ -71,3 +73,6 @@ Body = NodePath("..")
 wait_time = 6.0
 one_shot = true
 autostart = true
+
+[node name="Pop" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("4_wydns")
