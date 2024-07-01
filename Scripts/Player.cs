@@ -8,6 +8,7 @@ public partial class Player : CharacterBody3D {
 	[Export] public Timer IFrameTimer;
 	[Export] public GunVisual GunModel;
 	[Export] public GrappleVisual GrappleGunModel;
+	[Export] public HUD HUD;
 
 	// signals
 	[Signal] public delegate void PlayerShootEventHandler();
@@ -72,6 +73,7 @@ public partial class Player : CharacterBody3D {
 	// SIGNAL HANDLERS
 	private void OnGunAnimationFinished(StringName animationName) {
 		if (animationName != "reload") return;
+		Bullets = ClipSize;
 		reloading = false;
 	}
 
@@ -99,7 +101,6 @@ public partial class Player : CharacterBody3D {
 		if (Input.IsActionJustPressed("reload") && !reloading) {
 			if (Bullets == ClipSize) return;
 			reloading = true;
-			Bullets = ClipSize;
 			EmitSignal(SignalName.PlayerReload);
 		}
 
