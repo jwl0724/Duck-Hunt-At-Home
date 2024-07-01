@@ -2,7 +2,14 @@ using Godot;
 using System;
 
 // TODO:
-// HAVE HUD WITH RELEVANT INFO
+// CONNECT SOUNDS FOR EVERYTHING
+// CONNECT MUSIC FOR EVERYTHING
+// MAKE ONE LEVEL WITH FOUND ONLINE SHADERS
+// MAKE MENU SCREEN (NEW SCENE WITH PANNING BACKGROUND)
+// REFACTOR CODE
+// IRON OUT EGREGIOUS BUGS
+// MAKE GAME OVER SCREEN (REGULAR SCREEN)
+// IRON OUT MINOR BUGS
 public partial class Player : CharacterBody3D {	
 	// exported variables
 	[Export] public Timer IFrameTimer;
@@ -25,7 +32,7 @@ public partial class Player : CharacterBody3D {
 	private static readonly int grappleSpeed = 2000;
 
 	// instance variables
-	public int MaxHealth { get; private set; } = 500;
+	public int MaxHealth { get; private set; } = 50000000;
 	public int Health { get; private set; }
 	public float Gravity { get; private set; } = -12f;
 	public int Attack { get; private set; } = 100;
@@ -49,10 +56,7 @@ public partial class Player : CharacterBody3D {
 	}
 
     public override void _PhysicsProcess(double delta) {
-		if (Health <= 0) {
-			EmitSignal(SignalName.PlayerDied);
-			return;
-		}
+		if (Health <= 0) return;
 		ProcessInput();
 		ProcessMovement((float) delta);
 	}
@@ -78,7 +82,12 @@ public partial class Player : CharacterBody3D {
 	}
 
 	// HELPER FUNCTIONS
+	private void HandlePlayerDeath() {
+		
+	}
+
 	private void ProcessInput() {
+		if (Health <= 0) return;
 		// pause game (free cursor)
 		if (Input.IsActionJustPressed("pause")) {
 			if (Input.MouseMode == Input.MouseModeEnum.Visible)
@@ -129,6 +138,7 @@ public partial class Player : CharacterBody3D {
 	}
 
 	private void ProcessMovement(float delta) {
+		// TODO: REFACTOR MOVEMENT
 		float Ycomponent = delta * Gravity + Velocity.Y;
 
 		if (Grappled && !GrapplePoint.IsZeroApprox()) {
@@ -200,13 +210,14 @@ public partial class Player : CharacterBody3D {
 			ApplyKnockback(projectile.LinearVelocity, Projectile.KnockbackStrength);
 			EmitSignal(SignalName.PlayerDamaged);
 		}
+		if (Health <= 0) EmitSignal(SignalName.PlayerDied);
 	}
 
-	private void ApplyKnockback(Vector3 movementDirection, int knockbackStrength) {
+	private void ApplyKnockback(Vector3 objectVelocity, int knockbackStrength) {
 		int knockbackHeight = (int) Mathf.Min(knockbackStrength * 1.5f, 20);
 		Velocity = new Vector3(Velocity.X, knockbackHeight, Velocity.Z);
-		float Xcomponent = Mathf.Clamp(movementDirection.Normalized().X * knockbackStrength + knockbackVector.X, -35, 35);
-		float Zcomponent = Mathf.Clamp(movementDirection.Normalized().X * knockbackStrength + knockbackVector.X, -35, 35);
+		float Xcomponent = Mathf.Clamp(objectVelocity.X * knockbackStrength + knockbackVector.X, -35, 35);
+		float Zcomponent = Mathf.Clamp(objectVelocity.Z * knockbackStrength + knockbackVector.Z, -35, 35);
 		knockbackVector = new Vector3(Xcomponent, 0, Zcomponent);
 	}
 }
