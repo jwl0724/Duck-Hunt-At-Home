@@ -10,6 +10,7 @@ public partial class Enemy : CharacterBody3D {
 	[Export] public RigidBody3D Ragdoll;
 	[Export] public Timer DeleteDelayTimer;
 	[Export] public EnemyVisual Model;
+	[Export] public SoundManager SoundManager;
 
 	// signals
 	[Signal] public delegate void EnemyShootEventHandler();
@@ -18,7 +19,7 @@ public partial class Enemy : CharacterBody3D {
 	[Signal] public delegate void MoveStateChangeEventHandler();
 	
 	// static variables
-	public static int EnemyCount = 0;
+	public static int EnemyCount { get; private set; } = 0;
 	private static int bossScale = 2;
 	private static readonly int projectileSpeed = 250;
 	private static int chargeTime = 1;
@@ -153,8 +154,7 @@ public partial class Enemy : CharacterBody3D {
 					EmitSignal(SignalName.EnemyShoot);
 					attackTimer = 0;
 
-				} HandleCharging(delta);
-
+				} else HandleCharging(delta);
 			} else if (processingAttack == false) attackTimer += delta;
 		}
 	}
@@ -173,7 +173,7 @@ public partial class Enemy : CharacterBody3D {
 
 		// begin charging
 		if (chargeTimer == 0) {
-			Model.ToggleGlow();
+			if (type != EnemyType.Boss) Model.ToggleGlow();
 			Attack = 100;
 
 			// disable collision with other enemies
@@ -193,7 +193,7 @@ public partial class Enemy : CharacterBody3D {
 	}
 
 	private void ResetChargeState() {
-		Model.ToggleGlow();
+		if (type != EnemyType.Boss) Model.ToggleGlow();
 
 		// re-enable collision with other enemies
 		SetCollisionLayerValue(3, true);
@@ -218,7 +218,10 @@ public partial class Enemy : CharacterBody3D {
 		Projectile projectile = Projectile.Instantiate<Projectile>();
 		projectile.Damage = Attack;
 		projectile.Position = ProjectileSpawnPoint.GlobalPosition;
-		projectile.LinearVelocity = Position.DirectionTo(player.Position) + Velocity * projectileSpeed * delta;
+		if (type == EnemyType.Boss)
+			projectile.LinearVelocity = Position.DirectionTo(player.Position) + Velocity * delta;
+		else 
+			projectile.LinearVelocity = Position.DirectionTo(player.Position) + Velocity * projectileSpeed * delta;
 
 		// make projectile bigger if enemy is boss
 		if (type == EnemyType.Boss) projectile.Scale *= bossScale;
