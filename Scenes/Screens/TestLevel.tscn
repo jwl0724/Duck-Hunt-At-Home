@@ -1,9 +1,8 @@
-[gd_scene load_steps=10 format=3 uid="uid://co8ky5tqvx0io"]
+[gd_scene load_steps=9 format=3 uid="uid://co8ky5tqvx0io"]
 
 [ext_resource type="PackedScene" uid="uid://bjxi3yjg0rb46" path="res://Scenes/Entities/Player.tscn" id="1_hki0v"]
 [ext_resource type="Script" path="res://Scripts/GameManager.cs" id="1_qhil5"]
 [ext_resource type="PackedScene" uid="uid://g7arj8tp83bn" path="res://Scenes/Entities/Enemy.tscn" id="1_t4ccb"]
-[ext_resource type="Script" path="res://Scripts/SoundManager.cs" id="4_5v5da"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_qnmof"]
 size = Vector3(200, 0, 200)
@@ -72,9 +71,6 @@ wait_time = 30.0
 
 [node name="EnemySpawnTimer" type="Timer" parent="."]
 wait_time = 2.0
-
-[node name="SoundManager" type="Node3D" parent="."]
-script = ExtResource("4_5v5da")
 
 [node name="Platform" type="StaticBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -29.2751, 20.0231, 0)
