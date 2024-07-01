@@ -50,9 +50,6 @@ EnemySpawnTimer = NodePath("EnemySpawnTimer")
 BossSpawnTimer = NodePath("BossSpawnTimer")
 
 [node name="Player" parent="." instance=ExtResource("1_hki0v")]
-Speed = 100.0
-JumpSpeed = 10.0
-Health = 300000
 
 [node name="Ground" type="StaticBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
