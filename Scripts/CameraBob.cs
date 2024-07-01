@@ -18,9 +18,11 @@ public partial class CameraBob : Camera3D {
 
 	public override void _Ready() {
 		Player.Connect("PlayerDamaged", Callable.From(() => Animator.Play("damaged")));
+		Player.Connect("PlayerDied", Callable.From(() => Animator.Play("dead")));
 	}
 
 	public override void _Process(double delta) {
+		if (Player.Health <= 0) return;
 		if (!Player.Velocity.IsZeroApprox() && Player.IsOnFloor()) {
 			// moving on the ground
 			if (Rotation.X > headbobAngle + Mathf.DegToRad(0.1f)) {
@@ -47,6 +49,10 @@ public partial class CameraBob : Camera3D {
 		// adjust rotation of hitscan line so it matches reticle
 		HitscanLine.Rotation = HitscanLine.Rotation.Lerp(Rotation, bobSpeed * (float) delta);
 		BulletTrail.Rotation = new Vector3(0, 0, -Rotation.X);
+	}
+
+	public void ResetCamera() {
+		Animator.Stop();
 	}
 
 	private static bool IsBetween(float number, float min, float max) {
