@@ -8,19 +8,29 @@ public partial class HUD : Control {
 	
 	// HUD elements
 	[Export] public Control ReticleParent;
-	[Export] public Control HealthBar;
-	[Export] public Control AmmoCounter;
-	[Export] public Control TimerAndScore;
+	[Export] public Control TimeAndScore;
 
 	public override void _Ready() {
 		// connect signals
 		Player.Connect("PlayerShoot", Callable.From(() => OnPlayerShoot()));
 		ReticleParent.GetNode<Timer>("HitMarkerDuration").Connect("timeout", 
 			Callable.From(() => ReticleParent.GetNode<Sprite2D>("HitMarker").Visible = false));
+		UpdateScore(0);
+		UpdateTime(0);
 	}
 
 	public override void _Process(double delta) {
 		ProcessReticleColor();
+	}
+
+	public void UpdateScore(int score) {
+		TimeAndScore.GetNode<Label>("ScoreLabel").Text = $"Score: {score}";
+	}
+
+	public void UpdateTime(float time) {
+		TimeSpan timeSpan = TimeSpan.FromSeconds(time);
+		string timeText = timeSpan.ToString(@"mm\:ss");
+		TimeAndScore.GetNode<Label>("TimeLabel").Text = timeText;
 	}
 
 	// SIGNAL HANDLERS
