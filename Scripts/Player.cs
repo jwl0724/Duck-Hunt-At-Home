@@ -18,7 +18,7 @@ public partial class Player : CharacterBody3D {
 	[Signal] public delegate void PlayerGrappleEventHandler();
 
 	// static variables
-	private static readonly int clipSize = 25;
+	private static readonly int defaultClipSize = 25;
 	private static readonly int acceleration = 10;
 	private static readonly int decceleration = 15;
 	private static readonly int grappleSpeed = 2000;
@@ -31,13 +31,14 @@ public partial class Player : CharacterBody3D {
 	public float Speed { get; private set; } = 100f;
 	public float JumpSpeed { get; private set; } = 5f;
 	public float MouseSensitivity { get; private set; } = 0.1f;
+	public int ClipSize { get; private set; } = defaultClipSize;
+	public int Bullets { get; private set; } = defaultClipSize;
 	public bool Grappled = false;
 	public Vector3 GrapplePoint = new();
 	private Vector3 direction = new();
 	private Vector3 knockbackVector = new();
 	private Node3D RotationalHelper;
 	private bool reloading = false;
-	private int bullets = clipSize;
 
 	public override void _Ready() {
 		RotationalHelper = GetNode<Node3D>("RotationalHelper");
@@ -64,6 +65,8 @@ public partial class Player : CharacterBody3D {
 	public void ResetPlayerState() {
 		// TODO, ADD MORE STUFF HERE THAT NEEDS TO BE RESET
 		Health = MaxHealth;
+		ClipSize = defaultClipSize;
+		Bullets = defaultClipSize;
 	}
 
 	// SIGNAL HANDLERS
@@ -84,19 +87,19 @@ public partial class Player : CharacterBody3D {
 
 		// check shooting
 		if (Input.IsActionJustPressed("shoot") && !reloading) {
-			if (bullets < 0) {
+			if (Bullets == 0) {
 				EmitSignal(SignalName.PlayerEmptyMag);
 				return;
 			}
 			EmitSignal(SignalName.PlayerShoot);
-			bullets--;
+			Bullets--;
 		}
 
 		// check reloading
 		if (Input.IsActionJustPressed("reload") && !reloading) {
-			if (bullets == clipSize) return;
+			if (Bullets == ClipSize) return;
 			reloading = true;
-			bullets = clipSize;
+			Bullets = ClipSize;
 			EmitSignal(SignalName.PlayerReload);
 		}
 
