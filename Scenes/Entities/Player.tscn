@@ -1,14 +1,17 @@
-[gd_scene load_steps=17 format=3 uid="uid://bjxi3yjg0rb46"]
+[gd_scene load_steps=21 format=3 uid="uid://bjxi3yjg0rb46"]
 
 [ext_resource type="Script" path="res://Scripts/Player.cs" id="1_auq8a"]
 [ext_resource type="PackedScene" uid="uid://bghcfb4t3i5p7" path="res://Scenes/Models/GunModel.tscn" id="2_i0g63"]
 [ext_resource type="Script" path="res://Scripts/Hitscan.cs" id="3_fak1h"]
 [ext_resource type="Script" path="res://Scripts/ShootVisualEffects.cs" id="3_kvw6a"]
 [ext_resource type="Script" path="res://Scripts/CameraBob.cs" id="3_vnrey"]
-[ext_resource type="Texture2D" uid="uid://boeqo87na44x3" path="res://Assets/Images/Crosshair.png" id="4_1t3ti"]
 [ext_resource type="Script" path="res://Scripts/HUD.cs" id="4_3c0q6"]
 [ext_resource type="Shader" path="res://Assets/Shaders/Muzzleflash.gdshader" id="4_h5n5u"]
 [ext_resource type="PackedScene" uid="uid://chxaw8ej02n74" path="res://Scenes/Models/GrappleGunModel.tscn" id="7_t5rts"]
+[ext_resource type="Texture2D" uid="uid://ck2h3v1ujsjpo" path="res://Assets/Images/ReticleFrames/Reticle1.png" id="9_ma58q"]
+[ext_resource type="Texture2D" uid="uid://cstyoeha8c2xr" path="res://Assets/Images/ReticleFrames/Reticle2.png" id="10_ptpjr"]
+[ext_resource type="Texture2D" uid="uid://cxv86ietrslwd" path="res://Assets/Images/ReticleFrames/Reticle3.png" id="11_d53ii"]
+[ext_resource type="Texture2D" uid="uid://baluk4j7alkor" path="res://Assets/Images/ReticleFrames/Reticle4.png" id="12_uxnee"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_56r0q"]
 
@@ -67,6 +70,26 @@ _data = {
 "RESET": SubResource("Animation_mvu0o"),
 "damaged": SubResource("Animation_j82qx")
 }
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_ykuo0"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("9_ma58q")
+}, {
+"duration": 1.0,
+"texture": ExtResource("10_ptpjr")
+}, {
+"duration": 1.0,
+"texture": ExtResource("11_d53ii")
+}, {
+"duration": 1.0,
+"texture": ExtResource("12_uxnee")
+}],
+"loop": false,
+"name": &"shoot",
+"speed": 8.0
+}]
 
 [node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("IFrameTimer", "GunModel", "GrappleGunModel")]
 collision_layer = 8
@@ -134,7 +157,7 @@ Player = NodePath("../../..")
 wait_time = 0.5
 one_shot = true
 
-[node name="HUD" type="Control" parent="." node_paths=PackedStringArray("Player", "Crosshair")]
+[node name="HUD" type="Control" parent="." node_paths=PackedStringArray("Player", "HitscanLine", "ReticleParent")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -143,22 +166,41 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("4_3c0q6")
 Player = NodePath("..")
-Crosshair = NodePath("Crosshair")
+HitscanLine = NodePath("../RotationalHelper/HitscanLine")
+ReticleParent = NodePath("Reticle")
 metadata/_edit_use_anchors_ = true
 
-[node name="Crosshair" type="TextureRect" parent="HUD"]
+[node name="Reticle" type="Control" parent="HUD"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -25.0
-offset_top = -25.0
-offset_right = 25.0
-offset_bottom = 25.0
+offset_left = -40.0
+offset_top = -40.0
+offset_right = 40.0
+offset_bottom = 40.0
 grow_horizontal = 2
 grow_vertical = 2
-pivot_offset = Vector2(25, 25)
-texture = ExtResource("4_1t3ti")
-expand_mode = 1
+
+[node name="ReticleSprite" type="AnimatedSprite2D" parent="HUD/Reticle"]
+position = Vector2(40, 40)
+scale = Vector2(0.5, 0.5)
+sprite_frames = SubResource("SpriteFrames_ykuo0")
+animation = &"shoot"
+frame = 3
+frame_progress = 1.0
+speed_scale = 10.0
+
+[node name="HitMarker" type="Sprite2D" parent="HUD/Reticle"]
+visible = false
+self_modulate = Color(1, 0, 0, 1)
+position = Vector2(40, 40)
+rotation = 0.785398
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("10_ptpjr")
+
+[node name="HitMarkerDuration" type="Timer" parent="HUD/Reticle"]
+wait_time = 0.1
+one_shot = true
