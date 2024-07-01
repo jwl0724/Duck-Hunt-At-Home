@@ -1,4 +1,4 @@
-[gd_scene load_steps=65 format=3 uid="uid://bjxi3yjg0rb46"]
+[gd_scene load_steps=75 format=3 uid="uid://bjxi3yjg0rb46"]
 
 [ext_resource type="Script" path="res://Scripts/Player.cs" id="1_auq8a"]
 [ext_resource type="PackedScene" uid="uid://bghcfb4t3i5p7" path="res://Scenes/Models/GunModel.tscn" id="2_i0g63"]
@@ -33,6 +33,15 @@
 [ext_resource type="Script" path="res://Scripts/HealthBar.cs" id="31_jcyti"]
 [ext_resource type="FontFile" uid="uid://b4vgy4vusco5g" path="res://Assets/Fonts/Touchscreen-Regular.ttf" id="32_ao81m"]
 [ext_resource type="Script" path="res://Scripts/AmmoCounter.cs" id="33_7t1kl"]
+[ext_resource type="Script" path="res://Scripts/PlayerSoundManager.cs" id="34_erl5d"]
+[ext_resource type="Script" path="res://Scripts/SoundCollection.cs" id="35_2bqng"]
+[ext_resource type="AudioStream" uid="uid://h6qb4pt05sk2" path="res://Assets/SFX/PlayerDamageSFX.mp3" id="36_ama4q"]
+[ext_resource type="AudioStream" uid="uid://c3fac44aascn" path="res://Assets/SFX/PlayerEmptyMagSFX.mp3" id="37_cr87v"]
+[ext_resource type="AudioStream" uid="uid://dqbt60tpntv7s" path="res://Assets/SFX/GrappleHookSFX.mp3" id="38_46dla"]
+[ext_resource type="AudioStream" uid="uid://ddly4g2ej4k31" path="res://Assets/SFX/PlayerShotHitSFX.mp3" id="39_mdv8u"]
+[ext_resource type="AudioStream" uid="uid://ca6ih8urdfbtu" path="res://Assets/SFX/ShootSFX.mp3" id="40_h1ftp"]
+[ext_resource type="AudioStream" uid="uid://y74k54u73tw3" path="res://Assets/SFX/PlayerReloadSFX.mp3" id="41_vhca1"]
+[ext_resource type="AudioStream" uid="uid://cstddsb4mk5r" path="res://Assets/SFX/PlayerDeathSFX.mp3" id="42_gb5l6"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_56r0q"]
 
@@ -68,6 +77,18 @@ tracks/0/keys = {
 "update": 0,
 "values": [Vector3(0, 0, 0)]
 }
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0.634554, 0)]
+}
 
 [sub_resource type="Animation" id="Animation_j82qx"]
 resource_name = "damaged"
@@ -86,10 +107,39 @@ tracks/0/keys = {
 "values": [Vector3(0, 0, 0), Vector3(0, 0, -0.0698132), Vector3(0, 0, 0.0698132), Vector3(0, 0, 0)]
 }
 
+[sub_resource type="Animation" id="Animation_or1x7"]
+resource_name = "dead"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(0, 0.634554, 0), Vector3(0, 0, 1.481)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0.968658, -0.242601, -0.284489), Vector3(1.12574, -0.483456, -0.568977), Vector3(0.413738, -1.2091, -1.41985)]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_2brew"]
 _data = {
 "RESET": SubResource("Animation_mvu0o"),
-"damaged": SubResource("Animation_j82qx")
+"damaged": SubResource("Animation_j82qx"),
+"dead": SubResource("Animation_or1x7")
 }
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_ykuo0"]
@@ -538,3 +588,34 @@ offset_bottom = 119.0
 grow_horizontal = 2
 text = "60:00"
 label_settings = SubResource("LabelSettings_4qijx")
+
+[node name="SoundManager" type="Node3D" parent="." node_paths=PackedStringArray("Player", "HitscanLine", "SoundCollection")]
+script = ExtResource("34_erl5d")
+Player = NodePath("..")
+HitscanLine = NodePath("../RotationalHelper/HitscanLine")
+SoundCollection = NodePath("SoundCollection")
+
+[node name="SoundCollection" type="Node3D" parent="SoundManager"]
+script = ExtResource("35_2bqng")
+
+[node name="Damaged" type="AudioStreamPlayer3D" parent="SoundManager/SoundCollection"]
+stream = ExtResource("36_ama4q")
+
+[node name="EmptyMag" type="AudioStreamPlayer3D" parent="SoundManager/SoundCollection"]
+stream = ExtResource("37_cr87v")
+
+[node name="GrappleHook" type="AudioStreamPlayer3D" parent="SoundManager/SoundCollection"]
+stream = ExtResource("38_46dla")
+
+[node name="ShotLanded" type="AudioStreamPlayer3D" parent="SoundManager/SoundCollection"]
+stream = ExtResource("39_mdv8u")
+volume_db = -30.0
+
+[node name="Shoot" type="AudioStreamPlayer3D" parent="SoundManager/SoundCollection"]
+stream = ExtResource("40_h1ftp")
+
+[node name="Reload" type="AudioStreamPlayer3D" parent="SoundManager/SoundCollection"]
+stream = ExtResource("41_vhca1")
+
+[node name="Dead" type="AudioStreamPlayer3D" parent="SoundManager/SoundCollection"]
+stream = ExtResource("42_gb5l6")
