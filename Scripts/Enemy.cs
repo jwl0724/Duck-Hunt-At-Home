@@ -10,7 +10,6 @@ public partial class Enemy : CharacterBody3D {
 	[Export] public RigidBody3D Ragdoll;
 	[Export] public Timer DeleteDelayTimer;
 	[Export] public EnemyVisual Model;
-	[Export] public SoundManager SoundManager;
 
 	// signals
 	[Signal] public delegate void EnemyShootEventHandler();
