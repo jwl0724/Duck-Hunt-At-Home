@@ -114,7 +114,7 @@ public partial class Enemy : CharacterBody3D {
 		if (Health <= 0) {
 			ProcessDeath();
 			return;
-		}
+		} else if (Position.Y <= -30) QueueFree(); // delete if under the map
 		ProcessAttack((float) delta);
         ProcessMovement((float) delta);
     }
