@@ -1,8 +1,12 @@
-[gd_scene load_steps=9 format=3 uid="uid://co8ky5tqvx0io"]
+[gd_scene load_steps=13 format=3 uid="uid://co8ky5tqvx0io"]
 
 [ext_resource type="PackedScene" uid="uid://bjxi3yjg0rb46" path="res://Scenes/Entities/Player.tscn" id="1_hki0v"]
 [ext_resource type="Script" path="res://Scripts/GameManager.cs" id="1_qhil5"]
 [ext_resource type="PackedScene" uid="uid://g7arj8tp83bn" path="res://Scenes/Entities/Enemy.tscn" id="1_t4ccb"]
+[ext_resource type="Script" path="res://Scripts/SoundCollection.cs" id="4_yvke8"]
+[ext_resource type="AudioStream" uid="uid://umyiu7e7eirw" path="res://Assets/Music/InGameMusic.mp3" id="5_bsl47"]
+[ext_resource type="AudioStream" uid="uid://df4fuynudtk74" path="res://Assets/Music/GameOverJingle.mp3" id="6_ody44"]
+[ext_resource type="AudioStream" uid="uid://0xhnvgif4anl" path="res://Assets/Music/GameOverMusic.mp3" id="7_uma6b"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_qnmof"]
 size = Vector3(200, 0, 200)
@@ -42,11 +46,12 @@ size = Vector3(20, 1, 20)
 [sub_resource type="BoxMesh" id="BoxMesh_td5q1"]
 size = Vector3(20, 1, 20)
 
-[node name="TestLevel" type="Node" node_paths=PackedStringArray("EnemySpawnTimer", "BossSpawnTimer")]
+[node name="TestLevel" type="Node" node_paths=PackedStringArray("EnemySpawnTimer", "BossSpawnTimer", "MusicCollection")]
 script = ExtResource("1_qhil5")
 EnemyScene = ExtResource("1_t4ccb")
 EnemySpawnTimer = NodePath("EnemySpawnTimer")
 BossSpawnTimer = NodePath("BossSpawnTimer")
+MusicCollection = NodePath("MusicCollection")
 
 [node name="Player" parent="." instance=ExtResource("1_hki0v")]
 
@@ -80,3 +85,15 @@ shape = SubResource("BoxShape3D_nycdi")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Platform"]
 mesh = SubResource("BoxMesh_td5q1")
+
+[node name="MusicCollection" type="Node3D" parent="."]
+script = ExtResource("4_yvke8")
+
+[node name="InGame" type="AudioStreamPlayer" parent="MusicCollection"]
+stream = ExtResource("5_bsl47")
+
+[node name="GameOverJingle" type="AudioStreamPlayer" parent="MusicCollection"]
+stream = ExtResource("6_ody44")
+
+[node name="GameOver" type="AudioStreamPlayer" parent="MusicCollection"]
+stream = ExtResource("7_uma6b")
