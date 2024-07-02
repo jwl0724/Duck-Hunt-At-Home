@@ -2,8 +2,6 @@ using Godot;
 using System;
 
 // TODO:
-// CONNECT SOUNDS FOR EVERYTHING
-// CONNECT MUSIC FOR EVERYTHING
 // MAKE ONE LEVEL WITH FOUND ONLINE SHADERS
 // MAKE MENU SCREEN (NEW SCENE WITH PANNING BACKGROUND)
 // REFACTOR CODE
@@ -168,6 +166,8 @@ public partial class Player : CharacterBody3D {
 	}
 
 	private void ProcessMouse(InputEventMouseMotion movement) {
+		if (Health <= 0) return;
+
 		// handle left/right camera movement
 		float rotationDegreesY = RotationalHelper.Rotation.Y + Mathf.DegToRad(-movement.Relative.X * MouseSensitivity);
 
