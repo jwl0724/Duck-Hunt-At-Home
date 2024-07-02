@@ -37,7 +37,12 @@ public partial class EnemyVisual : Node {
 		// connect signals
 		Enemy.Connect("EnemyShoot", Callable.From(() => animator.Play("shoot")));
 		Enemy.Connect("MoveStateChange", Callable.From(() => OnMoveStateChange()));
+		Enemy.Connect("EnemyDamaged", Callable.From(() => OnEnemyDamaged()));
 		animator.Connect("animation_finished", Callable.From((StringName name) => OnAnimationFinished(name)));
+	}
+
+	private void OnEnemyDamaged() {
+		animator.Play("hurt");
 	}
 
 	private void OnAnimationFinished(StringName name) {
