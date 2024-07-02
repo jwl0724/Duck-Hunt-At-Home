@@ -7,6 +7,7 @@ public partial class GameManager : Node {
 	// [Export] public PackedScene ProjectileScene;
 	[Export] public Timer EnemySpawnTimer;
 	[Export] public Timer BossSpawnTimer;
+	[Export] public SoundCollection MusicCollection;
 
 	// signals
 
@@ -31,13 +32,23 @@ public partial class GameManager : Node {
 
 	
 	public override void _Process(double delta) {
-		if (player.Health <= 0) return;
+		if (!GameRunning) {
+			ProcessGameOverScreen();
+			return;
+
+		} else if (player.Health <= 0) {
+			EndGame();
+			return;
+		}
+
 		TimeElapsed += (float) delta;
 		player.HUD.UpdateScore(Score);
 		player.HUD.UpdateTime(TimeElapsed);
 	}
 
-	
+	private void ProcessGameOverScreen() {
+		if (!MusicCollection.IsPlaying("GameOverJingle")) MusicCollection.Play("GameOver");
+	}
 
 	private void OnEnemySpawn() {
 		if (!GameRunning) return;
@@ -66,6 +77,10 @@ public partial class GameManager : Node {
 	private void StartGame() {
 		EnemySpawnTimer.Start();
 		BossSpawnTimer.Start();
+		
+		MusicCollection.Stop("GameOverJingle");
+		MusicCollection.Stop("GameOver");
+		MusicCollection.Play("InGame");
 
 		GameRunning = true;
 	}
@@ -73,6 +88,9 @@ public partial class GameManager : Node {
 	private void EndGame() {
 		EnemySpawnTimer.Stop();
 		BossSpawnTimer.Stop();
+		
+		MusicCollection.Stop("InGame");
+		MusicCollection.Play("GameOverJingle");
 
 		GameRunning = false;
 	}
