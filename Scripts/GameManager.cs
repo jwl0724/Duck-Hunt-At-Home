@@ -3,8 +3,8 @@ using System;
 
 public partial class GameManager : Node {
 	// exported variables
+	[Export] public Vector3 MapSize;
 	[Export] public PackedScene EnemyScene;
-	// [Export] public PackedScene ProjectileScene;
 	[Export] public Timer EnemySpawnTimer;
 	[Export] public Timer BossSpawnTimer;
 	[Export] public SoundCollection MusicCollection;
@@ -70,8 +70,15 @@ public partial class GameManager : Node {
 	}
 
 	private Vector3 GenerateSpawnPoint() {
-		// will implement after shooting is done
-		return new Vector3(GD.RandRange(-25, 25), GD.RandRange(0, 15), GD.RandRange(-25, 25));
+		const int minSpawnRadius = 25;
+		float spawnAngle = Mathf.DegToRad(GD.Randi() % 361);
+		float spawnDistance = GD.RandRange(minSpawnRadius, minSpawnRadius * 2);
+		
+		return new Vector3(
+			Mathf.Clamp(spawnDistance * Mathf.Cos(spawnAngle), -MapSize.X / 2, MapSize.X / 2),
+			GD.Randi() % (minSpawnRadius + 1),
+			Mathf.Clamp(spawnDistance * Mathf.Sin(spawnAngle), -MapSize.Z / 2, MapSize.Z / 2)
+		);
 	}
 
 	private void StartGame() {
