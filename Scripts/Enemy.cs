@@ -34,6 +34,7 @@ public partial class Enemy : CharacterBody3D {
 	private CharacterBody3D player;
 	private bool processingAttack = false;
 	public MoveState CurrentState { get; private set; } = MoveState.Idle;
+	private int DespawnY = -30;
 
 	// timers
 	private float attackTimer = 0;
@@ -60,7 +61,9 @@ public partial class Enemy : CharacterBody3D {
 	}
 	
     public override void _Ready() {
-		player = GetParent().GetNode<CharacterBody3D>("Player");
+		GameManager gameScene = GetParent() as GameManager;
+		player = gameScene.GetNode<Player>("Player");
+		DespawnY = (int) gameScene.MapSize.Y;
 		Hurtbox.Connect("body_entered", Callable.From((PhysicsBody3D body) => HandleCollisionWithPlayer(body)));
 		DeleteDelayTimer.Connect("timeout", Callable.From(() => SetMoveState(MoveState.Dead)));
     }
@@ -114,7 +117,7 @@ public partial class Enemy : CharacterBody3D {
 		if (Health <= 0) {
 			ProcessDeath();
 			return;
-		} else if (Position.Y <= -30) QueueFree(); // delete if under the map
+		} else if (Position.Y <= DespawnY) QueueFree(); // delete if under the map
 		ProcessAttack((float) delta);
         ProcessMovement((float) delta);
     }
