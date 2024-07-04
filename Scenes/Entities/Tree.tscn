@@ -1,0 +1,80 @@
+[gd_scene load_steps=13 format=3 uid="uid://df6jvuqeo6x1r"]
+
+[ext_resource type="Texture2D" uid="uid://cdoojqoi7obn" path="res://Assets/Images/Textures/LogTexture.webp" id="1_76mb6"]
+[ext_resource type="Script" path="res://Scripts/TreeGenerator.cs" id="1_gplgg"]
+[ext_resource type="Texture2D" uid="uid://c68cw2lit18l1" path="res://Assets/Images/Textures/LeavesTexture.jpg" id="2_xyavq"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vy1sp"]
+albedo_color = Color(0.108328, 0.450398, 0.124243, 1)
+metallic = 0.75
+metallic_specular = 0.0
+metallic_texture = ExtResource("2_xyavq")
+metallic_texture_channel = 1
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_u0257"]
+height = 25.0
+radius = 2.0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_cj8j7"]
+albedo_color = Color(0.34049, 0.201666, 0.13349, 1)
+metallic = 1.0
+metallic_texture = ExtResource("1_76mb6")
+metallic_texture_channel = 4
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_dc4sa"]
+material = SubResource("StandardMaterial3D_cj8j7")
+top_radius = 2.0
+bottom_radius = 2.0
+height = 25.0
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_amkip"]
+height = 13.0
+radius = 4.0
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_57k2l"]
+material = SubResource("StandardMaterial3D_vy1sp")
+top_radius = 0.0
+bottom_radius = 7.0
+height = 13.0
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_ln4d5"]
+height = 13.0
+radius = 4.0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_m14rc"]
+albedo_color = Color(0.108328, 0.450398, 0.124243, 1)
+metallic = 0.75
+metallic_specular = 0.0
+metallic_texture = ExtResource("2_xyavq")
+metallic_texture_channel = 1
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_fbkqu"]
+material = SubResource("StandardMaterial3D_m14rc")
+top_radius = 3.0
+bottom_radius = 8.0
+height = 10.0
+
+[node name="Tree" type="StaticBody3D"]
+script = ExtResource("1_gplgg")
+LeavesMaterial = SubResource("StandardMaterial3D_vy1sp")
+metadata/_edit_group_ = true
+
+[node name="Trunk" type="CollisionShape3D" parent="."]
+shape = SubResource("CylinderShape3D_u0257")
+
+[node name="Mesh" type="MeshInstance3D" parent="Trunk"]
+mesh = SubResource("CylinderMesh_dc4sa")
+
+[node name="TopLeaves" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 14.7352, 0)
+shape = SubResource("CylinderShape3D_amkip")
+
+[node name="Mesh" type="MeshInstance3D" parent="TopLeaves"]
+mesh = SubResource("CylinderMesh_57k2l")
+
+[node name="BottomLeaves" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.96911, 0)
+shape = SubResource("CylinderShape3D_ln4d5")
+
+[node name="Mesh" type="MeshInstance3D" parent="BottomLeaves"]
+mesh = SubResource("CylinderMesh_fbkqu")
