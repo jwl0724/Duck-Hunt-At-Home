@@ -25,7 +25,7 @@ bounce = 0.5
 [sub_resource type="SphereShape3D" id="SphereShape3D_2muaf"]
 radius = 0.8
 
-[node name="Enemy" type="CharacterBody3D" node_paths=PackedStringArray("ProjectileSpawnPoint", "Hurtbox", "Ragdoll", "DeleteDelayTimer", "Model")]
+[node name="Enemy" type="CharacterBody3D" node_paths=PackedStringArray("ProjectileSpawnPoint", "Hurtbox", "Ragdoll", "DeleteDelayTimer", "Model") groups=["enemies"]]
 collision_layer = 4
 collision_mask = 5
 floor_constant_speed = true

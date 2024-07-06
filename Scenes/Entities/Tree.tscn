@@ -54,7 +54,7 @@ top_radius = 3.0
 bottom_radius = 8.0
 height = 10.0
 
-[node name="Tree" type="StaticBody3D"]
+[node name="Tree" type="StaticBody3D" groups=["trees"]]
 script = ExtResource("1_gplgg")
 LeavesMaterial = SubResource("StandardMaterial3D_vy1sp")
 metadata/_edit_group_ = true
