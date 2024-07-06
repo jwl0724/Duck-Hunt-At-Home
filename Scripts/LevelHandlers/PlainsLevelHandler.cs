@@ -10,12 +10,12 @@ public partial class PlainsLevelHandler : Node3D {
 	[Export] public Color[] ColorOptions;
 
 	// instance variables
-	private Vector3 MapSize = new(200, 20, 200);
+	private Vector3 MapSize;
 	private int maxSunHeight;
 	private float sunTimer;
 
 	public override void _Ready() {
-		//  MapSize = (GetParent() as GameManager).MapSize;
+		MapSize = (GetParent() as GameManager).MapSize;
 		maxSunHeight = (int) Sun.Position.Y;
 		GenerateRandomTrees();
 	}
@@ -62,22 +62,23 @@ public partial class PlainsLevelHandler : Node3D {
 
 	private void HandleWrapping() {
 		// put player onto other side when getting too close to edge
+		const float wrapFactor = 0.95f;
 		bool wrapped = false;
 		float Xcomponent, Zcomponent, Ycomponent = Player.Position.Y;
-		if (Player.Position.X >= MapSize.X / 2* 0.8) {
+		if (Player.Position.X >= MapSize.X / 2 * wrapFactor) {
 			Xcomponent = -Player.Position.X + Player.Velocity.X;
 			wrapped = true;
 
-		} else if (Player.Position.X <= -MapSize.X / 2 * 0.8) {
+		} else if (Player.Position.X <= -MapSize.X / 2 * wrapFactor) {
 			Xcomponent = Player.Position.X - Player.Velocity.X;
 			wrapped = true;
 
 		} else Xcomponent = Player.Position.X;
-		if (Player.Position.Z >= MapSize.Z / 2 * 0.8) {
+		if (Player.Position.Z >= MapSize.Z / 2 * wrapFactor) {
 			Zcomponent = -Player.Position.Z + Player.Velocity.Z;
 			wrapped = true;
 
-		} else if (Player.Position.Z <= -MapSize.Z / 2 * 0.8) {
+		} else if (Player.Position.Z <= -MapSize.Z / 2 * wrapFactor) {
 			Zcomponent = Player.Position.Z - Player.Velocity.Z;
 			wrapped = true;
 
