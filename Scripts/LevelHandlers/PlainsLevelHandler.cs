@@ -9,9 +9,6 @@ public partial class PlainsLevelHandler : Node3D {
 	[Export] public int MaxItems;
 	[Export] public Color[] ColorOptions;
 
-	// static variables
-	private static readonly int sunMoveTick = 1;
-
 	// instance variables
 	private Vector3 MapSize = new(200, 20, 200);
 	private int maxSunHeight;
@@ -19,6 +16,17 @@ public partial class PlainsLevelHandler : Node3D {
 
 	public override void _Ready() {
 		//  MapSize = (GetParent() as GameManager).MapSize;
+		maxSunHeight = (int) Sun.Position.Y;
+		GenerateRandomTrees();
+	}
+
+	public override void _Process(double delta) {
+		HandleWrapping();
+		HandleSunMovement((float) delta);
+	}
+
+	private void GenerateRandomTrees() {
+		(Engine.GetMainLoop() as SceneTree).CallGroup("trees", MethodName.QueueFree);
 		int itemsToMake = GD.RandRange(MaxItems / 3, MaxItems);
 		
 		for (int i = 0; i < itemsToMake; i++) {
@@ -32,18 +40,15 @@ public partial class PlainsLevelHandler : Node3D {
 			tree.SetColor(ColorOptions[GD.Randi() % ColorOptions.Length]);
 			
 			// randomize placement
-			int Xcoord = GD.RandRange((int) -MapSize.X / 2, (int) MapSize.X / 2);
-			int Zcoord = GD.RandRange((int) -MapSize.Z / 2, (int) MapSize.Z / 2);
-			tree.Position = new Vector3(Xcoord, 3, Zcoord);
-
+			const int minSpawnRadius = 15, maxSpawnRadius = 70;
+			float spawnAngle = Mathf.DegToRad(GD.Randi() % 361);
+			float spawnDistance = GD.RandRange(minSpawnRadius, maxSpawnRadius);
+			tree.Position = new Vector3(
+				Mathf.Clamp(spawnDistance * Mathf.Cos(spawnAngle), -MapSize.X / 2, MapSize.X / 2), 3,
+				Mathf.Clamp(spawnDistance * Mathf.Sin(spawnAngle), -MapSize.Z / 2, MapSize.Z / 2)
+			);
 			AddChild(tree);
 		}
-		maxSunHeight = (int) Sun.Position.Y;
-	}
-
-	public override void _Process(double delta) {
-		HandleWrapping();
-		HandleSunMovement((float) delta);
 	}
 
 	private void HandleSunMovement(float delta) {
