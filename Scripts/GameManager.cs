@@ -76,7 +76,7 @@ public partial class GameManager : Node {
 		
 		return new Vector3(
 			Mathf.Clamp(spawnDistance * Mathf.Cos(spawnAngle), -MapSize.X / 2, MapSize.X / 2),
-			GD.Randi() % (minSpawnRadius + 1),
+			Mathf.Clamp(GD.Randi() % (minSpawnRadius + 1), 0, MapSize.Y),
 			Mathf.Clamp(spawnDistance * Mathf.Sin(spawnAngle), -MapSize.Z / 2, MapSize.Z / 2)
 		);
 	}
