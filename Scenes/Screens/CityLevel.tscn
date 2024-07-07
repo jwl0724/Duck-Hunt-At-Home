@@ -1,0 +1,220 @@
+[gd_scene load_steps=17 format=3 uid="uid://cdqljydqxa58"]
+
+[ext_resource type="Shader" path="res://Assets/Shaders/Barrier.gdshader" id="1_f1mka"]
+[ext_resource type="PackedScene" uid="uid://ovc7fnrqlm44" path="res://Scenes/Entities/Building.tscn" id="2_cmv82"]
+[ext_resource type="PackedScene" uid="uid://bjxi3yjg0rb46" path="res://Scenes/Entities/Player.tscn" id="3_77cuk"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_wu7qi"]
+size = Vector3(400, 1, 400)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_ty5qn"]
+size = Vector2(400, 400)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1w0l3"]
+albedo_color = Color(0.10748, 0.10748, 0.10748, 1)
+backlight_enabled = true
+
+[sub_resource type="QuadMesh" id="QuadMesh_vqsuc"]
+material = SubResource("StandardMaterial3D_1w0l3")
+size = Vector2(400, 30)
+orientation = 1
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1cbbf"]
+albedo_color = Color(0.683077, 0.683077, 0.683077, 1)
+roughness = 0.0
+emission_enabled = true
+emission = Color(1.15514e-06, 0.480319, 0.716554, 1)
+emission_energy_multiplier = 5.0
+
+[sub_resource type="BoxMesh" id="BoxMesh_erfjm"]
+material = SubResource("StandardMaterial3D_1cbbf")
+size = Vector3(180, 1, 4)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_7k3jd"]
+albedo_color = Color(0.683077, 0.683077, 0.683077, 1)
+roughness = 0.0
+emission_enabled = true
+emission = Color(1.15514e-06, 0.480319, 0.716554, 1)
+emission_energy_multiplier = 5.0
+
+[sub_resource type="BoxMesh" id="BoxMesh_w35tx"]
+material = SubResource("StandardMaterial3D_7k3jd")
+size = Vector3(10, 1, 10)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_62rkl"]
+albedo_color = Color(1, 0.776471, 0.0941176, 1)
+roughness = 0.0
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_0vbuy"]
+material = SubResource("StandardMaterial3D_62rkl")
+size = Vector2(400, 2)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_b6ku2"]
+render_priority = 0
+shader = ExtResource("1_f1mka")
+shader_parameter/_shield_color = Color(0.141176, 0.627451, 0.886275, 1)
+shader_parameter/_shield_color_brightness = 20.0
+shader_parameter/_shield_intensity = 1.0
+shader_parameter/_rotation = Vector3(0, 0.3, 0)
+shader_parameter/_shield_size = 0.0
+shader_parameter/_shield_pulse_frequency = 1.0
+shader_parameter/_shield_pulse_density = 1.0
+shader_parameter/_shield_pulse_amplitude = 1.0
+shader_parameter/_shield_pulse_blend = 1.0
+shader_parameter/_shield_pulse_radius = 1.0
+shader_parameter/_impact_origin = Vector3(1, 0, 0)
+shader_parameter/_impact_frequency = 5.0
+shader_parameter/_impact_density = 5.0
+shader_parameter/_impact_amplitude = 6.0
+shader_parameter/_impact_blend = 0.0
+shader_parameter/_impact_radius = 1.1
+shader_parameter/_impact_anim = 0.0
+
+[sub_resource type="SphereMesh" id="SphereMesh_pu81k"]
+lightmap_size_hint = Vector2i(6285, 3143)
+material = SubResource("ShaderMaterial_b6ku2")
+flip_faces = true
+radius = 200.0
+height = 200.0
+is_hemisphere = true
+
+[sub_resource type="BoxMesh" id="BoxMesh_7sj0j"]
+material = SubResource("StandardMaterial3D_1cbbf")
+size = Vector3(8, 1, 13)
+
+[node name="City" type="Node"]
+
+[node name="Ground" type="StaticBody3D" parent="."]
+metadata/_edit_group_ = true
+metadata/_edit_lock_ = true
+
+[node name="Shape" type="CollisionShape3D" parent="Ground"]
+shape = SubResource("BoxShape3D_wu7qi")
+
+[node name="Mesh" type="MeshInstance3D" parent="Ground"]
+mesh = SubResource("PlaneMesh_ty5qn")
+
+[node name="Road" type="Node3D" parent="."]
+
+[node name="NSConcrete" type="MeshInstance3D" parent="Road"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0)
+mesh = SubResource("QuadMesh_vqsuc")
+skeleton = NodePath("../..")
+
+[node name="WEConcrete" type="MeshInstance3D" parent="Road"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0.1, 0)
+mesh = SubResource("QuadMesh_vqsuc")
+skeleton = NodePath("../..")
+
+[node name="Sidewalk1" type="MeshInstance3D" parent="Road"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 110, 0, 15)
+cast_shadow = 0
+mesh = SubResource("BoxMesh_erfjm")
+
+[node name="Sidewalk2" type="MeshInstance3D" parent="Road"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 110, 0, -15)
+cast_shadow = 0
+mesh = SubResource("BoxMesh_erfjm")
+
+[node name="Sidewalk3" type="MeshInstance3D" parent="Road"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -110, 0, 15)
+cast_shadow = 0
+mesh = SubResource("BoxMesh_erfjm")
+
+[node name="Sidewalk4" type="MeshInstance3D" parent="Road"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -110, 0, -15)
+cast_shadow = 0
+mesh = SubResource("BoxMesh_erfjm")
+
+[node name="Sidewalk5" type="MeshInstance3D" parent="Road"]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -15, 0, 110)
+cast_shadow = 0
+mesh = SubResource("BoxMesh_erfjm")
+
+[node name="Sidewalk6" type="MeshInstance3D" parent="Road"]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 15, 0, 110)
+cast_shadow = 0
+mesh = SubResource("BoxMesh_erfjm")
+
+[node name="Sidewalk7" type="MeshInstance3D" parent="Road"]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -15, 0, -110)
+cast_shadow = 0
+mesh = SubResource("BoxMesh_erfjm")
+
+[node name="Sidewalk8" type="MeshInstance3D" parent="Road"]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 15, 0, -110)
+cast_shadow = 0
+mesh = SubResource("BoxMesh_erfjm")
+
+[node name="Crossroad" type="MeshInstance3D" parent="Road"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -18, 0, 18)
+cast_shadow = 0
+mesh = SubResource("BoxMesh_w35tx")
+
+[node name="Crossroad2" type="MeshInstance3D" parent="Road"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18, 0, 18)
+cast_shadow = 0
+mesh = SubResource("BoxMesh_w35tx")
+
+[node name="Crossroad3" type="MeshInstance3D" parent="Road"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18, 0, -18)
+cast_shadow = 0
+mesh = SubResource("BoxMesh_w35tx")
+
+[node name="Crossroad4" type="MeshInstance3D" parent="Road"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -18, 0, -18)
+cast_shadow = 0
+mesh = SubResource("BoxMesh_w35tx")
+skeleton = NodePath("../Crossroad")
+
+[node name="Divider" type="MeshInstance3D" parent="Road"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, 0)
+mesh = SubResource("PlaneMesh_0vbuy")
+
+[node name="Divider2" type="MeshInstance3D" parent="Road"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0.2, 0)
+mesh = SubResource("PlaneMesh_0vbuy")
+
+[node name="Barrier" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
+mesh = SubResource("SphereMesh_pu81k")
+metadata/_edit_lock_ = true
+
+[node name="Buildings" type="Node3D" parent="."]
+
+[node name="Building1" parent="Buildings" instance=ExtResource("2_cmv82")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -50, 40, 50)
+
+[node name="Building2" parent="Buildings" instance=ExtResource("2_cmv82")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -120, 40, 50)
+
+[node name="Building3" parent="Buildings" instance=ExtResource("2_cmv82")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -50, 40, 120)
+
+[node name="Building4" parent="Buildings" instance=ExtResource("2_cmv82")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 120, 40, 50)
+
+[node name="Building5" parent="Buildings" instance=ExtResource("2_cmv82")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 50, 40, 50)
+
+[node name="Building6" parent="Buildings" instance=ExtResource("2_cmv82")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 50, 40, 120)
+
+[node name="Building7" parent="Buildings" instance=ExtResource("2_cmv82")]
+transform = Transform3D(-1.5, 0, -1.31134e-07, 0, 1.5, 0, 1.31134e-07, 0, -1.5, 75, 60, -75)
+
+[node name="Building8" parent="Buildings" instance=ExtResource("2_cmv82")]
+transform = Transform3D(-6.55671e-08, 0, -1.5, 0, 1.5, 0, 1.5, 0, -6.55671e-08, -60, 60, -60)
+
+[node name="Building9" parent="Buildings" instance=ExtResource("2_cmv82")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -50, 40, -130)
+
+[node name="Building10" parent="Buildings" instance=ExtResource("2_cmv82")]
+transform = Transform3D(-1.2, 0, -1.04907e-07, 0, 1.2, 0, 1.04907e-07, 0, -1.2, -130, 48, -54)
+
+[node name="Pathway" type="MeshInstance3D" parent="Buildings"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -50, 0, 23.4069)
+mesh = SubResource("BoxMesh_7sj0j")
+skeleton = NodePath("../..")
+
+[node name="Player" parent="." instance=ExtResource("3_77cuk")]
