@@ -9,8 +9,8 @@ public partial class Hitscan : RayCast3D {
 	[Signal] public delegate void ShotLandedEventHandler();
 
 	public override void _Ready() {
-		Player.Connect("PlayerShoot", Callable.From(() => OnPlayerShoot()));
-		Player.GrappleGunModel.Connect("GrappleGunLifted", Callable.From(() => OnGrappleGunLifted()));
+		Player.InputManager.Connect("PlayerShoot", Callable.From(() => OnPlayerShoot()));
+		Player.InputManager.GrappleModel.Connect("GrappleGunLifted", Callable.From(() => OnGrappleGunLifted()));
 	}
 
 	private void OnPlayerShoot() {

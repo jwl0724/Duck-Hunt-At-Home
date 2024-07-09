@@ -14,7 +14,7 @@ public partial class ShootVisualEffects : Node3D {
 
 	public override void _Ready() {
 		MuzzleFlashModel.Visible = false;
-		Player.Connect("PlayerShoot", Callable.From(() => OnPlayerShoot()));
+		Player.InputManager.Connect("PlayerShoot", Callable.From(() => OnPlayerShoot()));
 	}
 
 	public override void _Process(double delta) {

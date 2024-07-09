@@ -12,7 +12,7 @@ public partial class HUD : Control {
 
 	public override void _Ready() {
 		// connect signals
-		Player.Connect("PlayerShoot", Callable.From(() => OnPlayerShoot()));
+		Player.InputManager.Connect("PlayerShoot", Callable.From(() => OnPlayerShoot()));
 		ReticleParent.GetNode<Timer>("HitMarkerDuration").Connect("timeout", 
 			Callable.From(() => ReticleParent.GetNode<Sprite2D>("HitMarker").Visible = false));
 		UpdateScore(0);

@@ -9,11 +9,8 @@ public partial class GunVisual : Node3D {
 	[Export] public PackedScene BulletTrailModel;
 	
 	public override void _Ready() {
-		Player.Connect("PlayerShoot", Callable.From(() => OnPlayerShoot()));
-		Player.Connect("PlayerReload", Callable.From(() => OnPlayerReload()));
-	}
-
-	public override void _Process(double delta) {
+		Player.InputManager.Connect("PlayerShoot", Callable.From(() => OnPlayerShoot()));
+		Player.InputManager.Connect("PlayerReload", Callable.From(() => OnPlayerReload()));
 	}
 
 	private void OnPlayerReload() {

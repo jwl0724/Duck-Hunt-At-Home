@@ -21,7 +21,7 @@ public partial class GrappleVisual : Node3D {
 		Animator.Play("holster"); // hide grapple when first loading in
 
 		// connect signals
-		Player.Connect("PlayerGrapple", Callable.From(() => OnPlayerGrapple()));
+		Player.InputManager.Connect("PlayerGrapple", Callable.From(() => OnPlayerGrapple()));
 		Animator.Connect("animation_finished", Callable.From((StringName name) => OnAnimationFinished(name)));
 		
 		// get left and right sides of line for rendering

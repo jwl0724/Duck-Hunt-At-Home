@@ -9,17 +9,17 @@ public partial class PlayerSoundManager : Node3D {
 
 	public override void _Ready() {
 		// connect signals
-		Player.Connect("PlayerGrapple", Callable.From(() => OnPlayerGrapple()));
+		Player.InputManager.Connect("PlayerGrapple", Callable.From(() => OnPlayerGrapple()));
 		Player.Connect("PlayerDamaged", Callable.From(() => SoundCollection.Play("Damaged")));
-		Player.Connect("PlayerEmptyMag", Callable.From(() => SoundCollection.Play("EmptyMag")));
-		Player.Connect("PlayerReload", Callable.From(() => SoundCollection.Play("Reload")));
+		Player.InputManager.Connect("PlayerEmptyMag", Callable.From(() => SoundCollection.Play("EmptyMag")));
+		Player.InputManager.Connect("PlayerReload", Callable.From(() => SoundCollection.Play("Reload")));
 		Player.Connect("PlayerDied", Callable.From(() => SoundCollection.Play("Dead")));
-		Player.Connect("PlayerShoot", Callable.From(() => SoundCollection.Play("Shoot")));
+		Player.InputManager.Connect("PlayerShoot", Callable.From(() => SoundCollection.Play("Shoot")));
 		HitscanLine.Connect("ShotLanded", Callable.From(() => SoundCollection.Play("ShotLanded")));
 	}
 
 	private void OnPlayerGrapple() {
-		if (!Player.Grappled) return; // player sets grapple state before emitting signal
+		if (!Player.Grappled) return;
 		SoundCollection.Play("GrappleHook");
 	}
 }
