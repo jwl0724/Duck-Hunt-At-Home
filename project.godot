@@ -12,7 +12,7 @@ config_version=5
 
 config/name="Duck Hunt At Home"
 config/description="A game where you shoot a bunch of rubber ducks"
-run/main_scene="res://Scenes/Screens/PlainsLevel.tscn"
+run/main_scene="res://Scenes/Screens/CityLevel.tscn"
 config/features=PackedStringArray("4.2", "C#", "Forward Plus")
 config/icon="res://Assets/icon.png"
 config/windows_native_icon="res://Assets/icon.ico"
