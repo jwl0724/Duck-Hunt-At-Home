@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://ovc7fnrqlm44"]
+[gd_scene load_steps=5 format=3 uid="uid://ovc7fnrqlm44"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_lkiam"]
 size = Vector3(40, 80, 40)
@@ -15,16 +15,6 @@ emission_energy_multiplier = 12.0
 [sub_resource type="QuadMesh" id="QuadMesh_4rpfc"]
 material = SubResource("StandardMaterial3D_c8b20")
 size = Vector2(35, 10)
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_0mmr8"]
-albedo_color = Color(0, 0, 0, 1)
-emission_enabled = true
-emission_energy_multiplier = 0.0
-
-[sub_resource type="QuadMesh" id="QuadMesh_epaor"]
-material = SubResource("StandardMaterial3D_0mmr8")
-flip_faces = true
-size = Vector2(8, 12)
 
 [node name="Building" type="StaticBody3D"]
 
@@ -123,6 +113,11 @@ skeleton = NodePath("../Light2")
 [node name="SideLights4" type="Node3D" parent="Mesh"]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0)
 
+[node name="Light1" type="MeshInstance3D" parent="Mesh/SideLights4"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -28.378, 20.1)
+mesh = SubResource("QuadMesh_4rpfc")
+skeleton = NodePath("")
+
 [node name="Light2" type="MeshInstance3D" parent="Mesh/SideLights4"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -14.3778, 20.1)
 mesh = SubResource("QuadMesh_4rpfc")
@@ -142,7 +137,3 @@ skeleton = NodePath("../Light2")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 27.6222, 20.1)
 mesh = SubResource("QuadMesh_4rpfc")
 skeleton = NodePath("../Light2")
-
-[node name="FakeDoor" type="MeshInstance3D" parent="Mesh"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -34, -20.1)
-mesh = SubResource("QuadMesh_epaor")
