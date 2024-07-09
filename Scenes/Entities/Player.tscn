@@ -1,4 +1,4 @@
-[gd_scene load_steps=75 format=3 uid="uid://bjxi3yjg0rb46"]
+[gd_scene load_steps=76 format=3 uid="uid://bjxi3yjg0rb46"]
 
 [ext_resource type="Script" path="res://Scripts/Player.cs" id="1_auq8a"]
 [ext_resource type="PackedScene" uid="uid://bghcfb4t3i5p7" path="res://Scenes/Models/GunModel.tscn" id="2_i0g63"]
@@ -42,6 +42,7 @@
 [ext_resource type="AudioStream" uid="uid://ca6ih8urdfbtu" path="res://Assets/SFX/ShootSFX.mp3" id="40_h1ftp"]
 [ext_resource type="AudioStream" uid="uid://y74k54u73tw3" path="res://Assets/SFX/PlayerReloadSFX.mp3" id="41_vhca1"]
 [ext_resource type="AudioStream" uid="uid://cstddsb4mk5r" path="res://Assets/SFX/PlayerDeathSFX.mp3" id="42_gb5l6"]
+[ext_resource type="Script" path="res://Scripts/InputManager.cs" id="43_3yoye"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_56r0q"]
 
@@ -334,7 +335,7 @@ font_size = 45
 font = ExtResource("32_ao81m")
 font_size = 45
 
-[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("IFrameTimer", "GunModel", "GrappleGunModel", "HUD")]
+[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("IFrameTimer", "GunModel", "GrappleGunModel", "HUD", "InputManager")]
 collision_layer = 8
 collision_mask = 23
 script = ExtResource("1_auq8a")
@@ -342,6 +343,7 @@ IFrameTimer = NodePath("IframeTimer")
 GunModel = NodePath("RotationalHelper/Gun/Model")
 GrappleGunModel = NodePath("RotationalHelper/GrappleGun/Model")
 HUD = NodePath("HUD")
+InputManager = NodePath("InputManager")
 metadata/_edit_group_ = true
 metadata/_edit_horizontal_guides_ = [693.0]
 metadata/_edit_vertical_guides_ = [1632.0]
@@ -620,3 +622,9 @@ stream = ExtResource("41_vhca1")
 
 [node name="Dead" type="AudioStreamPlayer3D" parent="SoundManager/SoundCollection"]
 stream = ExtResource("42_gb5l6")
+
+[node name="InputManager" type="Node3D" parent="." node_paths=PackedStringArray("RotationalHelper", "GunModel", "GrappleModel")]
+script = ExtResource("43_3yoye")
+RotationalHelper = NodePath("../RotationalHelper")
+GunModel = NodePath("../RotationalHelper/Gun/Model")
+GrappleModel = NodePath("../RotationalHelper/GrappleGun/Model")
