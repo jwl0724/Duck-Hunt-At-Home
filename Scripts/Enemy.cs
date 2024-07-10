@@ -257,9 +257,12 @@ public partial class Enemy : CharacterBody3D {
 	}
 
 	private void FacePlayer() {
-		// TODO: FIX NativeCalls.cs:6354 @ void Godot.NativeCalls.godot_icall_3_706(nint, nint, Godot.Vector3*, Godot.Vector3*, Godot.NativeInterop.godot_bool): The target vector and up vector can't be parallel to each other.
+		Vector3 targetDirection = player.Position - GlobalTransform.Origin;
+		if (Mathf.Abs(targetDirection.Normalized().Dot(Vector3.Up)) > 0.999f) return;
+
 		LookAt(player.Position);
 		Rotation = new Vector3(0, Rotation.Y, 0); // rotate only left or right
+		
 	}
 
 	private void ProcessDeath() {
