@@ -18,6 +18,11 @@ public partial class CityLevelHandler : Node {
 
 	private void OnBarrierExit(PhysicsBody3D body) {
 		if (body is not Player player) return;
+		if (player.Grappled && !player.GrapplePoint.IsZeroApprox()) {
+			// handle when player grapples outside barrier
+			player.Position = player.Position.Lerp(Vector3.Zero, 0.1f);
+			return;
+		}
 		Vector3 force = new(-player.Velocity.X, 4, -player.Velocity.Z);
 		force = force * 2 / (float) GetProcessDeltaTime();
 		player.ApplyForce(force);
