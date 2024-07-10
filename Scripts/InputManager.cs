@@ -19,14 +19,20 @@ public partial class InputManager : Node3D {
 
 	public override void _Process(double delta) {
 		ProcessMovementInputs();
-		ProcessShootInput();
 		ProcessGrappleInput();
-		ProcessKeyInputs();
 	}
 
 	public override void _Input(InputEvent inputEvent) {
 		if (inputEvent is InputEventMouseMotion && Input.MouseMode == Input.MouseModeEnum.Captured)
 			ProcessMouse(inputEvent as InputEventMouseMotion);
+
+		if (inputEvent is InputEventMouseButton)
+			ProcessMouseButtonInput();
+
+		if (inputEvent is InputEventKey) {
+			ProcessReload();
+			ProcessKeyInputs();
+		}
 	}
 
 	private void ProcessMouse(InputEventMouseMotion movement) {
@@ -36,7 +42,7 @@ public partial class InputManager : Node3D {
 		// handle up/down camera movement
 		float rotationDegreesX = Mathf.Clamp(
 			Mathf.DegToRad(-movement.Relative.Y * player.MouseSensitivity) + RotationalHelper.Rotation.X, 
-			Mathf.DegToRad(-85), Mathf.DegToRad(85)
+			Mathf.DegToRad(-89), Mathf.DegToRad(85)
 		);
 
 		// normalize vector components
@@ -51,7 +57,7 @@ public partial class InputManager : Node3D {
 	}
 
 
-	private void ProcessShootInput() {
+	private void ProcessMouseButtonInput() {
 		// check shooting
 		if (Input.IsActionJustPressed("shoot") && !player.Reloading) {
 			if (player.Bullets == 0) {
@@ -60,8 +66,9 @@ public partial class InputManager : Node3D {
 			}
 			EmitSignal(SignalName.PlayerShoot);
 		}
+	}
 
-		// check reloading
+	private void ProcessReload() {
 		if (Input.IsActionJustPressed("reload") && !player.Reloading) {
 			if (player.Bullets == player.ClipSize) return;
 			EmitSignal(SignalName.PlayerReload);
@@ -85,13 +92,14 @@ public partial class InputManager : Node3D {
 		// check if player jumped
 		if (player.IsOnFloor()) {
 			if (Input.IsActionJustPressed("jump") && player.GrapplePoint.IsZeroApprox()) 
-				player.ApplyForce(Vector3.Up * player.JumpSpeed);
+				player.ApplyForce(Vector3.Up * player.JumpSpeed / (float) GetProcessDeltaTime());
 		}
 		// Account for camera rotation
-		// TODO: fix bug where looking up and down slows movement
 		Vector2 inputVector = Input.GetVector("left", "right", "forward", "backward");
-		Vector3 movementDirection = RotationalHelper.Transform.Basis * new Vector3(inputVector.X, 0, inputVector.Y) * player.Speed;
-		player.ApplyForce(movementDirection);
+		Vector3 forwardVector = RotationalHelper.Transform.Basis * new Vector3(inputVector.X, 0, inputVector.Y);
+		Vector3 movementDirection = new(forwardVector.X, 0, forwardVector.Z);
+		
+		player.ApplyForce(movementDirection, true);
 	}
 
 	private void ProcessKeyInputs() {
