@@ -17,17 +17,9 @@ public partial class CityLevelHandler : Node {
 	}
 
 	private void OnBarrierExit(PhysicsBody3D body) {
-		if (body is not CharacterBody3D characterBody) return;
-		
-		// calculate angle
-		Vector2 XZCoords = new(characterBody.Position.X, characterBody.Position.Z);
-		float angle = XZCoords.DirectionTo(Vector2.Zero).Angle();
-
-		// move body back based on angle
-		characterBody.Position = new Vector3(
-			-Mathf.Cos(angle) * (BarrierMesh.Radius - 2),
-			characterBody.Position.Y,
-			-Mathf.Sin(angle) * (BarrierMesh.Radius - 2)
-		);
+		if (body is not Player player) return;
+		Vector3 force = new(-player.Velocity.X, 4, -player.Velocity.Z);
+		force = force * 2 / (float) GetProcessDeltaTime();
+		player.ApplyForce(force);
 	}
 }
