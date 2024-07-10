@@ -52,5 +52,10 @@ public partial class HUD : Control {
 			ReticleParent.GetNode<AnimatedSprite2D>("ReticleSprite").SelfModulate = new Color(1, 0, 0, 1); // red
 		else
 			ReticleParent.GetNode<AnimatedSprite2D>("ReticleSprite").SelfModulate = new Color(1, 1, 1, 1); // white
+
+		if (HitscanLine.GetCollider() is StaticBody3D)
+			ReticleParent.GetNode<Sprite2D>("GrappleReticle").SelfModulate = new Color(0, 1, 0, 1); // green
+		else
+			ReticleParent.GetNode<Sprite2D>("GrappleReticle").SelfModulate = new Color(1, 1, 1, 1);
 	}
 }
