@@ -1,4 +1,4 @@
-[gd_scene load_steps=76 format=3 uid="uid://bjxi3yjg0rb46"]
+[gd_scene load_steps=77 format=3 uid="uid://bjxi3yjg0rb46"]
 
 [ext_resource type="Script" path="res://Scripts/Player.cs" id="1_auq8a"]
 [ext_resource type="PackedScene" uid="uid://bghcfb4t3i5p7" path="res://Scenes/Models/GunModel.tscn" id="2_i0g63"]
@@ -12,6 +12,7 @@
 [ext_resource type="Texture2D" uid="uid://cstyoeha8c2xr" path="res://Assets/Images/ReticleFrames/Reticle2.png" id="10_ptpjr"]
 [ext_resource type="Texture2D" uid="uid://cxv86ietrslwd" path="res://Assets/Images/ReticleFrames/Reticle3.png" id="11_d53ii"]
 [ext_resource type="Texture2D" uid="uid://baluk4j7alkor" path="res://Assets/Images/ReticleFrames/Reticle4.png" id="12_uxnee"]
+[ext_resource type="Texture2D" uid="uid://cnvt0s2kmjvor" path="res://Assets/Images/ReticleFrames/GrappleReticle.png" id="13_fqspd"]
 [ext_resource type="Shader" path="res://Assets/Shaders/CircleFrame.gdshader" id="13_neca7"]
 [ext_resource type="Texture2D" uid="uid://bguxhs1c5olo4" path="res://Assets/Images/PlayerPortraitFrames/Damaged1.png" id="14_p2gpl"]
 [ext_resource type="Texture2D" uid="uid://co31n4gqfl01d" path="res://Assets/Images/PlayerPortraitFrames/Damaged2.png" id="15_4e1f6"]
@@ -450,11 +451,16 @@ rotation = 0.785398
 scale = Vector2(0.5, 0.5)
 texture = ExtResource("10_ptpjr")
 
+[node name="GrappleReticle" type="Sprite2D" parent="HUD/Reticle"]
+position = Vector2(40, 40)
+scale = Vector2(0.58, 0.58)
+texture = ExtResource("13_fqspd")
+
 [node name="HitMarkerDuration" type="Timer" parent="HUD/Reticle"]
 wait_time = 0.1
 one_shot = true
 
-[node name="HeatlhBar" type="Control" parent="HUD"]
+[node name="HealthBar" type="Control" parent="HUD"]
 layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0
@@ -464,47 +470,49 @@ offset_right = 482.0
 grow_vertical = 0
 metadata/_edit_group_ = true
 
-[node name="BarFrame" type="Node2D" parent="HUD/HeatlhBar"]
+[node name="BarFrame" type="Node2D" parent="HUD/HealthBar"]
 position = Vector2(214, 57)
 metadata/_edit_group_ = true
 
-[node name="PortraitFrame" type="MeshInstance2D" parent="HUD/HeatlhBar/BarFrame"]
+[node name="PortraitFrame" type="MeshInstance2D" parent="HUD/HealthBar/BarFrame"]
 position = Vector2(-149, 9)
 rotation = 3.14159
 mesh = SubResource("SphereMesh_msurg")
 texture = SubResource("GradientTexture1D_4tbi0")
 
-[node name="BarFrame" type="MeshInstance2D" parent="HUD/HeatlhBar/BarFrame"]
+[node name="BarFrame" type="MeshInstance2D" parent="HUD/HealthBar/BarFrame"]
 position = Vector2(35, 29)
 scale = Vector2(0.925, 1)
 mesh = SubResource("BoxMesh_pmdxd")
 texture = SubResource("GradientTexture1D_d2fci")
 
-[node name="BarEdge" type="MeshInstance2D" parent="HUD/HeatlhBar/BarFrame"]
+[node name="BarEdge" type="MeshInstance2D" parent="HUD/HealthBar/BarFrame"]
 position = Vector2(240, 29)
 rotation = 3.14159
 mesh = SubResource("PrismMesh_4e7t0")
 texture = SubResource("GradientTexture1D_oj8x2")
 
-[node name="Portrait" type="Node2D" parent="HUD/HeatlhBar"]
+[node name="Portrait" type="Node2D" parent="HUD/HealthBar"]
 metadata/_edit_group_ = true
 
-[node name="PortraitBackground" type="MeshInstance2D" parent="HUD/HeatlhBar/Portrait"]
+[node name="PortraitBackground" type="MeshInstance2D" parent="HUD/HealthBar/Portrait"]
 position = Vector2(65, 66)
 rotation = -1.5708
 mesh = SubResource("SphereMesh_bnkh7")
 texture = SubResource("GradientTexture1D_b0eey")
 
-[node name="PortraitSprite" type="AnimatedSprite2D" parent="HUD/HeatlhBar/Portrait" node_paths=PackedStringArray("Player")]
+[node name="PortraitSprite" type="AnimatedSprite2D" parent="HUD/HealthBar/Portrait" node_paths=PackedStringArray("Player")]
 material = SubResource("ShaderMaterial_6vpvc")
 position = Vector2(65, 63)
 scale = Vector2(0.53125, 0.53125)
 sprite_frames = SubResource("SpriteFrames_hu841")
-animation = &"idle"
+animation = &"lowHealthIdle"
+frame = 4
+frame_progress = 1.0
 script = ExtResource("30_yaq0s")
 Player = NodePath("../../../..")
 
-[node name="Bar" type="TextureProgressBar" parent="HUD/HeatlhBar" node_paths=PackedStringArray("Player")]
+[node name="Bar" type="TextureProgressBar" parent="HUD/HealthBar" node_paths=PackedStringArray("Player")]
 layout_mode = 0
 offset_left = 124.0
 offset_top = 66.0
