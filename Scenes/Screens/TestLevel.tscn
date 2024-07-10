@@ -48,7 +48,7 @@ size = Vector3(20, 1, 20)
 
 [node name="TestLevel" type="Node" node_paths=PackedStringArray("EnemySpawnTimer", "BossSpawnTimer", "MusicCollection")]
 script = ExtResource("1_qhil5")
-MapSize = Vector3(400, -30, 400)
+MapSize = Vector3(400, 30, 400)
 EnemyScene = ExtResource("1_t4ccb")
 EnemySpawnTimer = NodePath("EnemySpawnTimer")
 BossSpawnTimer = NodePath("BossSpawnTimer")
