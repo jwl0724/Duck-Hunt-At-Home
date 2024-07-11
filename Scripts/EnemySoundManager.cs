@@ -11,8 +11,8 @@ public partial class EnemySoundManager : Node3D {
 	private float QuackTimer = 0;
 
 	public override void _Ready() {
+		Enemy.AttackHandler.Connect("EnemyShoot", Callable.From(() => SoundCollection.Play("Shoot")));
 		Enemy.Connect("EnemyDied", Callable.From((int score) => SoundCollection.Play("Death")));
-		Enemy.Connect("EnemyShoot", Callable.From(() => SoundCollection.Play("Shoot")));
 		Enemy.Connect("EnemyDamaged", Callable.From(() => OnDamaged()));
 		Enemy.Connect("MoveStateChange", Callable.From(() => OnMoveStateChange()));
 	}
