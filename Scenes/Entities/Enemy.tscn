@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://g7arj8tp83bn"]
+[gd_scene load_steps=18 format=3 uid="uid://g7arj8tp83bn"]
 
 [ext_resource type="Script" path="res://Scripts/Enemy.cs" id="1_dxy1a"]
 [ext_resource type="PackedScene" uid="uid://dskgymvjnsfn3" path="res://Scenes/Models/DuckModel.tscn" id="1_g0gds"]
@@ -12,6 +12,7 @@
 [ext_resource type="AudioStream" uid="uid://bkhe0eei51c7a" path="res://Assets/SFX/EnemyAmbience4SFX.mp3" id="9_1ddc8"]
 [ext_resource type="AudioStream" uid="uid://dyjpx4yml4on6" path="res://Assets/SFX/EnemyDiedSFX.mp3" id="9_u41ei"]
 [ext_resource type="AudioStream" uid="uid://boembjcy4r2ka" path="res://Assets/SFX/EnemyShootSFX.mp3" id="10_x7f87"]
+[ext_resource type="Script" path="res://Scripts/EnemyAttackHandler.cs" id="13_j2ova"]
 [ext_resource type="AudioStream" uid="uid://ch1j24ow0od8m" path="res://Assets/SFX/EnemyDamage.mp3" id="13_jwpbp"]
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_24c10"]
@@ -25,17 +26,15 @@ bounce = 0.5
 [sub_resource type="SphereShape3D" id="SphereShape3D_2muaf"]
 radius = 0.8
 
-[node name="Enemy" type="CharacterBody3D" node_paths=PackedStringArray("ProjectileSpawnPoint", "Hurtbox", "Ragdoll", "DeleteDelayTimer", "Model") groups=["enemies"]]
+[node name="Enemy" type="CharacterBody3D" node_paths=PackedStringArray("Ragdoll", "DeleteDelayTimer", "Model", "AttackHandler") groups=["enemies"]]
 collision_layer = 4
-collision_mask = 5
+collision_mask = 13
 floor_constant_speed = true
 script = ExtResource("1_dxy1a")
-Projectile = ExtResource("2_se0m8")
-ProjectileSpawnPoint = NodePath("ShootPoint")
-Hurtbox = NodePath("Hurtbox")
 Ragdoll = NodePath("Ragdoll")
 DeleteDelayTimer = NodePath("DeleteDelay")
 Model = NodePath("Ragdoll/Model")
+AttackHandler = NodePath("AttackHandler")
 metadata/_edit_group_ = true
 
 [node name="Shape" type="CollisionShape3D" parent="."]
@@ -46,12 +45,13 @@ shape = SubResource("CylinderShape3D_24c10")
 process_mode = 4
 process_physics_priority = 1
 transform = Transform3D(1, 0, 2.27374e-13, 0, 1, 0, -2.27374e-13, 0, 1, 0, 0.545304, -0.0988116)
-collision_mask = 9
+collision_layer = 4
+collision_mask = 13
 mass = 0.01
 physics_material_override = SubResource("PhysicsMaterial_kaqjq")
 gravity_scale = 2.0
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Ragdoll"]
+[node name="Shape" type="CollisionShape3D" parent="Ragdoll"]
 shape = SubResource("SphereShape3D_2muaf")
 
 [node name="Model" parent="Ragdoll" node_paths=PackedStringArray("Enemy") instance=ExtResource("1_g0gds")]
@@ -59,15 +59,8 @@ process_mode = 1
 transform = Transform3D(-0.85, 0, -2.1549e-06, 0, 0.85, 0, 2.1549e-06, 0, -0.85, -2.24672e-14, -0.545304, 0.0988116)
 Enemy = NodePath("../..")
 
-[node name="ShootPoint" type="Node3D" parent="."]
-
-[node name="Hurtbox" type="Area3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.545304, -0.0988116)
-collision_layer = 0
-collision_mask = 8
-
-[node name="Shape" type="CollisionShape3D" parent="Hurtbox"]
-shape = SubResource("CylinderShape3D_24c10")
+[node name="ShootPoint" type="Node3D" parent="Ragdoll/Model"]
+transform = Transform3D(-1.17647, 0, 2.98257e-06, 0, 1.17647, 0, -2.98257e-06, 0, -1.17647, -2.46419e-06, 0.798647, 0.971995)
 
 [node name="DeleteDelay" type="Timer" parent="."]
 wait_time = 4.0
@@ -105,3 +98,14 @@ stream = ExtResource("10_x7f87")
 
 [node name="Damaged" type="AudioStreamPlayer3D" parent="SoundManager/SoundCollection"]
 stream = ExtResource("13_jwpbp")
+
+[node name="AttackHandler" type="Node3D" parent="." node_paths=PackedStringArray("ProjectileSpawnPoint")]
+script = ExtResource("13_j2ova")
+Projectile = ExtResource("2_se0m8")
+ProjectileSpawnPoint = NodePath("../Ragdoll/Model/ShootPoint")
+
+[node name="AttackTimer" type="Timer" parent="AttackHandler"]
+
+[node name="MeleeTimer" type="Timer" parent="AttackHandler"]
+wait_time = 0.8
+one_shot = true
