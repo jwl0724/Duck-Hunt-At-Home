@@ -39,10 +39,10 @@ public partial class EnemyAttackHandler : Node3D {
 	public override void _PhysicsProcess(double delta) {
 		KinematicCollision3D lastCollision = enemy.GetLastSlideCollision();
 		if (lastCollision == null) return;
-		if (lastCollision.GetCollider() is Player player) HandleCollisionWithPlayer(player);
+		if (lastCollision.GetCollider() is Player) HandleCollisionWithPlayer();
 	}
 
-	private void HandleCollisionWithPlayer(Player player) {
+	private void HandleCollisionWithPlayer() {
 		if (meleeTimer.TimeLeft != 0) return;
 		attackTimer.Stop();
 		meleeTimer.Start();
@@ -87,6 +87,7 @@ public partial class EnemyAttackHandler : Node3D {
 	private void ProcessShoot() {
 		ShootProjectile();
 		EmitSignal(SignalName.EnemyShoot);
+		attackTimer.WaitTime = GD.RandRange(0.8, 1.5);
 	}
 
 	private void ShootProjectile() {
