@@ -5,11 +5,10 @@ using System.Collections.Generic;
 // TODO:
 // FINISH PUTTING PLANTS IN CITY LEVEL
 // FINISH CITY LEVEL WORLD ENVIRONMENT AND LIGHTING
+// IMPLEMENT SHIELD BOUNCE EFFECT
 // MAKE SPACE LEVEL WITH NEON THEME
 // MAKE MENU SCREEN (NEW SCENE WITH PANNING BACKGROUND)
-// IRON OUT EGREGIOUS BUGS
 // MAKE GAME OVER SCREEN (REGULAR SCREEN)
-// IRON OUT MINOR BUGS
 public partial class Player : CharacterBody3D {	
 	// exported variables
 	[Export] public Timer IFrameTimer;
@@ -31,7 +30,7 @@ public partial class Player : CharacterBody3D {
 	public int MaxHealth { get; private set; } = 50000000;
 	public int Health { get; private set; }
 	public float Gravity { get; private set; } = 25;
-	public int Attack { get; private set; } = 100;
+	public int Attack { get; private set; } = 1000;
 	public float Speed { get; private set; } = 200;
 	public float JumpSpeed { get; private set; } = 15;
 	public float MouseSensitivity { get; private set; } = 0.1f;
@@ -57,14 +56,17 @@ public partial class Player : CharacterBody3D {
 	}
 
     public override void _PhysicsProcess(double delta) {
-		if (IsOnFloor()) {
-			Velocity *= frictionCoefficient;
-			ApplyForce(movementDirection * Speed / frictionCoefficient);
-		} 
-		if (!GrapplePoint.IsZeroApprox() && Grappled) {
-			Velocity = Position.DirectionTo(GrapplePoint).Normalized() * grappleSpeed / frictionCoefficient * (float) delta;
-		}
+		Vector3 movementVector = movementDirection * Speed / frictionCoefficient;
 
+		if (IFrameTimer.TimeLeft != 0) movementVector = Vector3.Zero;
+		if (IsOnFloor() && IFrameTimer.TimeLeft == 0) Velocity *= frictionCoefficient;
+		else movementVector *= (float) delta * 1.3f;
+		ApplyForce(movementVector);
+
+		if (!GrapplePoint.IsZeroApprox() && Grappled) 
+			Velocity = Position.DirectionTo(GrapplePoint).Normalized() * grappleSpeed / frictionCoefficient * (float) delta;
+
+		HandleCollision();
 		ApplyForce(Vector3.Down * Gravity);
 		foreach(Vector3 force in forceList) {
 			Velocity += force * (float) delta;
@@ -80,7 +82,6 @@ public partial class Player : CharacterBody3D {
 			SetPhysicsProcess(false);
 			EmitSignal(SignalName.PlayerDied);
 		}
-		HandleCollision();
 	}
 
 	public void ApplyForce(Vector3 force, bool isInput = false) {
@@ -104,11 +105,11 @@ public partial class Player : CharacterBody3D {
 
 	// HELPER FUNCTIONS
 	private void HandlePlayerDeath() {
-		
+		Input.MouseMode = Input.MouseModeEnum.Visible;
 	}
 
 	private void HandleCollision() {
-		// TODO: FIX ENEMY KNOCKBACK
+		// TODO: FIX ENEMY KNOCKBACK, FIX ENEMY DEAD BODY HURTING PLAYER
 		if (IFrameTimer.TimeLeft != 0) return;
 		if (GetLastSlideCollision() == null) return;
 
@@ -118,13 +119,15 @@ public partial class Player : CharacterBody3D {
 		IFrameTimer.Start();
 		if (collidingObject is Enemy enemy) {
 			Health -= enemy.Attack;
-			Vector3 knockbackVector = new(enemy.Velocity.X, enemy.KnockbackStrength, enemy.Velocity.Z);
-			knockbackVector /= (float) GetProcessDeltaTime();
-			ApplyForce(knockbackVector * enemy.KnockbackStrength);
+			// Vector3 knockbackVector = new(enemy.Velocity.X, enemy.KnockbackStrength, enemy.Velocity.Z);
+			// ApplyForce(knockbackVector * enemy.KnockbackStrength);
+			ApplyForce(enemy.Velocity * enemy.KnockbackStrength / (float) GetProcessDeltaTime());
 
 		} else if (collidingObject is Projectile projectile) {
 			Health -= projectile.Damage;
-			ApplyForce(projectile.LinearVelocity * Projectile.KnockbackStrength * 10);
+			// ApplyForce(projectile.LinearVelocity / (float) GetProcessDeltaTime() / 2);
+			Vector3 force = projectile.LinearVelocity;
+			ApplyForce(force / (float) GetProcessDeltaTime());
 		}
 		EmitSignal(SignalName.PlayerDamaged);
 
