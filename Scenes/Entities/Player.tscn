@@ -338,7 +338,7 @@ font_size = 45
 
 [node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("IFrameTimer", "GunModel", "GrappleGunModel", "HUD", "InputManager")]
 collision_layer = 8
-collision_mask = 23
+collision_mask = 7
 script = ExtResource("1_auq8a")
 IFrameTimer = NodePath("IframeTimer")
 GunModel = NodePath("RotationalHelper/Gun/Model")
