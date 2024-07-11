@@ -4,12 +4,10 @@ using System;
 public partial class Enemy : CharacterBody3D {
 	// exported variables
 	[Export] public float FallSpeed = -50f; // different from gravity, constant fall rate
-	[Export] public PackedScene Projectile;
-	[Export] public Node3D ProjectileSpawnPoint;
-	[Export] public Area3D Hurtbox;
 	[Export] public RigidBody3D Ragdoll;
 	[Export] public Timer DeleteDelayTimer;
 	[Export] public EnemyVisual Model;
+	[Export] public EnemyAttackHandler AttackHandler;
 
 	// signals
 	[Signal] public delegate void EnemyShootEventHandler();
@@ -19,97 +17,73 @@ public partial class Enemy : CharacterBody3D {
 	
 	// static variables
 	public static int EnemyCount { get; private set; } = 0;
-	private static int bossScale = 2;
-	private static readonly int projectileSpeed = 250;
-	private static int chargeTime = 1;
-	private static int chargeDelay = 2;
+	public static int BossScale { get; private set; } = 2;
 
 	// instance variables
 	public int Health { get; private set; } = 500;
 	public int Attack { get; private set; } = 50;
 	public float Speed { get; private set; } = 400;
-	public int KnockbackStrength { get; private set; } = 5;
-	private Vector3 direction = new(0, 0, 0);
-	private EnemyType type;
+	public int KnockbackStrength { get; private set; } = 1;
+	public EnemyType Type { get; private set; }
+	public MoveState CurrentState { get; set; } = MoveState.Idle;
+	public Vector3 Direction { get; set; } = new();
 	private CharacterBody3D player;
-	private bool processingAttack = false;
-	public MoveState CurrentState { get; private set; } = MoveState.Idle;
 	private int DespawnY;
-
-	// timers
-	private float attackTimer = 0;
-	private float chargeTimer = 0;
-	private float chargeDelayTimer = 0;
-	private float attackCD = 1.5f;
-
+	
 	// enemy types, boss needs to always be at the bottom
 	public enum EnemyType {
-		Melee,
-		Charger,
-		Shooter,
-		Boss
+		Melee, Charger, Shooter, Boss
 	}
 
 	// possible states
 	public enum MoveState {
-		Walking,
-		Idle,
-		Falling,
-		Charging,
-		Dead,
-		Ragdoll
+		Idle, Walking, Falling, Charging, WindUp, Dead, Ragdoll
 	}
 	
     public override void _Ready() {
 		GameManager gameScene = GetParent() as GameManager;
 		player = gameScene.GetNode<Player>("Player");
 		DespawnY = (int) -gameScene.MapSize.Y / 2;
-		Hurtbox.Connect("body_entered", Callable.From((PhysicsBody3D body) => HandleCollisionWithPlayer(body)));
+		AttackHandler = GetNode<EnemyAttackHandler>("AttackHandler");
 		DeleteDelayTimer.Connect("timeout", Callable.From(() => SetMoveState(MoveState.Dead)));
+
+		if (IsOnFloor()) SetMoveState(MoveState.Walking);
+		else SetMoveState(MoveState.Falling);
     }
 
 	public void SetEnemyProperties(EnemyType type) {
-		// change properties
-		
 		if (type == EnemyType.Melee) {
-			Health = 500;
-			Speed = 90;
-			Attack = 50;
-			this.type = type;
-			Model.SetColor(EnemyVisual.DuckColors.Default);
+			SetProperties(500, 90, 50, type, EnemyVisual.DuckColors.Default);
 
 		} else if (type == EnemyType.Charger) {
-			Health = 400;
-			Speed = 70;
-			Attack = 75;
-			attackCD = 4f;
-			this.type = type;
-			Model.SetColor(EnemyVisual.DuckColors.Pink);
+			SetProperties(400, 70, 75, type, EnemyVisual.DuckColors.Pink, attackCD: 2);
 
 		} else if (type == EnemyType.Shooter) {
-			Health = 300;
-			Speed = 50;
-			Attack = 30;
-			attackCD = 2.5f;
-			this.type = type;
-			Model.SetColor(EnemyVisual.DuckColors.Blue);
+			SetProperties(300, 50, 30, type, EnemyVisual.DuckColors.Blue, attackCD: 1f);
 
 		} else {
 			// boss properties
-			Health = 2000;
-			Speed = 80;
-			Attack = 100;
-			attackCD = 5f;
-			KnockbackStrength = 15;
-			this.type = type;
-			int scale = Mathf.Min(bossScale, 10);
-			Scale = new Vector3(scale, scale, scale);
-			Model.SetColor(EnemyVisual.DuckColors.Green);
+			SetProperties(2000, 80, 100, type, EnemyVisual.DuckColors.Green, attackCD: 2.5f);
 			Model.ToggleGlow();
+			KnockbackStrength = 2;
+			
+			Vector3 scale = new(BossScale, BossScale, BossScale);
 
-			// increment scale for next boss
-			bossScale++;
+			GetNode<CollisionShape3D>("Shape").Scale = scale;
+			Ragdoll.GetNode<CollisionShape3D>("Shape").Scale = scale * 0.8f;
+			Ragdoll.GetNode<EnemyVisual>("Model").Scale = scale;
+
+			if (BossScale <= 4) BossScale++; // increment scaling for next boss
 		}
+	}
+
+	private void SetProperties(int health, int speed, int attack, EnemyType type, EnemyVisual.DuckColors color, float attackCD = 0) {
+		if (attackCD != 0) AttackHandler.SetAttackCD(attackCD);
+		Health = health;
+		Speed = speed;
+		Attack = attack;
+		Type = type;
+		Model.SetColor(color);
 	}
 
     public override void _PhysicsProcess(double delta) {
@@ -118,7 +92,6 @@ public partial class Enemy : CharacterBody3D {
 			ProcessDeath();
 			return;
 		} else if (Position.Y <= DespawnY) QueueFree(); // delete if under the map
-		ProcessAttack((float) delta);
         ProcessMovement((float) delta);
     }
 
@@ -130,143 +103,42 @@ public partial class Enemy : CharacterBody3D {
 	public void DeleteEnemy() {
 		QueueFree();
 	}
-
-	// HELPER FUNCTIONS
-	private void ProcessAttack(float delta) {
-		if (type == EnemyType.Melee) return; // melee enemies have no special mechanics
-
-		if (type == EnemyType.Shooter) {
-			// spawn projectile and do shooting animation
-			if (attackTimer >= attackCD) {
-				ShootProjectile(delta);
-				EmitSignal(SignalName.EnemyShoot);
-				attackTimer = 0;
-			} else attackTimer += delta;
-
-		} else if (type == EnemyType.Charger) {
-			// stop movement after a delay then rapid move forward
-			if (attackTimer >= attackCD) HandleCharging(delta);
-			else if (processingAttack == false && IsOnFloor()) attackTimer += delta;
-
-		} else {
-			// handle boss attacks
-			if (attackTimer >= attackCD) {
-				if (processingAttack == false && GD.Randi() % 2 == 0) {
-					ShootProjectile(delta);
-					EmitSignal(SignalName.EnemyShoot);
-					attackTimer = 0;
-
-				} else HandleCharging(delta);
-			} else if (processingAttack == false) attackTimer += delta;
-		}
-	}
-
-	private void HandleCharging(float delta) {
-		processingAttack = true;
-
-		// stop enemy movement
-		if (chargeDelayTimer <= chargeDelay) {
-			chargeDelayTimer += delta;
-			SetMoveState(MoveState.Idle);
-			FacePlayer();
-			Velocity = new();
-			return;
-		}
-
-		// begin charging
-		if (chargeTimer == 0) {
-			if (type != EnemyType.Boss) Model.ToggleGlow();
-			Attack = 100;
-
-			// disable collision with other enemies
-			SetCollisionMaskValue(3, false);
-			SetCollisionLayerValue(3, false);
-
-			Velocity = Position.DirectionTo(player.Position).Normalized();
-			Velocity *= Speed * delta * 50;
-			SetMoveState(MoveState.Charging);
-		}
-
-		if (chargeTimer >= chargeTime) {
-			ResetChargeState();
-			return;
-		}
-		chargeTimer += delta;
-	}
-
-	private void ResetChargeState() {
-		if (type != EnemyType.Boss) Model.ToggleGlow();
-
-		// re-enable collision with other enemies
-		SetCollisionLayerValue(3, true);
-		SetCollisionMaskValue(3, true);
-		
-		processingAttack = false;
-		chargeDelayTimer = 0;
-		chargeTimer = 0;
-		attackTimer = 0;
-		Attack = 0;
-		SetMoveState(MoveState.Idle);
-	}
-
-	private void HandleCollisionWithPlayer(PhysicsBody3D body) {
-		if (body is not CharacterBody3D) return;
-		if (body.Name != "Player") return;
-		if (CurrentState == MoveState.Charging) ResetChargeState();
-		else EmitSignal(SignalName.EnemyShoot);
-	}
-
-	private void ShootProjectile(float delta) {
-		Projectile projectile = Projectile.Instantiate<Projectile>();
-		projectile.Damage = Attack;
-		projectile.Position = ProjectileSpawnPoint.GlobalPosition;
-		if (type == EnemyType.Boss)
-			projectile.LinearVelocity = Position.DirectionTo(player.Position) + Velocity * delta;
-		else 
-			projectile.LinearVelocity = Position.DirectionTo(player.Position) + Velocity * projectileSpeed * delta;
-
-		// make projectile bigger if enemy is boss
-		if (type == EnemyType.Boss) projectile.Scale *= bossScale;
-		(Engine.GetMainLoop() as SceneTree).Root.AddChild(projectile);
-	}
-
-	private void ProcessMovement(float delta) {
-		float Ycomponent;
-		if (processingAttack) {
-			Ycomponent = 0;
-		} else if (!IsOnFloor()) {
-			Ycomponent = FallSpeed * delta;
-			SetMoveState(MoveState.Falling);
-		} else {
-			Ycomponent = 0;
-			SetMoveState(MoveState.Walking);
-		}
-
-		if (!processingAttack) {
-			FacePlayer();
-			Vector3 playerPosition = player.Position;
-			direction = Position.DirectionTo(playerPosition);
-			Vector3 velocity = Velocity.Lerp(direction * Speed, 10);
-			float Xcomponent = velocity.X * delta;
-			float Zcomponent = velocity.Z * delta;
-			Velocity = new(Xcomponent, Ycomponent, Zcomponent);
-		}
-
-		if (Velocity.IsZeroApprox() && !processingAttack) SetMoveState(MoveState.Idle);
-		MoveAndSlide();
-	}
-
+	
 	private void FacePlayer() {
 		Vector3 targetDirection = player.Position - GlobalTransform.Origin;
 		if (Mathf.Abs(targetDirection.Normalized().Dot(Vector3.Up)) > 0.999f) return;
 
 		LookAt(player.Position);
 		Rotation = new Vector3(0, Rotation.Y, 0); // rotate only left or right
-		
+	}
+
+	private void ProcessMovement(float delta) {
+		if (CurrentState == MoveState.Walking || CurrentState == MoveState.Falling) {
+			Direction = Position.DirectionTo(player.Position).Normalized();
+			Vector3 interpolatedVelocity = Velocity.Lerp(Direction * Speed, 5);
+			float Xcomponent = interpolatedVelocity.X * delta;
+			float Ycomponent = FallSpeed * delta;
+			float Zcomponent = interpolatedVelocity.Z * delta;
+			Velocity = new(Xcomponent, Ycomponent, Zcomponent);
+			FacePlayer();
+
+		} else if (CurrentState == MoveState.Idle || CurrentState == MoveState.WindUp) {
+			Velocity = Vector3.Zero;
+			FacePlayer();
+
+		} else if (CurrentState == MoveState.Charging) {
+			Velocity = Direction * Speed / 2;
+
+		} else return;
+
+		MoveAndSlide();
 	}
 
 	private void ProcessDeath() {
 		if (CurrentState == MoveState.Ragdoll || CurrentState == MoveState.Dead) return;
+	
+		SetCollisionLayerValue(3, false);
+		SetPhysicsProcess(false); // disable physics processing once dead
 		SetMoveState(MoveState.Ragdoll);
 		Ragdoll.ProcessMode = ProcessModeEnum.Inherit;
 		Ragdoll.LinearVelocity = Velocity;
@@ -274,17 +146,16 @@ public partial class Enemy : CharacterBody3D {
 
 		// determine score amount
 		int score;
-		if (type == EnemyType.Charger) score = 20;
-		else if (type == EnemyType.Shooter) score = 25;
-		else if (type == EnemyType.Boss) score = 50;
+		if (Type == EnemyType.Charger) score = 20;
+		else if (Type == EnemyType.Shooter) score = 25;
+		else if (Type == EnemyType.Boss) score = 50;
 		else score = 10; // melee enemy score
 		
-		// TODO: FIX BUG WHERE BOSS KILLED REVERTS BACK TO TINY SIZE
 		EmitSignal(SignalName.EnemyDied, score);
 		DeleteDelayTimer.Start();
 	}
 
-	private void SetMoveState(MoveState state) {
+	public void SetMoveState(MoveState state) {
 		if (CurrentState != state) {
 			CurrentState = state;
 			EmitSignal(SignalName.MoveStateChange);
