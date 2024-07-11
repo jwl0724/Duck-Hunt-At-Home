@@ -24,6 +24,7 @@ public partial class Projectile : RigidBody3D {
 	}
 
     public void PopBubble() {
+		Visible = false;
 		PopSFX.Play();
 	}
 
