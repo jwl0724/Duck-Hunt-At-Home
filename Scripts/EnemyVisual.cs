@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-public partial class EnemyVisual : Node {
+public partial class EnemyVisual : MeshInstance3D {
 	// exported variables
 	[Export] public Enemy Enemy;
 
@@ -35,7 +35,7 @@ public partial class EnemyVisual : Node {
 		animator = GetNode<AnimationPlayer>("Animation");
 
 		// connect signals
-		Enemy.Connect("EnemyShoot", Callable.From(() => animator.Play("shoot")));
+		Enemy.AttackHandler.Connect("EnemyShoot", Callable.From(() => animator.Play("shoot")));
 		Enemy.Connect("MoveStateChange", Callable.From(() => OnMoveStateChange()));
 		Enemy.Connect("EnemyDamaged", Callable.From(() => OnEnemyDamaged()));
 		animator.Connect("animation_finished", Callable.From((StringName name) => OnAnimationFinished(name)));
@@ -60,7 +60,8 @@ public partial class EnemyVisual : Node {
 		} else if (Enemy.CurrentState == Enemy.MoveState.Charging) {
 			animator.Play("charge");
 		} else if (Enemy.CurrentState == Enemy.MoveState.Dead) {
-			animator.Play("dead");
+			if (Enemy.Type == Enemy.EnemyType.Boss) RunTweenedAnimation();
+			else animator.Play("dead");
 		}
 	}
 
@@ -89,5 +90,11 @@ public partial class EnemyVisual : Node {
 		// set the glowing state after editing
 		if (glowing) glowing = false;
 		else glowing = true;
+	}
+
+	private void RunTweenedAnimation() {
+		Tween tween = animator.CreateTween();
+		tween.TweenProperty(this, "scale", Vector3.Zero, 0.5f);
+		tween.TweenCallback(Callable.From(() => Enemy.DeleteEnemy()));
 	}
 }
