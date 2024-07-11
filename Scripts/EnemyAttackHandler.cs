@@ -124,13 +124,11 @@ public partial class EnemyAttackHandler : Node3D {
 		if (enemy.Type == Enemy.EnemyType.Charger) enemy.Model.ToggleGlow();
 		enemy.Direction = enemy.Position.DirectionTo(player.Position).Normalized();
 		enemy.SetCollisionMaskValue(3, false); // disable collision with other enemies
-		enemy.SetCollisionLayerValue(3, false); // marked
 	}
 
 	private void ResetChargeState() {
 		if (enemy.Type == Enemy.EnemyType.Charger) enemy.Model.ToggleGlow();
 		enemy.SetCollisionMaskValue(3, true);
-		enemy.SetCollisionLayerValue(3, true); // marked
 	}
 
 	private void SetMovement() {
