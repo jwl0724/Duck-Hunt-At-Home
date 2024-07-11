@@ -7,9 +7,6 @@ public partial class Projectile : RigidBody3D {
 	[Export] public Timer LifespanTimer;
 	[Export] public AudioStreamPlayer3D PopSFX;
 
-	// static variables
-	public static readonly int KnockbackStrength = 5;
-
 	// instance variables
 	public int Damage { get; set; } = 25;
 
