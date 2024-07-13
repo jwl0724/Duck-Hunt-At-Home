@@ -92,7 +92,7 @@ public partial class InputManager : Node3D {
 		// check if player jumped
 		if (player.IsOnFloor()) {
 			if (Input.IsActionJustPressed("jump") && player.GrapplePoint.IsZeroApprox()) 
-				player.ApplyForce(Vector3.Up * player.JumpSpeed / (float) GetProcessDeltaTime());
+				player.ApplyForce(Vector3.Up * player.JumpSpeed);
 		}
 		// Account for camera rotation
 		Vector2 inputVector = Input.GetVector("left", "right", "forward", "backward");
