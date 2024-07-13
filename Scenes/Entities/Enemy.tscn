@@ -26,7 +26,7 @@ bounce = 0.5
 [sub_resource type="SphereShape3D" id="SphereShape3D_2muaf"]
 radius = 0.8
 
-[node name="Enemy" type="CharacterBody3D" node_paths=PackedStringArray("Ragdoll", "DeleteDelayTimer", "Model", "AttackHandler") groups=["enemies"]]
+[node name="Enemy" type="CharacterBody3D" node_paths=PackedStringArray("Ragdoll", "DeleteDelayTimer", "Model", "AttackHandler", "VisibilityNotifier") groups=["enemies"]]
 collision_layer = 4
 collision_mask = 13
 floor_constant_speed = true
@@ -35,6 +35,7 @@ Ragdoll = NodePath("Ragdoll")
 DeleteDelayTimer = NodePath("DeleteDelay")
 Model = NodePath("Ragdoll/Model")
 AttackHandler = NodePath("AttackHandler")
+VisibilityNotifier = NodePath("Ragdoll/Visibility")
 metadata/_edit_group_ = true
 
 [node name="Shape" type="CollisionShape3D" parent="."]
@@ -50,6 +51,10 @@ collision_mask = 13
 mass = 0.01
 physics_material_override = SubResource("PhysicsMaterial_kaqjq")
 gravity_scale = 2.0
+
+[node name="Visibility" type="VisibleOnScreenNotifier3D" parent="Ragdoll"]
+process_mode = 1
+transform = Transform3D(1, 0, -2.27374e-13, 0, 1, 0, 2.27374e-13, 0, 1, -2.24672e-14, -0.10132, 0.0988116)
 
 [node name="Shape" type="CollisionShape3D" parent="Ragdoll"]
 shape = SubResource("SphereShape3D_2muaf")

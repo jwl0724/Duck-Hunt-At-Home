@@ -50,7 +50,7 @@ material = SubResource("ShaderMaterial_jwm06")
 radius = 0.25
 height = 0.5
 
-[node name="Bubble" type="RigidBody3D" node_paths=PackedStringArray("LifespanTimer", "PopSFX") groups=["projectiles"]]
+[node name="Bubble" type="RigidBody3D" node_paths=PackedStringArray("LifespanTimer", "PopSFX", "Bubble") groups=["projectiles"]]
 collision_layer = 2
 collision_mask = 11
 physics_material_override = SubResource("PhysicsMaterial_oj5gu")
@@ -59,6 +59,7 @@ linear_damp_mode = 1
 script = ExtResource("1_i3crb")
 LifespanTimer = NodePath("Lifespan")
 PopSFX = NodePath("Pop")
+Bubble = NodePath("Model")
 metadata/_edit_group_ = true
 
 [node name="Shape" type="CollisionShape3D" parent="."]
@@ -75,3 +76,6 @@ autostart = true
 
 [node name="Pop" type="AudioStreamPlayer3D" parent="."]
 stream = ExtResource("4_wydns")
+
+[node name="Visibility" type="VisibleOnScreenNotifier3D" parent="."]
+aabb = AABB(-0.5, -0.75, -0.5, 1, 1.5, 1)
