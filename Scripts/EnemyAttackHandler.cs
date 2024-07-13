@@ -51,7 +51,6 @@ public partial class EnemyAttackHandler : Node3D {
 		if ((enemy.Type == Enemy.EnemyType.Charger || enemy.Type == Enemy.EnemyType.Boss) && enemy.CurrentState == Enemy.MoveState.Charging) 
 			ResetChargeState();
 
-		GD.Print(enemy.GetLastSlideCollision().GetCollider());
 		player.ApplyForce(enemy.Velocity * enemy.KnockbackStrength);
 		player.DamagePlayer(enemy.Attack);
 		enemy.SetMoveState(Enemy.MoveState.Idle);
