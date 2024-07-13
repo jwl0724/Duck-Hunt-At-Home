@@ -30,7 +30,7 @@ public partial class Player : CharacterBody3D {
 	public int MaxHealth { get; private set; } = 50000000;
 	public int Health { get; private set; }
 	public float Gravity { get; private set; } = 25;
-	public int Attack { get; private set; } = 1000;
+	public int Attack { get; private set; } = 1;
 	public float Speed { get; private set; } = 400;
 	public float JumpSpeed { get; private set; } = 15;
 	public float MouseSensitivity { get; private set; } = 0.1f;
@@ -51,6 +51,7 @@ public partial class Player : CharacterBody3D {
 		GunModel.Animator.Connect("animation_finished", Callable.From((StringName name) => OnGunAnimationFinished(name)));
 		InputManager.Connect("PlayerShoot", Callable.From(() => Bullets--));
 		InputManager.Connect("PlayerReload", Callable.From(() => Reloading = true));
+		IFrameTimer.Connect("timeout", Callable.From(() => OnIFrameTimeout()));
 
 		ResetPlayerState();
 	}
@@ -65,7 +66,7 @@ public partial class Player : CharacterBody3D {
 		if (!GrapplePoint.IsZeroApprox() && Grappled) 
 			Velocity = Position.DirectionTo(GrapplePoint).Normalized() * grappleSpeed / frictionCoefficient * (float) delta;
 
-		ApplyForce(Vector3.Down * Gravity * (float) delta);
+		ApplyForce(Vector3.Down * Gravity * (float) delta, ignoreIFrame: true);
 		foreach(Vector3 force in forceList) {
 			Velocity += force;
 		}
@@ -82,8 +83,8 @@ public partial class Player : CharacterBody3D {
 		}
 	}
 
-	public void ApplyForce(Vector3 force, bool isInput = false) {
-		if (IFrameTimer.TimeLeft != 0) return; // iframes still active
+	public void ApplyForce(Vector3 force, bool isInput = false, bool ignoreIFrame = false) {
+		if (IFrameTimer.TimeLeft != 0 && !ignoreIFrame) return; // iframes still active
 		if (isInput) movementDirection = force;
 		else forceList.AddFirst(force);
 	}
@@ -94,6 +95,7 @@ public partial class Player : CharacterBody3D {
 		if (Health <= 0) EmitSignal(SignalName.PlayerDied);
 		else {
 			EmitSignal(SignalName.PlayerDamaged);
+			TogglePhysicsMasks(false);
 			IFrameTimer.Start();
 		}
 	}
@@ -112,8 +114,17 @@ public partial class Player : CharacterBody3D {
 		Reloading = false;
 	}
 
+	private void OnIFrameTimeout() {
+		TogglePhysicsMasks(true);
+	}
+
 	// HELPER FUNCTIONS
 	private void HandlePlayerDeath() {
 		Input.MouseMode = Input.MouseModeEnum.Visible;
+	}
+
+	private void TogglePhysicsMasks(bool state) {
+		SetCollisionMaskValue(2, state);
+		SetCollisionMaskValue(3, state);
 	}
 }
