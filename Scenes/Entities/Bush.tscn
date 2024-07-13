@@ -1,0 +1,99 @@
+[gd_scene load_steps=12 format=3 uid="uid://dg5jebuykxrud"]
+
+[ext_resource type="Texture2D" uid="uid://dygd842qevmjw" path="res://Assets/Images/Textures/SoilTexture.jpg" id="1_gle3p"]
+[ext_resource type="Shader" path="res://Assets/Shaders/Bush.gdshader" id="2_2n0i8"]
+[ext_resource type="Texture2D" uid="uid://bkiegvmxfkbgo" path="res://Assets/Images/Textures/FoliageTexture.png" id="3_08pbd"]
+[ext_resource type="ArrayMesh" uid="uid://1mtimugtca21" path="res://Assets/Meshes/Bush.obj" id="4_nvy4b"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_xatnx"]
+size = Vector3(20, 1, 2.5)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_skhpt"]
+albedo_color = Color(1.5, 1.5, 1.5, 1)
+metallic = 0.5
+metallic_specular = 1.0
+roughness = 0.0
+emission_enabled = true
+emission = Color(0.683077, 0.683077, 0.683077, 1)
+emission_energy_multiplier = 6.0
+
+[sub_resource type="BoxMesh" id="BoxMesh_dpbm4"]
+material = SubResource("StandardMaterial3D_skhpt")
+size = Vector3(20, 1, 0.5)
+
+[sub_resource type="BoxMesh" id="BoxMesh_hbnvf"]
+material = SubResource("StandardMaterial3D_skhpt")
+size = Vector3(0.5, 1, 1.5)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_w8e3w"]
+disable_ambient_light = true
+disable_fog = true
+albedo_color = Color(0.716296, 0.716296, 0.716296, 1)
+albedo_texture = ExtResource("1_gle3p")
+metallic = 1.0
+metallic_specular = 0.0
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_e0ehk"]
+material = SubResource("StandardMaterial3D_w8e3w")
+size = Vector2(20, 1.5)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_r8uw1"]
+render_priority = 0
+shader = ExtResource("2_2n0i8")
+shader_parameter/foliage_colour = Color(0.312238, 0.391469, 0.075188, 1)
+shader_parameter/foliage_texture = ExtResource("3_08pbd")
+
+[node name="Bush" type="StaticBody3D"]
+
+[node name="Shape" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_xatnx")
+
+[node name="Pot" type="Node3D" parent="."]
+
+[node name="Wall1" type="MeshInstance3D" parent="Pot"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1)
+mesh = SubResource("BoxMesh_dpbm4")
+skeleton = NodePath("../..")
+
+[node name="Wall2" type="MeshInstance3D" parent="Pot"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1)
+mesh = SubResource("BoxMesh_dpbm4")
+skeleton = NodePath("../..")
+
+[node name="Wall3" type="MeshInstance3D" parent="Pot"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.75, 0, 0)
+mesh = SubResource("BoxMesh_hbnvf")
+skeleton = NodePath("../..")
+
+[node name="Wall4" type="MeshInstance3D" parent="Pot"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.75, 0, 0)
+mesh = SubResource("BoxMesh_hbnvf")
+
+[node name="Soil" type="MeshInstance3D" parent="Pot"]
+mesh = SubResource("PlaneMesh_e0ehk")
+
+[node name="Bushes" type="Node3D" parent="."]
+
+[node name="Bush1" type="MeshInstance3D" parent="Bushes"]
+transform = Transform3D(0.747079, 0.664735, 0, -0.664735, 0.747079, 0, 0, 0, 1, -7.05513, 2.945, 0)
+material_override = SubResource("ShaderMaterial_r8uw1")
+mesh = ExtResource("4_nvy4b")
+skeleton = NodePath("../..")
+
+[node name="Bush2" type="MeshInstance3D" parent="Bushes"]
+transform = Transform3D(0.389861, -0.698576, 0, 0.698576, 0.389861, 0, 0, 0, 0.8, -1.74601, 2.945, 0)
+material_override = SubResource("ShaderMaterial_r8uw1")
+mesh = ExtResource("4_nvy4b")
+skeleton = NodePath("../..")
+
+[node name="Bush3" type="MeshInstance3D" parent="Bushes"]
+transform = Transform3D(-0.29546, 1.05958, 0, 0.136157, 0.0379671, 1.09088, 1.05079, 0.293011, -0.141351, 3.00484, 2.945, 0)
+material_override = SubResource("ShaderMaterial_r8uw1")
+mesh = ExtResource("4_nvy4b")
+skeleton = NodePath("../..")
+
+[node name="Bush4" type="MeshInstance3D" parent="Bushes"]
+transform = Transform3D(-0.125161, -0.790148, 0, 0.790148, -0.125161, 0, 0, 0, 0.8, 7.49509, 2.27572, 0)
+material_override = SubResource("ShaderMaterial_r8uw1")
+mesh = ExtResource("4_nvy4b")
+skeleton = NodePath("../..")
