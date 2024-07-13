@@ -1,14 +1,22 @@
-[gd_scene load_steps=17 format=3 uid="uid://cdqljydqxa58"]
+[gd_scene load_steps=19 format=3 uid="uid://cdqljydqxa58"]
 
 [ext_resource type="Shader" path="res://Assets/Shaders/Barrier.gdshader" id="1_f1mka"]
 [ext_resource type="PackedScene" uid="uid://ovc7fnrqlm44" path="res://Scenes/Entities/Building.tscn" id="2_cmv82"]
 [ext_resource type="PackedScene" uid="uid://bjxi3yjg0rb46" path="res://Scenes/Entities/Player.tscn" id="3_77cuk"]
 [ext_resource type="Script" path="res://Scripts/LevelHandlers/CityLevelHandler.cs" id="4_7yrtj"]
+[ext_resource type="PackedScene" uid="uid://dg5jebuykxrud" path="res://Scenes/Entities/Bush.tscn" id="5_a2mhx"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_wu7qi"]
 size = Vector3(400, 1, 400)
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_r6pfu"]
+albedo_color = Color(0.617455, 0.617455, 0.617455, 1)
+metallic = 0.5
+metallic_specular = 1.0
+roughness = 0.0
+
 [sub_resource type="PlaneMesh" id="PlaneMesh_ty5qn"]
+material = SubResource("StandardMaterial3D_r6pfu")
 size = Vector2(400, 400)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1w0l3"]
@@ -182,6 +190,7 @@ skeleton = NodePath("../..")
 metadata/_edit_lock_ = true
 
 [node name="Buildings" type="Node3D" parent="."]
+metadata/_edit_lock_ = true
 
 [node name="Building1" parent="Buildings" instance=ExtResource("2_cmv82")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -50, 40, 50)
@@ -219,3 +228,269 @@ transform = Transform3D(-1.2, 0, -1.04907e-07, 0, 1.2, 0, 1.04907e-07, 0, -1.2, 
 script = ExtResource("4_7yrtj")
 Barrier = NodePath("../Barrier")
 BarrierMesh = SubResource("SphereMesh_pu81k")
+
+[node name="Bushes" type="Node3D" parent="."]
+
+[node name="Bush" parent="Bushes" instance=ExtResource("5_a2mhx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 60.4474, 0.5, 27.9869)
+
+[node name="Bush1" parent="Bushes" instance=ExtResource("5_a2mhx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 40.1923, 0.5, 27.9869)
+
+[node name="Bush2" parent="Bushes" instance=ExtResource("5_a2mhx")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 26.8141, 0.5, 40.342)
+
+[node name="Bush3" parent="Bushes" instance=ExtResource("5_a2mhx")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 26.8141, 0.5, 60.0084)
+
+[node name="Bush4" parent="Bushes" instance=ExtResource("5_a2mhx")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 39.7833, 1, 96.945)
+
+[node name="Bush5" parent="Bushes" instance=ExtResource("5_a2mhx")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 59.4497, 1, 96.945)
+
+[node name="Bush6" parent="Bushes" instance=ExtResource("5_a2mhx")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 39.7833, 1, 73.0054)
+
+[node name="Bush7" parent="Bushes" instance=ExtResource("5_a2mhx")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 59.4497, 1, 73.0054)
+
+[node name="Bush8" parent="Bushes" instance=ExtResource("5_a2mhx")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 26.8141, 0.5, 110.026)
+
+[node name="Bush9" parent="Bushes" instance=ExtResource("5_a2mhx")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 26.8141, 0.5, 129.693)
+
+[node name="Bush10" parent="Bushes" instance=ExtResource("5_a2mhx")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -27.2501, 0.5, 110.423)
+
+[node name="Bush11" parent="Bushes" instance=ExtResource("5_a2mhx")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -27.2501, 0.5, 130.09)
+
+[node name="Bush12" parent="Bushes" instance=ExtResource("5_a2mhx")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 39.7833, 1, 143.603)
+
+[node name="Bush13" parent="Bushes" instance=ExtResource("5_a2mhx")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 59.4497, 1, 143.603)
+
+[node name="Bush14" parent="Bushes" instance=ExtResource("5_a2mhx")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 72.958, 0.5, 110.216)
+
+[node name="Bush15" parent="Bushes" instance=ExtResource("5_a2mhx")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 72.958, 0.5, 129.882)
+
+[node name="Bush16" parent="Bushes" instance=ExtResource("5_a2mhx")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 72.8563, 0.5, 40.342)
+
+[node name="Bush17" parent="Bushes" instance=ExtResource("5_a2mhx")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 72.8563, 0.5, 60.0084)
+
+[node name="Bush18" parent="Bushes" instance=ExtResource("5_a2mhx")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 96.7942, 0.5, 40.342)
+
+[node name="Bush19" parent="Bushes" instance=ExtResource("5_a2mhx")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 96.7942, 0.5, 60.0084)
+
+[node name="Bush20" parent="Bushes" instance=ExtResource("5_a2mhx")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 142.952, 0.5, 40.342)
+
+[node name="Bush21" parent="Bushes" instance=ExtResource("5_a2mhx")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 142.952, 0.5, 60.0084)
+
+[node name="Bush22" parent="Bushes" instance=ExtResource("5_a2mhx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 109.678, 0.5, 27.9869)
+
+[node name="Bush23" parent="Bushes" instance=ExtResource("5_a2mhx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 129.933, 0.5, 27.9869)
+
+[node name="Bush24" parent="Bushes" instance=ExtResource("5_a2mhx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 109.678, 0.5, 73.0554)
+
+[node name="Bush25" parent="Bushes" instance=ExtResource("5_a2mhx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 129.933, 0.5, 73.0554)
+
+[node name="Bush26" parent="Bushes" instance=ExtResource("5_a2mhx")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -59.8607, 1, 96.945)
+
+[node name="Bush27" parent="Bushes" instance=ExtResource("5_a2mhx")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -40.1943, 1, 96.945)
+
+[node name="Bush28" parent="Bushes" instance=ExtResource("5_a2mhx")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -72.8299, 0.5, 110.026)
+
+[node name="Bush29" parent="Bushes" instance=ExtResource("5_a2mhx")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -72.8299, 0.5, 129.693)
+
+[node name="Bush30" parent="Bushes" instance=ExtResource("5_a2mhx")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -59.8607, 1, 143.603)
+
+[node name="Bush31" parent="Bushes" instance=ExtResource("5_a2mhx")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -40.1943, 1, 143.603)
+
+[node name="Bush32" parent="Bushes" instance=ExtResource("5_a2mhx")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -27.2501, 0.5, 40.0781)
+
+[node name="Bush33" parent="Bushes" instance=ExtResource("5_a2mhx")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -27.2501, 0.5, 59.7446)
+
+[node name="Bush34" parent="Bushes" instance=ExtResource("5_a2mhx")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -59.8607, 1, 26.5998)
+
+[node name="Bush35" parent="Bushes" instance=ExtResource("5_a2mhx")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -40.1943, 1, 26.5998)
+
+[node name="Bush36" parent="Bushes" instance=ExtResource("5_a2mhx")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -72.8299, 0.5, 39.6812)
+
+[node name="Bush37" parent="Bushes" instance=ExtResource("5_a2mhx")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -72.8299, 0.5, 59.3477)
+
+[node name="Bush38" parent="Bushes" instance=ExtResource("5_a2mhx")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -59.8607, 1, 73.2581)
+
+[node name="Bush39" parent="Bushes" instance=ExtResource("5_a2mhx")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -40.1943, 1, 73.2581)
+
+[node name="Bush40" parent="Bushes" instance=ExtResource("5_a2mhx")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -97.6848, 0.5, 40.0781)
+
+[node name="Bush41" parent="Bushes" instance=ExtResource("5_a2mhx")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -97.6848, 0.5, 59.7446)
+
+[node name="Bush42" parent="Bushes" instance=ExtResource("5_a2mhx")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -130.295, 1, 26.5998)
+
+[node name="Bush43" parent="Bushes" instance=ExtResource("5_a2mhx")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -110.629, 1, 26.5998)
+
+[node name="Bush44" parent="Bushes" instance=ExtResource("5_a2mhx")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -143.265, 0.5, 39.6812)
+
+[node name="Bush45" parent="Bushes" instance=ExtResource("5_a2mhx")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -143.265, 0.5, 59.3477)
+
+[node name="Bush46" parent="Bushes" instance=ExtResource("5_a2mhx")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -130.295, 1, 73.2581)
+
+[node name="Bush47" parent="Bushes" instance=ExtResource("5_a2mhx")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -110.629, 1, 73.2581)
+
+[node name="Bush48" parent="Bushes" instance=ExtResource("5_a2mhx")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -27.2501, 0.5, -139.565)
+
+[node name="Bush49" parent="Bushes" instance=ExtResource("5_a2mhx")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -27.2501, 0.5, -119.899)
+
+[node name="Bush50" parent="Bushes" instance=ExtResource("5_a2mhx")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -59.8607, 1, -153.044)
+
+[node name="Bush51" parent="Bushes" instance=ExtResource("5_a2mhx")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -40.1943, 1, -153.044)
+
+[node name="Bush52" parent="Bushes" instance=ExtResource("5_a2mhx")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -72.8299, 0.5, -139.962)
+
+[node name="Bush53" parent="Bushes" instance=ExtResource("5_a2mhx")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -72.8299, 0.5, -120.296)
+
+[node name="Bush54" parent="Bushes" instance=ExtResource("5_a2mhx")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -59.8607, 1, -106.385)
+
+[node name="Bush55" parent="Bushes" instance=ExtResource("5_a2mhx")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -40.1943, 1, -106.385)
+
+[node name="Bush56" parent="Bushes" instance=ExtResource("5_a2mhx")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -103.97, 0.5, -62.2228)
+
+[node name="Bush57" parent="Bushes" instance=ExtResource("5_a2mhx")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -103.97, 0.5, -42.5564)
+
+[node name="Bush58" parent="Bushes" instance=ExtResource("5_a2mhx")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -139.937, 1, -27.0508)
+
+[node name="Bush59" parent="Bushes" instance=ExtResource("5_a2mhx")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -120.271, 1, -27.0508)
+
+[node name="Bush60" parent="Bushes" instance=ExtResource("5_a2mhx")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -156.924, 0.5, -64.1617)
+
+[node name="Bush61" parent="Bushes" instance=ExtResource("5_a2mhx")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -156.924, 0.5, -44.4953)
+
+[node name="Bush62" parent="Bushes" instance=ExtResource("5_a2mhx")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -138.936, 1, -80.8472)
+
+[node name="Bush63" parent="Bushes" instance=ExtResource("5_a2mhx")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -119.269, 1, -80.8472)
+
+[node name="Bush68" parent="Bushes" instance=ExtResource("5_a2mhx")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 42.0989, 0.5, -95.0836)
+
+[node name="Bush69" parent="Bushes" instance=ExtResource("5_a2mhx")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 42.0989, 0.5, -75.1622)
+
+[node name="Bush72" parent="Bushes" instance=ExtResource("5_a2mhx")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 42.0989, 0.5, -54.8697)
+
+[node name="Bush70" parent="Bushes" instance=ExtResource("5_a2mhx")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 107.888, 0.5, -95.0836)
+
+[node name="Bush71" parent="Bushes" instance=ExtResource("5_a2mhx")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 107.888, 0.5, -75.1622)
+
+[node name="Bush73" parent="Bushes" instance=ExtResource("5_a2mhx")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 107.888, 0.5, -54.8697)
+
+[node name="Bush74" parent="Bushes" instance=ExtResource("5_a2mhx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 94.88, 0.5, -43)
+
+[node name="Bush75" parent="Bushes" instance=ExtResource("5_a2mhx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 74.839, 0.5, -43)
+
+[node name="Bush76" parent="Bushes" instance=ExtResource("5_a2mhx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 54.504, 0.5, -43)
+
+[node name="Bush77" parent="Bushes" instance=ExtResource("5_a2mhx")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -92.693, 0.5, -79.3451)
+
+[node name="Bush78" parent="Bushes" instance=ExtResource("5_a2mhx")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -92.693, 0.5, -59.4237)
+
+[node name="Bush79" parent="Bushes" instance=ExtResource("5_a2mhx")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -92.693, 0.5, -39.1312)
+
+[node name="Bush80" parent="Bushes" instance=ExtResource("5_a2mhx")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -26.9037, 0.5, -79.3451)
+
+[node name="Bush81" parent="Bushes" instance=ExtResource("5_a2mhx")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -26.9037, 0.5, -59.4237)
+
+[node name="Bush82" parent="Bushes" instance=ExtResource("5_a2mhx")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -26.9037, 0.5, -39.1312)
+
+[node name="Bush83" parent="Bushes" instance=ExtResource("5_a2mhx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -39.9119, 0.5, -27.2615)
+
+[node name="Bush84" parent="Bushes" instance=ExtResource("5_a2mhx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -59.9529, 0.5, -27.2615)
+
+[node name="Bush85" parent="Bushes" instance=ExtResource("5_a2mhx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -80.2879, 0.5, -27.2615)
+
+[node name="Bush86" parent="Bushes" instance=ExtResource("5_a2mhx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 94.88, 0.5, -108.163)
+
+[node name="Bush87" parent="Bushes" instance=ExtResource("5_a2mhx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 74.839, 0.5, -108.163)
+
+[node name="Bush88" parent="Bushes" instance=ExtResource("5_a2mhx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 54.504, 0.5, -108.163)
+
+[node name="Bush89" parent="Bushes" instance=ExtResource("5_a2mhx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -39.9119, 0.5, -93.1728)
+
+[node name="Bush90" parent="Bushes" instance=ExtResource("5_a2mhx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -59.9529, 0.5, -93.1728)
+
+[node name="Bush91" parent="Bushes" instance=ExtResource("5_a2mhx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -80.2879, 0.5, -93.1728)
