@@ -8,6 +8,7 @@ public partial class EnemyAttackHandler : Node3D {
 
 	// signals
 	[Signal] public delegate void EnemyShootEventHandler();
+	[Signal] public delegate void PlayerHitEventHandler();
 
 	// class constants
 	private static readonly int projectileSpeed = 2500;
@@ -37,6 +38,7 @@ public partial class EnemyAttackHandler : Node3D {
 	}
 
 	public override void _PhysicsProcess(double delta) {
+		if (enemy.Health <= 0) return;
 		KinematicCollision3D lastCollision = enemy.GetLastSlideCollision();
 		if (lastCollision == null) return;
 		if (lastCollision.GetCollider() is Player) HandleCollisionWithPlayer();
@@ -49,6 +51,9 @@ public partial class EnemyAttackHandler : Node3D {
 		if ((enemy.Type == Enemy.EnemyType.Charger || enemy.Type == Enemy.EnemyType.Boss) && enemy.CurrentState == Enemy.MoveState.Charging) 
 			ResetChargeState();
 
+		GD.Print(enemy.GetLastSlideCollision().GetCollider());
+		player.ApplyForce(enemy.Velocity * enemy.KnockbackStrength);
+		player.DamagePlayer(enemy.Attack);
 		enemy.SetMoveState(Enemy.MoveState.Idle);
 		EmitSignal(SignalName.EnemyShoot);
 	}
