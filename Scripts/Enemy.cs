@@ -8,6 +8,7 @@ public partial class Enemy : CharacterBody3D {
 	[Export] public Timer DeleteDelayTimer;
 	[Export] public EnemyVisual Model;
 	[Export] public EnemyAttackHandler AttackHandler;
+	[Export] public VisibleOnScreenNotifier3D VisibilityNotifier;
 
 	// signals
 	[Signal] public delegate void EnemyShootEventHandler();
@@ -45,6 +46,9 @@ public partial class Enemy : CharacterBody3D {
 		player = gameScene.GetNode<Player>("Player");
 		DespawnY = (int) -gameScene.MapSize.Y / 2;
 		AttackHandler = GetNode<EnemyAttackHandler>("AttackHandler");
+
+		VisibilityNotifier.Connect("screen_entered", Callable.From(() => Model.Visible = true));
+		VisibilityNotifier.Connect("screen_exited", Callable.From(() => Model.Visible = false));
 		DeleteDelayTimer.Connect("timeout", Callable.From(() => SetMoveState(MoveState.Dead)));
 
 		if (IsOnFloor()) SetMoveState(MoveState.Walking);
@@ -101,6 +105,9 @@ public partial class Enemy : CharacterBody3D {
 	}
 
 	public void DeleteEnemy() {
+		foreach(var child in GetChildren()) {
+			child.QueueFree();
+		}
 		QueueFree();
 	}
 	
