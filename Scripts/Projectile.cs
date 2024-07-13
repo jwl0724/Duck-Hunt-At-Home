@@ -39,7 +39,7 @@ public partial class Projectile : RigidBody3D {
 	private void OnCollision(PhysicsBody3D body) {
 		if (body is not CharacterBody3D characterBody3D) return;
 		if (characterBody3D is not Player player) return;
-		player.ApplyForce(LinearVelocity * 0.25f);
+		player.ApplyForce(new Vector3(LinearVelocity.X * 0.25f, 5, LinearVelocity.Z * 0.25f));
 		player.DamagePlayer(Damage);
 		PopBubble();
 	}
