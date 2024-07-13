@@ -51,10 +51,14 @@ public partial class EnemyAttackHandler : Node3D {
 		if ((enemy.Type == Enemy.EnemyType.Charger || enemy.Type == Enemy.EnemyType.Boss) && enemy.CurrentState == Enemy.MoveState.Charging) 
 			ResetChargeState();
 
-		player.ApplyForce(enemy.Velocity * enemy.KnockbackStrength);
+		if (enemy.CurrentState == Enemy.MoveState.Charging) 
+			player.ApplyForce(enemy.Direction * enemy.KnockbackStrength * 12 + Vector3.Up * 8 * enemy.KnockbackStrength);
+		else 
+			player.ApplyForce(enemy.Direction * enemy.KnockbackStrength * 6 + Vector3.Up * 4 * enemy.KnockbackStrength);
 		player.DamagePlayer(enemy.Attack);
+
+		if (enemy.CurrentState != Enemy.MoveState.Charging) EmitSignal(SignalName.EnemyShoot);
 		enemy.SetMoveState(Enemy.MoveState.Idle);
-		EmitSignal(SignalName.EnemyShoot);
 	}
 
 	public void SetAttackCD(float time) {
