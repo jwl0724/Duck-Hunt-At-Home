@@ -19,6 +19,7 @@ public partial class BubbleVisual : MeshInstance3D {
 	}
 
 	public override void _Process(double delta) {
+		if (!Visible) return;
 		model.Height = originalHeight * Mathf.Clamp(1 - Body.LinearVelocity.Y * 0.1f, 0.9f, 1.5f);
 		lastFrameVelocity = Body.LinearVelocity.Y;
 	}
