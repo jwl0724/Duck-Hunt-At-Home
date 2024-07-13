@@ -21,7 +21,7 @@ public partial class Enemy : CharacterBody3D {
 	public static int BossScale { get; private set; } = 2;
 
 	// instance variables
-	public int Health { get; private set; } = 500;
+	public int Health { get; private set; } = 1;
 	public int Attack { get; private set; } = 50;
 	public float Speed { get; private set; } = 400;
 	public int KnockbackStrength { get; private set; } = 1;
@@ -57,17 +57,17 @@ public partial class Enemy : CharacterBody3D {
 
 	public void SetEnemyProperties(EnemyType type) {
 		if (type == EnemyType.Melee) {
-			SetProperties(500, 90, 50, type, EnemyVisual.DuckColors.Default);
+			SetProperties(1, 90, 50, type, EnemyVisual.DuckColors.Default);
 
 		} else if (type == EnemyType.Charger) {
-			SetProperties(400, 70, 75, type, EnemyVisual.DuckColors.Pink, attackCD: 2);
+			SetProperties(3, 70, 75, type, EnemyVisual.DuckColors.Pink, attackCD: 2);
 
 		} else if (type == EnemyType.Shooter) {
-			SetProperties(300, 50, 30, type, EnemyVisual.DuckColors.Blue, attackCD: 1f);
+			SetProperties(2, 50, 30, type, EnemyVisual.DuckColors.Blue, attackCD: 1f);
 
 		} else {
 			// boss properties
-			SetProperties(2000, 80, 100, type, EnemyVisual.DuckColors.Green, attackCD: 2.5f);
+			SetProperties(10 + BossScale * 2, 80, 100, type, EnemyVisual.DuckColors.Green, attackCD: 2.5f);
 			Model.ToggleGlow();
 			KnockbackStrength = 2;
 			
