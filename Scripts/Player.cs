@@ -31,7 +31,7 @@ public partial class Player : CharacterBody3D {
 	public int Health { get; private set; }
 	public float Gravity { get; private set; } = 25;
 	public int Attack { get; private set; } = 1000;
-	public float Speed { get; private set; } = 200;
+	public float Speed { get; private set; } = 400;
 	public float JumpSpeed { get; private set; } = 15;
 	public float MouseSensitivity { get; private set; } = 0.1f;
 	public int ClipSize { get; private set; } = defaultClipSize;
@@ -56,20 +56,18 @@ public partial class Player : CharacterBody3D {
 	}
 
     public override void _PhysicsProcess(double delta) {
-		Vector3 movementVector = movementDirection * Speed / frictionCoefficient;
-
-		if (IFrameTimer.TimeLeft != 0) movementVector = Vector3.Zero;
-		if (IsOnFloor() && IFrameTimer.TimeLeft == 0) Velocity *= frictionCoefficient;
-		else movementVector *= (float) delta * 1.3f;
-		ApplyForce(movementVector);
+		Vector3 movementVector = movementDirection * Speed * (float) delta;
+		if (IFrameTimer.TimeLeft == 0 && IsOnFloor()) {
+			Velocity *= frictionCoefficient;
+			ApplyForce(movementVector);
+		}
 
 		if (!GrapplePoint.IsZeroApprox() && Grappled) 
 			Velocity = Position.DirectionTo(GrapplePoint).Normalized() * grappleSpeed / frictionCoefficient * (float) delta;
 
-		HandleCollision();
-		ApplyForce(Vector3.Down * Gravity);
+		ApplyForce(Vector3.Down * Gravity * (float) delta);
 		foreach(Vector3 force in forceList) {
-			Velocity += force * (float) delta;
+			Velocity += force;
 		}
 		forceList.Clear();
 		MoveAndSlide();
@@ -85,8 +83,19 @@ public partial class Player : CharacterBody3D {
 	}
 
 	public void ApplyForce(Vector3 force, bool isInput = false) {
+		if (IFrameTimer.TimeLeft != 0) return; // iframes still active
 		if (isInput) movementDirection = force;
 		else forceList.AddFirst(force);
+	}
+
+	public void DamagePlayer(int damage) {
+		if (IFrameTimer.TimeLeft != 0) return;
+		Health -= damage;
+		if (Health <= 0) EmitSignal(SignalName.PlayerDied);
+		else {
+			EmitSignal(SignalName.PlayerDamaged);
+			IFrameTimer.Start();
+		}
 	}
 
 	public void ResetPlayerState() {
@@ -106,31 +115,5 @@ public partial class Player : CharacterBody3D {
 	// HELPER FUNCTIONS
 	private void HandlePlayerDeath() {
 		Input.MouseMode = Input.MouseModeEnum.Visible;
-	}
-
-	private void HandleCollision() {
-		// TODO: FIX ENEMY KNOCKBACK, FIX ENEMY DEAD BODY HURTING PLAYER
-		if (IFrameTimer.TimeLeft != 0) return;
-		if (GetLastSlideCollision() == null) return;
-
-		var collidingObject = GetLastSlideCollision().GetCollider();
-		if (collidingObject is StaticBody3D) return;
-
-		IFrameTimer.Start();
-		if (collidingObject is Enemy enemy) {
-			Health -= enemy.Attack;
-			// Vector3 knockbackVector = new(enemy.Velocity.X, enemy.KnockbackStrength, enemy.Velocity.Z);
-			// ApplyForce(knockbackVector * enemy.KnockbackStrength);
-			ApplyForce(enemy.Velocity * enemy.KnockbackStrength / (float) GetProcessDeltaTime());
-
-		} else if (collidingObject is Projectile projectile) {
-			Health -= projectile.Damage;
-			// ApplyForce(projectile.LinearVelocity / (float) GetProcessDeltaTime() / 2);
-			Vector3 force = projectile.LinearVelocity;
-			ApplyForce(force / (float) GetProcessDeltaTime());
-		}
-		EmitSignal(SignalName.PlayerDamaged);
-
-		if (Health <= 0) EmitSignal(SignalName.PlayerDied);
 	}
 }
