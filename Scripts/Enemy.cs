@@ -57,13 +57,13 @@ public partial class Enemy : CharacterBody3D {
 
 	public void SetEnemyProperties(EnemyType type) {
 		if (type == EnemyType.Melee) {
-			SetProperties(1, 90, 50, type, EnemyVisual.DuckColors.Default);
+			SetProperties(2, 90, 50, type, EnemyVisual.DuckColors.Default);
 
 		} else if (type == EnemyType.Charger) {
 			SetProperties(3, 70, 75, type, EnemyVisual.DuckColors.Pink, attackCD: 2);
 
 		} else if (type == EnemyType.Shooter) {
-			SetProperties(2, 50, 30, type, EnemyVisual.DuckColors.Blue, attackCD: 1f);
+			SetProperties(1, 50, 30, type, EnemyVisual.DuckColors.Blue, attackCD: 1f);
 
 		} else {
 			// boss properties
