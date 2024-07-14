@@ -23,13 +23,13 @@ public partial class CityLevelHandler : Node {
 			player.Position = player.Position.Lerp(Vector3.Zero, 0.1f);
 			return;
 		}
-		Vector3 force = player.Position.DirectionTo(Vector3.Zero) * CalculateKnockback(player.Velocity);
+		Vector3 force = player.Position.DirectionTo(Vector3.Zero) * CalculateKnockback(player.Velocity) + Vector3.Up * 3;
 		player.ApplyForce(force);
 	}
 
 	private float CalculateKnockback(Vector3 velocity) {
 		float highestAxis = Math.Max(Math.Abs(velocity.X), Math.Max(Math.Abs(velocity.Y), Math.Abs(velocity.Z)));
 		if (highestAxis <= 30) return 30;
-		else return highestAxis;
+		else return highestAxis * 2;
 	}
 }
