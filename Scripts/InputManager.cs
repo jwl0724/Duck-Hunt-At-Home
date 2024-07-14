@@ -10,6 +10,7 @@ public partial class InputManager : Node3D {
 	[Signal] public delegate void PlayerEmptyMagEventHandler();
 	[Signal] public delegate void PlayerReloadEventHandler();
 	[Signal] public delegate void PlayerGrappleEventHandler();
+	[Signal] public delegate void PlayerGrappleReleasedEventHandler();
 
 	private Player player;
 
@@ -84,7 +85,7 @@ public partial class InputManager : Node3D {
 		} else if (Input.IsActionJustReleased("grapple")) {
 			player.Grappled = false;
 			player.GrapplePoint = Vector3.Zero;
-			EmitSignal(SignalName.PlayerGrapple);
+			EmitSignal(SignalName.PlayerGrappleReleased);
 		}
 	}
 
