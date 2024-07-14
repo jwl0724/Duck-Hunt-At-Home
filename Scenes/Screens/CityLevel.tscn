@@ -1,10 +1,17 @@
-[gd_scene load_steps=20 format=3 uid="uid://cdqljydqxa58"]
+[gd_scene load_steps=31 format=3 uid="uid://cdqljydqxa58"]
 
 [ext_resource type="Shader" path="res://Assets/Shaders/Barrier.gdshader" id="1_f1mka"]
+[ext_resource type="Script" path="res://Scripts/GameManager.cs" id="1_ko6q1"]
 [ext_resource type="PackedScene" uid="uid://ovc7fnrqlm44" path="res://Scenes/Entities/Building.tscn" id="2_cmv82"]
+[ext_resource type="PackedScene" uid="uid://g7arj8tp83bn" path="res://Scenes/Entities/Enemy.tscn" id="2_ib3tq"]
 [ext_resource type="PackedScene" uid="uid://bjxi3yjg0rb46" path="res://Scenes/Entities/Player.tscn" id="3_77cuk"]
 [ext_resource type="Script" path="res://Scripts/LevelHandlers/CityLevelHandler.cs" id="4_7yrtj"]
 [ext_resource type="PackedScene" uid="uid://dg5jebuykxrud" path="res://Scenes/Entities/Bush.tscn" id="5_a2mhx"]
+[ext_resource type="Script" path="res://Scripts/SoundCollection.cs" id="8_2bruk"]
+[ext_resource type="AudioStream" uid="uid://umyiu7e7eirw" path="res://Assets/Music/InGameMusic.mp3" id="9_gf1mb"]
+[ext_resource type="AudioStream" uid="uid://df4fuynudtk74" path="res://Assets/Music/GameOverJingle.mp3" id="10_fo4gx"]
+[ext_resource type="AudioStream" uid="uid://0xhnvgif4anl" path="res://Assets/Music/GameOverMusic.mp3" id="11_7c762"]
+[ext_resource type="Shader" path="res://Assets/Shaders/Sun.gdshader" id="12_6oev4"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_wu7qi"]
 size = Vector3(400, 1, 400)
@@ -59,7 +66,7 @@ shader = ExtResource("1_f1mka")
 shader_parameter/_shield_color = Color(0.141176, 0.627451, 0.886275, 1)
 shader_parameter/_shield_color_brightness = 20.0
 shader_parameter/_shield_intensity = 1.0
-shader_parameter/_rotation = Vector3(0, 0.03, 0)
+shader_parameter/_rotation = Vector3(0, 0.06, 0)
 shader_parameter/_shield_size = 0.0
 shader_parameter/_shield_pulse_frequency = 1.0
 shader_parameter/_shield_pulse_density = 1.0
@@ -78,11 +85,12 @@ shader_parameter/_impact_anim = 0.0
 lightmap_size_hint = Vector2i(6285, 3143)
 material = SubResource("ShaderMaterial_b6ku2")
 flip_faces = true
-radius = 200.0
+radius = 199.0
 height = 200.0
 is_hemisphere = true
 
 [sub_resource type="Environment" id="Environment_ags5f"]
+background_mode = 2
 ambient_light_color = Color(0.0624279, 0.130602, 0.450022, 1)
 ssr_enabled = true
 ssr_fade_in = 0.579562
@@ -100,8 +108,44 @@ fog_enabled = true
 fog_light_color = Color(0.0468125, 0.0539838, 0.051343, 1)
 fog_light_energy = 5.0
 fog_sun_scatter = 0.05
+volumetric_fog_density = 0.0
+volumetric_fog_albedo = Color(0.501407, 0.501406, 0.501406, 1)
+volumetric_fog_length = 250.0
 
-[node name="City" type="Node"]
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_38v5g"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_pt3d1"]
+seamless = true
+noise = SubResource("FastNoiseLite_38v5g")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_4uu42"]
+render_priority = 0
+shader = ExtResource("12_6oev4")
+shader_parameter/color_top = Color(0.909804, 0.239216, 0.615686, 1)
+shader_parameter/color_bottom = Color(0.863433, 0.738195, 0.243925, 1)
+shader_parameter/intensity = 4.0
+shader_parameter/position = 0.0
+shader_parameter/blend = 0.716
+shader_parameter/angle = 90.0
+shader_parameter/line_height_min = 0.05
+shader_parameter/line_height_max = 0.1
+shader_parameter/num_lines = 8
+shader_parameter/speed = 0.2
+shader_parameter/vertical_origin = 0.0
+shader_parameter/texture_albedo = SubResource("NoiseTexture2D_pt3d1")
+
+[sub_resource type="SphereMesh" id="SphereMesh_8mdyx"]
+material = SubResource("ShaderMaterial_4uu42")
+radius = 25.0
+height = 50.0
+
+[node name="City" type="Node" node_paths=PackedStringArray("EnemySpawnTimer", "BossSpawnTimer", "MusicCollection")]
+script = ExtResource("1_ko6q1")
+MapSize = Vector3(400, 200, 400)
+EnemyScene = ExtResource("2_ib3tq")
+EnemySpawnTimer = NodePath("EnemySpawnTimer")
+BossSpawnTimer = NodePath("BossSpawnTimer")
+MusicCollection = NodePath("MusicCollection")
 
 [node name="Ground" type="StaticBody3D" parent="."]
 metadata/_edit_group_ = true
@@ -516,3 +560,26 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -80.2879, 0.5, -93.1728)
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_ags5f")
+
+[node name="BossSpawnTimer" type="Timer" parent="."]
+wait_time = 30.0
+
+[node name="EnemySpawnTimer" type="Timer" parent="."]
+wait_time = 2.0
+
+[node name="MusicCollection" type="Node3D" parent="."]
+script = ExtResource("8_2bruk")
+
+[node name="InGame" type="AudioStreamPlayer" parent="MusicCollection"]
+stream = ExtResource("9_gf1mb")
+
+[node name="GameOverJingle" type="AudioStreamPlayer" parent="MusicCollection"]
+stream = ExtResource("10_fo4gx")
+
+[node name="GameOver" type="AudioStreamPlayer" parent="MusicCollection"]
+stream = ExtResource("11_7c762")
+
+[node name="Moon" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.438104, 0.898924, 0, -0.898924, 0.438104, 0, 280.751, 267.534)
+mesh = SubResource("SphereMesh_8mdyx")
+skeleton = NodePath("")
