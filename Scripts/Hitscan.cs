@@ -10,7 +10,7 @@ public partial class Hitscan : RayCast3D {
 
 	public override void _Ready() {
 		Player.InputManager.Connect("PlayerShoot", Callable.From(() => OnPlayerShoot()));
-		Player.InputManager.GrappleModel.Connect("GrappleGunLifted", Callable.From(() => OnGrappleGunLifted()));
+		Player.InputManager.Connect("PlayerGrapple", Callable.From(() => OnGrappleFire()));
 	}
 
 	private void OnPlayerShoot() {
@@ -22,7 +22,7 @@ public partial class Hitscan : RayCast3D {
 		}
 	}
 
-	private void OnGrappleGunLifted() {
+	private void OnGrappleFire() {
 		var body = GetCollider();
 		if (body is StaticBody3D) Player.GrapplePoint = GetCollisionPoint();
 	}
