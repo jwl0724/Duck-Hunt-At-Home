@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 
 // TODO:
-// IMPLEMENT SHIELD BOUNCE EFFECT
 // MAKE SPACE LEVEL WITH NEON THEME
 // MAKE MENU SCREEN (NEW SCENE WITH PANNING BACKGROUND)
 // MAKE GAME OVER SCREEN (REGULAR SCREEN)
@@ -22,15 +21,15 @@ public partial class Player : CharacterBody3D {
 	// static variables
 	private static readonly int defaultClipSize = 25;
 	private static readonly float frictionCoefficient = 0.4f;
-	private static readonly int grappleSpeed = 1000;
 
 	// instance variables
 	public int MaxHealth { get; private set; } = 50000000;
 	public int Health { get; private set; }
-	public float Gravity { get; private set; } = 25;
+	public float Gravity { get; set; } = 25;
 	public int Attack { get; private set; } = 1;
 	public float Speed { get; private set; } = 400;
-	public float JumpSpeed { get; private set; } = 15;
+	public float JumpSpeed { get; set; } = 15;
+	public int GrappleSpeed { get; set; } = 1000;
 	public float MouseSensitivity { get; private set; } = 0.1f;
 	public int ClipSize { get; private set; } = defaultClipSize;
 	public int Bullets { get; private set; } = defaultClipSize;
@@ -62,7 +61,7 @@ public partial class Player : CharacterBody3D {
 		}
 
 		if (!GrapplePoint.IsZeroApprox() && Grappled) 
-			Velocity = Position.DirectionTo(GrapplePoint).Normalized() * grappleSpeed / frictionCoefficient * (float) delta;
+			Velocity = Position.DirectionTo(GrapplePoint).Normalized() * GrappleSpeed / frictionCoefficient * (float) delta;
 
 		ApplyForce(Vector3.Down * Gravity * (float) delta, ignoreIFrame: true);
 		foreach(Vector3 force in forceList) {
