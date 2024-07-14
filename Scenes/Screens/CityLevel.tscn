@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://cdqljydqxa58"]
+[gd_scene load_steps=20 format=3 uid="uid://cdqljydqxa58"]
 
 [ext_resource type="Shader" path="res://Assets/Shaders/Barrier.gdshader" id="1_f1mka"]
 [ext_resource type="PackedScene" uid="uid://ovc7fnrqlm44" path="res://Scenes/Entities/Building.tscn" id="2_cmv82"]
@@ -81,6 +81,25 @@ flip_faces = true
 radius = 200.0
 height = 200.0
 is_hemisphere = true
+
+[sub_resource type="Environment" id="Environment_ags5f"]
+ambient_light_color = Color(0.0624279, 0.130602, 0.450022, 1)
+ssr_enabled = true
+ssr_fade_in = 0.579562
+ssr_fade_out = 2.14355
+sdfgi_enabled = true
+sdfgi_cascades = 1
+sdfgi_min_cell_size = 6.25
+sdfgi_energy = 0.1
+glow_enabled = true
+glow_normalized = true
+glow_intensity = 1.0
+glow_strength = 0.25
+glow_bloom = 0.1
+fog_enabled = true
+fog_light_color = Color(0.0468125, 0.0539838, 0.051343, 1)
+fog_light_energy = 5.0
+fog_sun_scatter = 0.05
 
 [node name="City" type="Node"]
 
@@ -494,3 +513,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -59.9529, 0.5, -93.1728)
 
 [node name="Bush91" parent="Bushes" instance=ExtResource("5_a2mhx")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -80.2879, 0.5, -93.1728)
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_ags5f")
