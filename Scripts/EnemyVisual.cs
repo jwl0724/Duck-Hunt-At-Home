@@ -20,7 +20,6 @@ public partial class EnemyVisual : MeshInstance3D {
 	
 	// instance variables
 	private AnimationPlayer animator;
-	private bool glowing = false;
 	private StringName previousAnimation = null;
 
 	// enums
@@ -84,12 +83,14 @@ public partial class EnemyVisual : MeshInstance3D {
 		foreach (var child in GetChildren()) {
 			if (child is not MeshInstance3D meshInstance) continue;
 			StandardMaterial3D material = meshInstance.GetSurfaceOverrideMaterial(0) as StandardMaterial3D;
-			if (glowing) material.AlbedoColor /= 2;
-			else material.AlbedoColor *= 2;
+
+			if (material.EmissionEnabled && !Enemy.AlwaysGlow) material.EmissionEnabled = false;
+			else {
+				material.EmissionEnabled = true;
+				material.Emission = material.AlbedoColor;
+				material.EmissionEnergyMultiplier = 2;
+			}
 		}
-		// set the glowing state after editing
-		if (glowing) glowing = false;
-		else glowing = true;
 	}
 
 	private void RunTweenedAnimation() {
