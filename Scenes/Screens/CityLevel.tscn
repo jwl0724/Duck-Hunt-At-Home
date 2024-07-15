@@ -8,7 +8,7 @@
 [ext_resource type="Script" path="res://Scripts/LevelHandlers/CityLevelHandler.cs" id="4_7yrtj"]
 [ext_resource type="PackedScene" uid="uid://dg5jebuykxrud" path="res://Scenes/Entities/Bush.tscn" id="5_a2mhx"]
 [ext_resource type="Script" path="res://Scripts/SoundCollection.cs" id="8_2bruk"]
-[ext_resource type="AudioStream" uid="uid://umyiu7e7eirw" path="res://Assets/Music/InGameMusic.mp3" id="9_gf1mb"]
+[ext_resource type="AudioStream" uid="uid://umyiu7e7eirw" path="res://Assets/Music/CityInGameMusic.mp3" id="9_gf1mb"]
 [ext_resource type="AudioStream" uid="uid://df4fuynudtk74" path="res://Assets/Music/GameOverJingle.mp3" id="10_fo4gx"]
 [ext_resource type="AudioStream" uid="uid://0xhnvgif4anl" path="res://Assets/Music/GameOverMusic.mp3" id="11_7c762"]
 [ext_resource type="Shader" path="res://Assets/Shaders/Sun.gdshader" id="12_6oev4"]
