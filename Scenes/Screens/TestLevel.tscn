@@ -4,7 +4,7 @@
 [ext_resource type="Script" path="res://Scripts/GameManager.cs" id="1_qhil5"]
 [ext_resource type="PackedScene" uid="uid://g7arj8tp83bn" path="res://Scenes/Entities/Enemy.tscn" id="1_t4ccb"]
 [ext_resource type="Script" path="res://Scripts/SoundCollection.cs" id="4_yvke8"]
-[ext_resource type="AudioStream" uid="uid://umyiu7e7eirw" path="res://Assets/Music/InGameMusic.mp3" id="5_bsl47"]
+[ext_resource type="AudioStream" uid="uid://umyiu7e7eirw" path="res://Assets/Music/CityInGameMusic.mp3" id="5_bsl47"]
 [ext_resource type="AudioStream" uid="uid://df4fuynudtk74" path="res://Assets/Music/GameOverJingle.mp3" id="6_ody44"]
 [ext_resource type="AudioStream" uid="uid://0xhnvgif4anl" path="res://Assets/Music/GameOverMusic.mp3" id="7_uma6b"]
 
