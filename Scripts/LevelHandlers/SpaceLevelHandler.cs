@@ -8,9 +8,6 @@ public partial class SpaceLevelHandler : Node3D {
 		Player.Gravity = 2;
 		Player.JumpSpeed = 4;
 		Player.GrappleSpeed = 300;
-	}
-
-	public override void _Process(double delta) {
-		
+		(GetParent() as GameManager).AlwaysGlow = true;
 	}
 }
