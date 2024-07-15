@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 
 // TODO:
-// MAKE SPACE LEVEL WITH NEON THEME
 // MAKE MENU SCREEN (NEW SCENE WITH PANNING BACKGROUND)
 // MAKE GAME OVER SCREEN (REGULAR SCREEN)
 public partial class Player : CharacterBody3D {	
@@ -121,6 +120,7 @@ public partial class Player : CharacterBody3D {
 	}
 
 	private void TogglePhysicsMasks(bool state) {
+		SetCollisionLayerValue(4, state);
 		SetCollisionMaskValue(2, state);
 		SetCollisionMaskValue(3, state);
 	}
