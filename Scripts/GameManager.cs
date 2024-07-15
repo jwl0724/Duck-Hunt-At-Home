@@ -9,11 +9,10 @@ public partial class GameManager : Node {
 	[Export] public Timer BossSpawnTimer;
 	[Export] public SoundCollection MusicCollection;
 
-	// signals
-
 	// instance variables
 	private Player player;
 	public bool GameRunning { get; private set; } = false;
+	public bool AlwaysGlow { get; set; } = false;
 	public int Score { get; private set; } = 0;
 
 	// internal timers
@@ -55,7 +54,7 @@ public partial class GameManager : Node {
 		Enemy enemy = EnemyScene.Instantiate<Enemy>();
 		Enemy.EnemyType[] enemyTypes = (Enemy.EnemyType[]) Enum.GetValues(typeof(Enemy.EnemyType));
 		Enemy.EnemyType type = enemyTypes[GD.Randi() % (enemyTypes.Length - 1)]; // assumes boss is at bottom of enum
-		enemy.SetEnemyProperties(type);
+		enemy.SetEnemyProperties(type, AlwaysGlow);
 		enemy.Position = GenerateSpawnPoint();
 		AddChild(enemy);
 		enemy.Connect("EnemyDied", Callable.From((int score) => Score += score));
@@ -64,7 +63,7 @@ public partial class GameManager : Node {
 	private void OnBossSpawn() {
 		if (!GameRunning) return;
 		Enemy enemy = EnemyScene.Instantiate<Enemy>();
-		enemy.SetEnemyProperties(Enemy.EnemyType.Boss);
+		enemy.SetEnemyProperties(Enemy.EnemyType.Boss, AlwaysGlow);
 		enemy.Position = GenerateSpawnPoint();
 		AddChild(enemy);
 	}
