@@ -24,6 +24,7 @@ public partial class Enemy : CharacterBody3D {
 	public int Health { get; private set; } = 1;
 	public int Attack { get; private set; } = 50;
 	public float Speed { get; private set; } = 400;
+	public bool AlwaysGlow { get; private set; } = false;
 	public int KnockbackStrength { get; private set; } = 1;
 	public EnemyType Type { get; private set; }
 	public MoveState CurrentState { get; set; } = MoveState.Idle;
@@ -55,7 +56,8 @@ public partial class Enemy : CharacterBody3D {
 		else SetMoveState(MoveState.Falling);
     }
 
-	public void SetEnemyProperties(EnemyType type) {
+	public void SetEnemyProperties(EnemyType type, bool alwaysGlow = false) {
+		AlwaysGlow = alwaysGlow;
 		if (type == EnemyType.Melee) {
 			SetProperties(2, 90, 50, type, EnemyVisual.DuckColors.Default);
 
@@ -68,7 +70,7 @@ public partial class Enemy : CharacterBody3D {
 		} else {
 			// boss properties
 			SetProperties(10 + BossScale * 2, 80, 100, type, EnemyVisual.DuckColors.Green, attackCD: 2.5f);
-			Model.ToggleGlow();
+			if(!AlwaysGlow) Model.ToggleGlow();
 			KnockbackStrength = 2;
 			
 			Vector3 scale = new(BossScale, BossScale, BossScale);
@@ -79,6 +81,8 @@ public partial class Enemy : CharacterBody3D {
 
 			if (BossScale <= 4) BossScale++; // increment scaling for next boss
 		}
+
+		if (AlwaysGlow) Model.ToggleGlow();
 	}
 
 	private void SetProperties(int health, int speed, int attack, EnemyType type, EnemyVisual.DuckColors color, float attackCD = 0) {
