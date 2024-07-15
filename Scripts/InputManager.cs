@@ -24,6 +24,10 @@ public partial class InputManager : Node3D {
 	}
 
 	public override void _Input(InputEvent inputEvent) {
+		if (player.Health <= 0) {
+			ProcessDeathMenu();
+			return;
+		}
 		if (inputEvent is InputEventMouseMotion && Input.MouseMode == Input.MouseModeEnum.Captured)
 			ProcessMouse(inputEvent as InputEventMouseMotion);
 
@@ -36,6 +40,10 @@ public partial class InputManager : Node3D {
 		}
 	}
 
+	private void ProcessDeathMenu() {
+
+	}
+
 	private void ProcessMouse(InputEventMouseMotion movement) {
 		// handle left/right camera movement
 		float rotationDegreesY = RotationalHelper.Rotation.Y + Mathf.DegToRad(-movement.Relative.X * player.MouseSensitivity);
@@ -43,7 +51,7 @@ public partial class InputManager : Node3D {
 		// handle up/down camera movement
 		float rotationDegreesX = Mathf.Clamp(
 			Mathf.DegToRad(-movement.Relative.Y * player.MouseSensitivity) + RotationalHelper.Rotation.X, 
-			Mathf.DegToRad(-89), Mathf.DegToRad(85)
+			Mathf.DegToRad(-89.9f), Mathf.DegToRad(89.9f)
 		);
 
 		// normalize vector components
