@@ -1,4 +1,4 @@
-[gd_scene load_steps=52 format=3 uid="uid://bbk2wh3ddq1rx"]
+[gd_scene load_steps=61 format=3 uid="uid://bbk2wh3ddq1rx"]
 
 [ext_resource type="Script" path="res://Scripts/ScreenHandlers/MenuHandler.cs" id="1_hxx3p"]
 [ext_resource type="Texture2D" uid="uid://dh8hwu3bkssd2" path="res://Assets/Images/LogoFrames/StudioLogo1.png" id="3_ct1nv"]
@@ -12,6 +12,10 @@
 [ext_resource type="Shader" path="res://Assets/Shaders/Water.gdshader" id="8_0qod2"]
 [ext_resource type="FontFile" uid="uid://1tlgwild87np" path="res://Assets/Fonts/fs-a-pixel-away.ttf" id="11_b8xsk"]
 [ext_resource type="Script" path="res://Scripts/ScreenHandlers/LevelSelectHandler.cs" id="12_atf7j"]
+[ext_resource type="Script" path="res://Scripts/ScreenHandlers/LevelPreviewHandler.cs" id="13_5pjbe"]
+[ext_resource type="Texture2D" uid="uid://frujlwpgyhp1" path="res://Assets/Images/LevelPreviews/CityLevelPreview.png" id="14_kejgs"]
+[ext_resource type="Texture2D" uid="uid://cb0cxdnrrqx2t" path="res://Assets/Images/LevelPreviews/PlainsLevelPreview.png" id="15_2rsun"]
+[ext_resource type="Texture2D" uid="uid://ctgrhxlgwp42x" path="res://Assets/Images/LevelPreviews/SpaceLevelPreview.png" id="16_6xp7s"]
 
 [sub_resource type="Animation" id="Animation_bpgd3"]
 resource_name = "Logo"
@@ -459,6 +463,48 @@ font_color = Color(0.89843, 0.898348, 3.85046e-07, 1)
 outline_size = 15
 outline_color = Color(0, 0, 0, 1)
 
+[sub_resource type="LabelSettings" id="LabelSettings_auncy"]
+font = ExtResource("11_b8xsk")
+font_size = 48
+outline_size = 15
+outline_color = Color(0, 0, 0, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_hw3o6"]
+font = ExtResource("11_b8xsk")
+font_size = 25
+outline_size = 10
+outline_color = Color(0, 0, 0, 1)
+
+[sub_resource type="Theme" id="Theme_pa0vv"]
+default_font = ExtResource("11_b8xsk")
+default_font_size = 128
+Button/colors/font_color = Color(0.875, 0.875, 0.875, 1)
+Button/colors/font_hover_color = Color(0.577008, 0.577008, 0.577008, 1)
+Button/colors/font_outline_color = Color(0, 0, 0, 1)
+Button/colors/font_pressed_color = Color(0.393086, 0.393086, 0.393085, 1)
+Button/constants/outline_size = 15
+Button/styles/pressed = SubResource("StyleBoxFlat_setk4")
+
+[sub_resource type="Theme" id="Theme_jsyiv"]
+default_font = ExtResource("11_b8xsk")
+default_font_size = 128
+Button/colors/font_color = Color(0.875, 0.875, 0.875, 1)
+Button/colors/font_hover_color = Color(0.577008, 0.577008, 0.577008, 1)
+Button/colors/font_outline_color = Color(0, 0, 0, 1)
+Button/colors/font_pressed_color = Color(0.393086, 0.393086, 0.393085, 1)
+Button/constants/outline_size = 15
+Button/styles/pressed = SubResource("StyleBoxFlat_setk4")
+
+[sub_resource type="Theme" id="Theme_n573s"]
+default_font = ExtResource("11_b8xsk")
+default_font_size = 48
+Button/colors/font_color = Color(0.875, 0.875, 0.875, 1)
+Button/colors/font_hover_color = Color(0.577008, 0.577008, 0.577008, 1)
+Button/colors/font_outline_color = Color(0, 0, 0, 1)
+Button/colors/font_pressed_color = Color(0.393086, 0.393086, 0.393085, 1)
+Button/constants/outline_size = 15
+Button/styles/pressed = SubResource("StyleBoxFlat_setk4")
+
 [node name="Menu" type="Control" node_paths=PackedStringArray("BootUpScreen", "MainMenuScreen", "LevelSelectScreen")]
 layout_mode = 3
 anchors_preset = 15
@@ -676,10 +722,156 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("12_atf7j")
 
-[node name="TextureRect" type="TextureRect" parent="LevelSelect"]
+[node name="BackgroundDim" type="ColorRect" parent="LevelSelect"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+color = Color(0, 0, 0, 0.52549)
+metadata/_edit_lock_ = true
+
+[node name="LevelPreview" type="Control" parent="LevelSelect"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -360.0
+offset_top = -274.0
+offset_right = 360.0
+offset_bottom = 206.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("13_5pjbe")
+metadata/_edit_group_ = true
+
+[node name="PictureOutline" type="ColorRect" parent="LevelSelect/LevelPreview"]
+layout_mode = 1
+offset_left = -10.0
+offset_top = -10.0
+offset_right = 730.0
+offset_bottom = 490.0
+color = Color(0, 0, 0, 1)
+
+[node name="PreviewPictures" type="Control" parent="LevelSelect/LevelPreview"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="CityPreview" type="TextureRect" parent="LevelSelect/LevelPreview/PreviewPictures"]
+visible = false
+offset_right = 720.0
+offset_bottom = 480.0
+texture = ExtResource("14_kejgs")
+expand_mode = 1
+
+[node name="PlainsPreview" type="TextureRect" parent="LevelSelect/LevelPreview/PreviewPictures"]
+visible = false
+layout_mode = 1
+offset_right = 720.0
+offset_bottom = 480.0
+texture = ExtResource("15_2rsun")
+expand_mode = 1
+
+[node name="SpacePreview" type="TextureRect" parent="LevelSelect/LevelPreview/PreviewPictures"]
+visible = false
+offset_right = 720.0
+offset_bottom = 480.0
+texture = ExtResource("16_6xp7s")
+expand_mode = 1
+
+[node name="LevelName" type="Label" parent="LevelSelect/LevelPreview"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -211.0
+offset_top = 20.0
+offset_right = 211.0
+offset_bottom = 71.0
+grow_horizontal = 2
+text = "NEON SPACE"
+label_settings = SubResource("LabelSettings_auncy")
+horizontal_alignment = 1
+
+[node name="Difficulty" type="Label" parent="LevelSelect/LevelPreview"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -139.0
+offset_top = 90.0
+offset_right = 139.0
+offset_bottom = 122.0
+grow_horizontal = 2
+text = "Difficulty: Hard"
+label_settings = SubResource("LabelSettings_hw3o6")
+horizontal_alignment = 1
+
+[node name="LeftArrow" type="Button" parent="LevelSelect"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 60.0
+offset_top = -109.0
+offset_right = 167.0
+offset_bottom = 33.0
+grow_vertical = 2
+focus_mode = 0
+theme = SubResource("Theme_pa0vv")
+theme_type_variation = &"FlatButton"
+text = "<"
+
+[node name="RightArrow" type="Button" parent="LevelSelect"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -157.0
+offset_top = -109.0
+offset_right = -50.0
+offset_bottom = 33.0
+grow_horizontal = 0
+grow_vertical = 2
+focus_mode = 0
+theme = SubResource("Theme_jsyiv")
+theme_type_variation = &"FlatButton"
+text = ">"
+
+[node name="PlayLevelButton" type="Button" parent="LevelSelect"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -235.5
+offset_top = -93.0
+offset_right = 235.5
+offset_bottom = -18.0
+grow_horizontal = 2
+grow_vertical = 0
+focus_mode = 0
+theme = SubResource("Theme_hn8qe")
+theme_type_variation = &"FlatButton"
+text = "Play Level"
+
+[node name="BackButton" type="Button" parent="LevelSelect"]
+layout_mode = 1
+offset_left = 10.0
+offset_top = 10.0
+offset_right = 175.0
+offset_bottom = 69.0
+focus_mode = 0
+theme = SubResource("Theme_n573s")
+theme_type_variation = &"FlatButton"
+text = "Back"
