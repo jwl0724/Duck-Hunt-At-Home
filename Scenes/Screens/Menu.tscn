@@ -1,25 +1,14 @@
-[gd_scene load_steps=13 format=3 uid="uid://bbk2wh3ddq1rx"]
+[gd_scene load_steps=42 format=3 uid="uid://bbk2wh3ddq1rx"]
 
 [ext_resource type="Script" path="res://Scripts/ScreenHandlers/MenuHandler.cs" id="1_hxx3p"]
 [ext_resource type="Texture2D" uid="uid://dh8hwu3bkssd2" path="res://Assets/Images/LogoFrames/StudioLogo1.png" id="3_ct1nv"]
 [ext_resource type="Texture2D" uid="uid://dnku35t11m7tn" path="res://Assets/Images/LogoFrames/StudioLogo2.png" id="4_gthfs"]
 [ext_resource type="Texture2D" uid="uid://ol5yb7t34tsa" path="res://Assets/Images/LogoFrames/StudioLogo3.png" id="5_q5htc"]
+[ext_resource type="Script" path="res://Scripts/ScreenHandlers/MainMenuBackgroundHandler.cs" id="6_pn0og"]
+[ext_resource type="Shader" path="res://Assets/Shaders/Sun.gdshader" id="6_ukapw"]
 [ext_resource type="Texture2D" uid="uid://otktih7ajnxo" path="res://Assets/Images/LogoFrames/StudioLogo4.png" id="6_x3hln"]
-
-[sub_resource type="Animation" id="Animation_e02xl"]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("BootUp/Logo:modulate")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Color(1, 1, 1, 0)]
-}
+[ext_resource type="PackedScene" uid="uid://dskgymvjnsfn3" path="res://Scenes/Models/DuckModel.tscn" id="7_4b8og"]
+[ext_resource type="Shader" path="res://Assets/Shaders/Water.gdshader" id="8_0qod2"]
 
 [sub_resource type="Animation" id="Animation_bpgd3"]
 resource_name = "Logo"
@@ -35,6 +24,21 @@ tracks/0/keys = {
 "transitions": PackedFloat32Array(1, 1, 1, 1),
 "update": 0,
 "values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_e02xl"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("BootUp/Logo:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_yxaln"]
@@ -75,6 +79,319 @@ animations = [{
 "name": &"default",
 "speed": 10.0
 }]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_38v5g"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_na355"]
+seamless = true
+noise = SubResource("FastNoiseLite_38v5g")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_4uu42"]
+render_priority = 0
+shader = ExtResource("6_ukapw")
+shader_parameter/color_top = Color(0.909804, 0.239216, 0.615686, 1)
+shader_parameter/color_bottom = Color(0.863433, 0.738195, 0.243925, 1)
+shader_parameter/intensity = 4.0
+shader_parameter/position = 0.0
+shader_parameter/blend = 0.716
+shader_parameter/angle = 90.0
+shader_parameter/line_height_min = 0.05
+shader_parameter/line_height_max = 0.1
+shader_parameter/num_lines = 8
+shader_parameter/speed = 0.2
+shader_parameter/vertical_origin = 0.0
+shader_parameter/texture_albedo = SubResource("NoiseTexture2D_na355")
+
+[sub_resource type="SphereMesh" id="SphereMesh_d4p8r"]
+material = SubResource("ShaderMaterial_4uu42")
+radius = 25.0
+height = 50.0
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_m0w7f"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_jdrul"]
+as_normal_map = true
+noise = SubResource("FastNoiseLite_m0w7f")
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_6qwch"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_ejuce"]
+seamless = true
+as_normal_map = true
+noise = SubResource("FastNoiseLite_6qwch")
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_m74f0"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_wt53l"]
+seamless = true
+as_normal_map = true
+noise = SubResource("FastNoiseLite_m74f0")
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_uv8q5"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_fr67x"]
+as_normal_map = true
+noise = SubResource("FastNoiseLite_uv8q5")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_mp133"]
+render_priority = 0
+shader = ExtResource("8_0qod2")
+shader_parameter/depth_fade_distance = 1.0
+shader_parameter/absorbance = 5.0
+shader_parameter/shallow_color = Color(0.22, 0.66, 1, 1)
+shader_parameter/deep_color = Color(7.21961e-08, 0.235203, 0.4255, 1)
+shader_parameter/foam_amount = 0.2
+shader_parameter/foam_color = Color(1, 1, 1, 1)
+shader_parameter/roughness = 0.05
+shader_parameter/wave_scale = 6.0
+shader_parameter/height_scale = 0.35
+shader_parameter/wave_dir1 = Vector2(5, 0)
+shader_parameter/wave_dir2 = Vector2(0, 8)
+shader_parameter/wave_speed = 0.015
+shader_parameter/foam_noise = SubResource("NoiseTexture2D_jdrul")
+shader_parameter/wave_texture = SubResource("NoiseTexture2D_fr67x")
+shader_parameter/normal1 = SubResource("NoiseTexture2D_ejuce")
+shader_parameter/normal2 = SubResource("NoiseTexture2D_wt53l")
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_r8s2p"]
+material = SubResource("ShaderMaterial_mp133")
+size = Vector2(200, 200)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_sl4cr"]
+noise_type = 3
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_xuhbh"]
+seamless = true
+noise = SubResource("FastNoiseLite_sl4cr")
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_pe75b"]
+sky_top_color = Color(0.0602986, 0.409154, 0.542314, 1)
+sky_horizon_color = Color(0.780165, 0.290297, 0, 1)
+sky_energy_multiplier = 2.0
+sky_cover = SubResource("NoiseTexture2D_xuhbh")
+sky_cover_modulate = Color(0.672531, 0.15332, 0.181599, 1)
+ground_bottom_color = Color(0, 0.235294, 0.427451, 1)
+ground_horizon_color = Color(0.780392, 0.290196, 0, 1)
+ground_curve = 1.00427
+ground_energy_multiplier = 2.0
+
+[sub_resource type="Sky" id="Sky_08l82"]
+sky_material = SubResource("ProceduralSkyMaterial_pe75b")
+
+[sub_resource type="Environment" id="Environment_thck6"]
+background_mode = 2
+sky = SubResource("Sky_08l82")
+
+[sub_resource type="Animation" id="Animation_j2rcn"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Background/Camera:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(-1.98235, 1.13801, -1.68706)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Background/Camera:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, -2.27924, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Background/Camera:fov")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [75.0]
+}
+
+[sub_resource type="Animation" id="Animation_2oavg"]
+resource_name = "CameraLoop"
+length = 16.0
+step = 2.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Background/Camera:position")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 2, 4, 6, 8, 10, 12, 14, 16),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector3(-1.414, 1.138, -1.414), Vector3(0, 1.138, -2), Vector3(1.414, 1.138, -1.414), Vector3(2, 1.138, 0), Vector3(1.414, 1.138, 1.414), Vector3(0, 1.138, 2), Vector3(-1.414, 1.138, 1.414), Vector3(-2, 1.138, 0), Vector3(-1.414, 1.138, -1.414)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Background/Camera:rotation")
+tracks/1/interp = 2
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 2, 6, 10, 14, 16),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector3(0, -2.35619, 0), Vector3(0, -3.14159, 0), Vector3(0, -4.71239, 0), Vector3(0, -6.28319, 0), Vector3(0, -7.85398, 0), Vector3(0, -8.63938, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Background/Camera:fov")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [75.0]
+}
+
+[sub_resource type="Animation" id="Animation_lmke0"]
+resource_name = "CloseUp"
+length = 7.0
+step = 1.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Background/Camera:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1, 2, 3, 4, 5, 6),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [Vector3(-0.626946, 0.727409, -0.927661), Vector3(0.576475, 0.727409, -0.927661), Vector3(0, 0.336606, -1.25018), Vector3(0, 0.419026, 0.955754), Vector3(-1.29326, 0.419026, -0.361027), Vector3(-0.77065, 0.521264, -0.537872), Vector3(0.154428, 2.14752, 0.972859)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Background/Camera:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 1, 2, 3, 4, 5, 6),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [Vector3(0, -2.35619, 0), Vector3(0, 2.34834, 0), Vector3(0.487087, -3.14159, 4.63036e-08), Vector3(0.244067, 0, 0), Vector3(0.244067, -1.84289, 0), Vector3(0.497685, -2.17818, -0.175517), Vector3(0.593395, -2.25398, -0.0125234)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Background/Camera:fov")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 6),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [75.0, 16.6]
+}
+
+[sub_resource type="Animation" id="Animation_as4n6"]
+resource_name = "Aerial"
+length = 10.0
+step = 1.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Background/Camera:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 10),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(0, 6.064, -45), Vector3(0, 6.064, 3)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Background/Camera:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(-0.844739, 3.14159, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Background/Camera:fov")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [75.0]
+}
+
+[sub_resource type="Animation" id="Animation_8afhi"]
+resource_name = "SkimSurface"
+length = 5.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Background/Camera:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, -3.14159, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Background/Camera:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(0, 0.8, -20), Vector3(0, 0.8, -1.34267)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Background/Camera:fov")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [75.0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_4lwbx"]
+_data = {
+"Aerial": SubResource("Animation_as4n6"),
+"Circle": SubResource("Animation_2oavg"),
+"CloseUp": SubResource("Animation_lmke0"),
+"RESET": SubResource("Animation_j2rcn"),
+"SkimSurface": SubResource("Animation_8afhi")
+}
 
 [node name="Menu" type="Control" node_paths=PackedStringArray("BootUpScreen", "MainMenuScreen", "LevelSelectScreen")]
 layout_mode = 3
@@ -140,6 +457,40 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="Background" type="Node3D" parent="MainMenu"]
+script = ExtResource("6_pn0og")
+
+[node name="Environment" type="Node3D" parent="MainMenu/Background"]
+process_mode = 4
+metadata/_edit_group_ = true
+metadata/_edit_lock_ = true
+
+[node name="Sun" type="MeshInstance3D" parent="MainMenu/Background/Environment"]
+transform = Transform3D(0.629034, -0.410093, 0.660409, -0.0872338, 0.806931, 0.584168, -0.772468, -0.425071, 0.471813, 320.783, 280.751, 267.534)
+mesh = SubResource("SphereMesh_d4p8r")
+skeleton = NodePath("")
+
+[node name="Duck" parent="MainMenu/Background/Environment" instance=ExtResource("7_4b8og")]
+process_mode = 4
+transform = Transform3D(-0.85, 0, -2.1549e-06, 0, 0.85, 0, 2.1549e-06, 0, -0.85, 0, 0, 0)
+skeleton = NodePath("../..")
+
+[node name="Water" type="MeshInstance3D" parent="MainMenu/Background/Environment"]
+mesh = SubResource("PlaneMesh_r8s2p")
+skeleton = NodePath("../..")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="MainMenu/Background/Environment"]
+environment = SubResource("Environment_thck6")
+
+[node name="Camera" type="Camera3D" parent="MainMenu/Background"]
+transform = Transform3D(-0.650655, 0, -0.759373, 0, 1, 0, 0.759373, 0, -0.650655, -1.98235, 1.13801, -1.68706)
+
+[node name="Animation" type="AnimationPlayer" parent="MainMenu/Background"]
+root_node = NodePath("../..")
+libraries = {
+"": SubResource("AnimationLibrary_4lwbx")
+}
 
 [node name="LevelSelect" type="Control" parent="."]
 visible = false
