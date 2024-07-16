@@ -31,6 +31,7 @@ public partial class EnemyVisual : MeshInstance3D {
 	}
 
 	public override void _Ready() {
+		if (ProcessMode == ProcessModeEnum.Disabled) return;
 		animator = GetNode<AnimationPlayer>("Animation");
 
 		// connect signals
