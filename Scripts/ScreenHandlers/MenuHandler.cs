@@ -13,6 +13,7 @@ public partial class MenuHandler : Control {
 	public override void _Ready() {
 		MainMenuScreen.Connect("LeaveMainMenu", Callable.From(() => TransitionScreen(MenuScreen.LevelSelect)));
 		LevelSelectScreen.Connect("SelectedLevel", Callable.From(() => TransitionScreen(MenuScreen.InGame)));
+		LevelSelectScreen.Connect("BackToMainMenu", Callable.From(() => TransitionScreen(MenuScreen.MainMenu)));
 		RunBootUp();
 	}
 
