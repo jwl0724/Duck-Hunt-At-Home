@@ -11,13 +11,12 @@ public partial class MenuHandler : Control {
 	public MenuScreen CurrentScreen { get; private set; } = MenuScreen.BootUp;
 
 	public override void _Ready() {
+		MainMenuScreen.Connect("LeaveMainMenu", Callable.From(() => TransitionScreen(MenuScreen.LevelSelect)));
+		LevelSelectScreen.Connect("SelectedLevel", Callable.From(() => TransitionScreen(MenuScreen.InGame)));
 		RunBootUp();
 	}
 
-	public override void _Process(double delta) {
-	}
-
-	public void TransitionScreen(MenuScreen screen) {
+	private void TransitionScreen(MenuScreen screen) {
 		CurrentScreen = screen;
 		foreach (Control menu in GetChildren()) {
 			if (menu.Name == Enum.GetName(CurrentScreen)) menu.Visible = true;
@@ -28,16 +27,7 @@ public partial class MenuHandler : Control {
 	private void RunBootUp() {
 		TransitionScreen(MenuScreen.BootUp);
 		AnimationPlayer animator = BootUpScreen.GetNode<AnimationPlayer>("Animation");
-		animator.Connect("animation_finished", Callable.From((StringName name) => RunMainMenu()));
+		animator.Connect("animation_finished", Callable.From((StringName name) => TransitionScreen(MenuScreen.MainMenu)));
 		animator.Play("LogoIntro");
-	}
-
-	private void RunMainMenu() {
-		TransitionScreen(MenuScreen.MainMenu);
-		GD.Print("Main menu here");
-	}
-
-	private void RunLevelSelect() {
-		TransitionScreen(MenuScreen.LevelSelect);
 	}
 }
