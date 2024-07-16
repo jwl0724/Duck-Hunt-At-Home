@@ -18,14 +18,10 @@ public partial class LevelSelectHandler : Control {
 		// connect buttons
 		GetNode<Button>("LeftArrow").Connect("button_up", Callable.From(() => CycleLevel(-1)));
 		GetNode<Button>("RightArrow").Connect("button_up", Callable.From(() => CycleLevel(1)));
-		GetNode<Button>("PlayLevelButton").Connect("button_up", Callable.From(() => OnSelectedLevel()));
+		GetNode<Button>("PlayLevelButton").Connect("button_up", Callable.From(() => EmitSignal(SignalName.SelectedLevel, levelIndex)));
 		GetNode<Button>("BackButton").Connect("button_up", Callable.From(() => EmitSignal(SignalName.BackToMainMenu)));
 
 		CycleLevel(0); // load an image on first load up
-	}
-
-	private void OnSelectedLevel() {
-		EmitSignal(SignalName.SelectedLevel);
 	}
 
 	private void CycleLevel(int indexShift) {
