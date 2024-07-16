@@ -1,13 +1,9 @@
-[gd_scene load_steps=61 format=3 uid="uid://bbk2wh3ddq1rx"]
+[gd_scene load_steps=50 format=3 uid="uid://bbk2wh3ddq1rx"]
 
 [ext_resource type="Script" path="res://Scripts/ScreenHandlers/MenuHandler.cs" id="1_hxx3p"]
-[ext_resource type="Texture2D" uid="uid://dh8hwu3bkssd2" path="res://Assets/Images/LogoFrames/StudioLogo1.png" id="3_ct1nv"]
-[ext_resource type="Texture2D" uid="uid://dnku35t11m7tn" path="res://Assets/Images/LogoFrames/StudioLogo2.png" id="4_gthfs"]
-[ext_resource type="Texture2D" uid="uid://ol5yb7t34tsa" path="res://Assets/Images/LogoFrames/StudioLogo3.png" id="5_q5htc"]
 [ext_resource type="Script" path="res://Scripts/ScreenHandlers/MainMenuHandler.cs" id="6_ad7gf"]
 [ext_resource type="Script" path="res://Scripts/ScreenHandlers/MainMenuBackgroundHandler.cs" id="6_pn0og"]
 [ext_resource type="Shader" path="res://Assets/Shaders/Sun.gdshader" id="6_ukapw"]
-[ext_resource type="Texture2D" uid="uid://otktih7ajnxo" path="res://Assets/Images/LogoFrames/StudioLogo4.png" id="6_x3hln"]
 [ext_resource type="PackedScene" uid="uid://dskgymvjnsfn3" path="res://Scenes/Models/DuckModel.tscn" id="7_4b8og"]
 [ext_resource type="Shader" path="res://Assets/Shaders/Water.gdshader" id="8_0qod2"]
 [ext_resource type="FontFile" uid="uid://1tlgwild87np" path="res://Assets/Fonts/fs-a-pixel-away.ttf" id="11_b8xsk"]
@@ -16,76 +12,6 @@
 [ext_resource type="Texture2D" uid="uid://frujlwpgyhp1" path="res://Assets/Images/LevelPreviews/CityLevelPreview.png" id="14_kejgs"]
 [ext_resource type="Texture2D" uid="uid://cb0cxdnrrqx2t" path="res://Assets/Images/LevelPreviews/PlainsLevelPreview.png" id="15_2rsun"]
 [ext_resource type="Texture2D" uid="uid://ctgrhxlgwp42x" path="res://Assets/Images/LevelPreviews/SpaceLevelPreview.png" id="16_6xp7s"]
-
-[sub_resource type="Animation" id="Animation_bpgd3"]
-resource_name = "Logo"
-length = 3.0
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("BootUp/Logo:modulate")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 1, 2, 3),
-"transitions": PackedFloat32Array(1, 1, 1, 1),
-"update": 0,
-"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
-}
-
-[sub_resource type="Animation" id="Animation_e02xl"]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("BootUp/Logo:modulate")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Color(1, 1, 1, 0)]
-}
-
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_yxaln"]
-_data = {
-"LogoIntro": SubResource("Animation_bpgd3"),
-"RESET": SubResource("Animation_e02xl")
-}
-
-[sub_resource type="SphereMesh" id="SphereMesh_otjrf"]
-radius = 155.0
-height = 280.0
-radial_segments = 5
-rings = 1
-
-[sub_resource type="Gradient" id="Gradient_x3htk"]
-offsets = PackedFloat32Array(0)
-colors = PackedColorArray(0.898039, 0.435294, 0.0901961, 1)
-
-[sub_resource type="GradientTexture1D" id="GradientTexture1D_bnlxw"]
-gradient = SubResource("Gradient_x3htk")
-
-[sub_resource type="SpriteFrames" id="SpriteFrames_ycmhe"]
-animations = [{
-"frames": [{
-"duration": 1.0,
-"texture": ExtResource("3_ct1nv")
-}, {
-"duration": 1.0,
-"texture": ExtResource("4_gthfs")
-}, {
-"duration": 1.0,
-"texture": ExtResource("5_q5htc")
-}, {
-"duration": 1.0,
-"texture": ExtResource("6_x3hln")
-}],
-"loop": true,
-"name": &"default",
-"speed": 10.0
-}]
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_38v5g"]
 
@@ -505,7 +431,7 @@ Button/colors/font_pressed_color = Color(0.393086, 0.393086, 0.393085, 1)
 Button/constants/outline_size = 15
 Button/styles/pressed = SubResource("StyleBoxFlat_setk4")
 
-[node name="Menu" type="Control" node_paths=PackedStringArray("BootUpScreen", "MainMenuScreen", "LevelSelectScreen")]
+[node name="Menu" type="Control" node_paths=PackedStringArray("MainMenuScreen", "LevelSelectScreen")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -513,53 +439,8 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_hxx3p")
-BootUpScreen = NodePath("BootUp")
 MainMenuScreen = NodePath("MainMenu")
 LevelSelectScreen = NodePath("LevelSelect")
-
-[node name="BootUp" type="Control" parent="."]
-visible = false
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="Background" type="ColorRect" parent="BootUp"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-color = Color(0.0352941, 0.0352941, 0.0352941, 1)
-
-[node name="Animation" type="AnimationPlayer" parent="BootUp"]
-root_node = NodePath("../..")
-libraries = {
-"": SubResource("AnimationLibrary_yxaln")
-}
-
-[node name="Logo" type="Control" parent="BootUp"]
-modulate = Color(1, 1, 1, 0)
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="LogoBackground" type="MeshInstance2D" parent="BootUp/Logo"]
-mesh = SubResource("SphereMesh_otjrf")
-texture = SubResource("GradientTexture1D_bnlxw")
-
-[node name="LogoSprite" type="AnimatedSprite2D" parent="BootUp/Logo"]
-sprite_frames = SubResource("SpriteFrames_ycmhe")
-autoplay = "default"
-frame_progress = 0.23442
 
 [node name="MainMenu" type="Control" parent="." node_paths=PackedStringArray("IntroScreen", "MenuScreen")]
 visible = false
@@ -767,6 +648,7 @@ grow_vertical = 2
 
 [node name="CityPreview" type="TextureRect" parent="LevelSelect/LevelPreview/PreviewPictures"]
 visible = false
+layout_mode = 0
 offset_right = 720.0
 offset_bottom = 480.0
 texture = ExtResource("14_kejgs")
@@ -782,6 +664,7 @@ expand_mode = 1
 
 [node name="SpacePreview" type="TextureRect" parent="LevelSelect/LevelPreview/PreviewPictures"]
 visible = false
+layout_mode = 0
 offset_right = 720.0
 offset_bottom = 480.0
 texture = ExtResource("16_6xp7s")
