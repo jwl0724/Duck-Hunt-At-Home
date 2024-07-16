@@ -1,4 +1,4 @@
-[gd_scene load_steps=50 format=3 uid="uid://bbk2wh3ddq1rx"]
+[gd_scene load_steps=51 format=3 uid="uid://bbk2wh3ddq1rx"]
 
 [ext_resource type="Script" path="res://Scripts/ScreenHandlers/MenuHandler.cs" id="1_hxx3p"]
 [ext_resource type="Script" path="res://Scripts/ScreenHandlers/MainMenuHandler.cs" id="6_ad7gf"]
@@ -431,6 +431,12 @@ Button/colors/font_pressed_color = Color(0.393086, 0.393086, 0.393085, 1)
 Button/constants/outline_size = 15
 Button/styles/pressed = SubResource("StyleBoxFlat_setk4")
 
+[sub_resource type="LabelSettings" id="LabelSettings_v5dw7"]
+font = ExtResource("11_b8xsk")
+font_size = 64
+outline_size = 32
+outline_color = Color(0, 0, 0, 1)
+
 [node name="Menu" type="Control" node_paths=PackedStringArray("MainMenuScreen", "LevelSelectScreen")]
 layout_mode = 3
 anchors_preset = 15
@@ -595,7 +601,6 @@ text = "DUCK HUNT AT HOME"
 label_settings = SubResource("LabelSettings_mny6e")
 
 [node name="LevelSelect" type="Control" parent="."]
-visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -759,3 +764,37 @@ focus_mode = 0
 theme = SubResource("Theme_n573s")
 theme_type_variation = &"FlatButton"
 text = "Back"
+
+[node name="LoadingScreen" type="Control" parent="LevelSelect"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="LevelImage" type="TextureRect" parent="LevelSelect/LoadingScreen"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("14_kejgs")
+
+[node name="LoadingMessage" type="Label" parent="LevelSelect/LoadingScreen"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -356.0
+offset_top = -33.5
+offset_right = 356.0
+offset_bottom = 33.5
+grow_horizontal = 2
+grow_vertical = 2
+text = "NOW LOADING..."
+label_settings = SubResource("LabelSettings_v5dw7")
