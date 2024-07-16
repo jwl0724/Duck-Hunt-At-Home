@@ -112,13 +112,13 @@ volumetric_fog_density = 0.0
 volumetric_fog_albedo = Color(0.501407, 0.501406, 0.501406, 1)
 volumetric_fog_length = 250.0
 
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_38v5g"]
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_5ccxf"]
 
 [sub_resource type="NoiseTexture2D" id="NoiseTexture2D_pt3d1"]
 seamless = true
-noise = SubResource("FastNoiseLite_38v5g")
+noise = SubResource("FastNoiseLite_5ccxf")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_4uu42"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_xf112"]
 render_priority = 0
 shader = ExtResource("12_6oev4")
 shader_parameter/color_top = Color(0.909804, 0.239216, 0.615686, 1)
@@ -135,7 +135,7 @@ shader_parameter/vertical_origin = 0.0
 shader_parameter/texture_albedo = SubResource("NoiseTexture2D_pt3d1")
 
 [sub_resource type="SphereMesh" id="SphereMesh_8mdyx"]
-material = SubResource("ShaderMaterial_4uu42")
+material = SubResource("ShaderMaterial_xf112")
 radius = 25.0
 height = 50.0
 
