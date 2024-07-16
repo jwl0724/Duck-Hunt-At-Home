@@ -13,15 +13,36 @@ public partial class LevelSelectHandler : Control {
 	private string[] levelNames = {"Duck City", "Misty Plains", "Neon Space"};
 	private int levelIndex = 0;
 	private int totalLevels = Enum.GetNames(typeof(Level)).Length;
+	private CompressedTexture2D cityImage = ResourceLoader.Load<CompressedTexture2D>("res://Assets/Images/LevelPreviews/CityLevelPreview.png");
+	private CompressedTexture2D plainsImage = ResourceLoader.Load<CompressedTexture2D>("res://Assets/Images/LevelPreviews/PlainsLevelPreview.png");
+	private CompressedTexture2D spaceImage = ResourceLoader.Load<CompressedTexture2D>("res://Assets/Images/LevelPreviews/SpaceLevelPreview.png");
 
 	public override void _Ready() {
 		// connect buttons
 		GetNode<Button>("LeftArrow").Connect("button_up", Callable.From(() => CycleLevel(-1)));
 		GetNode<Button>("RightArrow").Connect("button_up", Callable.From(() => CycleLevel(1)));
-		GetNode<Button>("PlayLevelButton").Connect("button_up", Callable.From(() => EmitSignal(SignalName.SelectedLevel, levelIndex)));
+		GetNode<Button>("PlayLevelButton").Connect("button_up", Callable.From(() => OnSelectedLevel()));
 		GetNode<Button>("BackButton").Connect("button_up", Callable.From(() => EmitSignal(SignalName.BackToMainMenu)));
+		GetNode<Control>("LoadingScreen").Connect("draw", Callable.From(() => OnLoadingScreenDraw()));
 
 		CycleLevel(0); // load an image on first load up
+	}
+
+	private void OnSelectedLevel() {
+		Control loadingScreen = GetNode<Control>("LoadingScreen");
+		TextureRect loadImage = loadingScreen.GetNode<TextureRect>("LevelImage");
+		
+		if (levelIndex == 0) loadImage.Texture = cityImage;
+		else if (levelIndex == 1) loadImage.Texture = plainsImage;
+		else if (levelIndex == 2) loadImage.Texture = spaceImage;
+		
+		loadingScreen.Visible = true;
+	}
+
+	async private void OnLoadingScreenDraw() {
+		await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame); // wait for frame before draw frame to finish
+		await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame); // wait for draw frame to finish
+		EmitSignal(SignalName.SelectedLevel, levelIndex);
 	}
 
 	private void CycleLevel(int indexShift) {
