@@ -1,14 +1,17 @@
-[gd_scene load_steps=42 format=3 uid="uid://bbk2wh3ddq1rx"]
+[gd_scene load_steps=52 format=3 uid="uid://bbk2wh3ddq1rx"]
 
 [ext_resource type="Script" path="res://Scripts/ScreenHandlers/MenuHandler.cs" id="1_hxx3p"]
 [ext_resource type="Texture2D" uid="uid://dh8hwu3bkssd2" path="res://Assets/Images/LogoFrames/StudioLogo1.png" id="3_ct1nv"]
 [ext_resource type="Texture2D" uid="uid://dnku35t11m7tn" path="res://Assets/Images/LogoFrames/StudioLogo2.png" id="4_gthfs"]
 [ext_resource type="Texture2D" uid="uid://ol5yb7t34tsa" path="res://Assets/Images/LogoFrames/StudioLogo3.png" id="5_q5htc"]
+[ext_resource type="Script" path="res://Scripts/ScreenHandlers/MainMenuHandler.cs" id="6_ad7gf"]
 [ext_resource type="Script" path="res://Scripts/ScreenHandlers/MainMenuBackgroundHandler.cs" id="6_pn0og"]
 [ext_resource type="Shader" path="res://Assets/Shaders/Sun.gdshader" id="6_ukapw"]
 [ext_resource type="Texture2D" uid="uid://otktih7ajnxo" path="res://Assets/Images/LogoFrames/StudioLogo4.png" id="6_x3hln"]
 [ext_resource type="PackedScene" uid="uid://dskgymvjnsfn3" path="res://Scenes/Models/DuckModel.tscn" id="7_4b8og"]
 [ext_resource type="Shader" path="res://Assets/Shaders/Water.gdshader" id="8_0qod2"]
+[ext_resource type="FontFile" uid="uid://1tlgwild87np" path="res://Assets/Fonts/fs-a-pixel-away.ttf" id="11_b8xsk"]
+[ext_resource type="Script" path="res://Scripts/ScreenHandlers/LevelSelectHandler.cs" id="12_atf7j"]
 
 [sub_resource type="Animation" id="Animation_bpgd3"]
 resource_name = "Logo"
@@ -182,8 +185,10 @@ sky_material = SubResource("ProceduralSkyMaterial_pe75b")
 background_mode = 2
 sky = SubResource("Sky_08l82")
 
-[sub_resource type="Animation" id="Animation_j2rcn"]
-length = 0.001
+[sub_resource type="Animation" id="Animation_as4n6"]
+resource_name = "Aerial"
+length = 10.0
+step = 1.0
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -191,10 +196,10 @@ tracks/0/path = NodePath("Background/Camera:position")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
+"times": PackedFloat32Array(0, 10),
+"transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [Vector3(-1.98235, 1.13801, -1.68706)]
+"values": [Vector3(0, 6.064, -45), Vector3(0, 6.064, 3)]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -206,7 +211,7 @@ tracks/1/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector3(0, -2.27924, 0)]
+"values": [Vector3(-0.844739, 3.14159, 0)]
 }
 tracks/2/type = "value"
 tracks/2/imported = false
@@ -303,10 +308,8 @@ tracks/2/keys = {
 "values": [75.0, 16.6]
 }
 
-[sub_resource type="Animation" id="Animation_as4n6"]
-resource_name = "Aerial"
-length = 10.0
-step = 1.0
+[sub_resource type="Animation" id="Animation_j2rcn"]
+length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -314,10 +317,10 @@ tracks/0/path = NodePath("Background/Camera:position")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 10),
-"transitions": PackedFloat32Array(1, 1),
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector3(0, 6.064, -45), Vector3(0, 6.064, 3)]
+"values": [Vector3(-1.98235, 1.13801, -1.68706)]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -329,7 +332,7 @@ tracks/1/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector3(-0.844739, 3.14159, 0)]
+"values": [Vector3(0, -2.27924, 0)]
 }
 tracks/2/type = "value"
 tracks/2/imported = false
@@ -393,6 +396,69 @@ _data = {
 "SkimSurface": SubResource("Animation_8afhi")
 }
 
+[sub_resource type="LabelSettings" id="LabelSettings_lkftj"]
+line_spacing = 20.0
+font = ExtResource("11_b8xsk")
+font_size = 38
+outline_size = 15
+outline_color = Color(0, 0, 0, 1)
+
+[sub_resource type="Animation" id="Animation_iir5i"]
+resource_name = "FadeIn"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("BackgroundDim:color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(0, 0, 0, 0), Color(0, 0, 0, 0.709804)]
+}
+
+[sub_resource type="Animation" id="Animation_u1hjn"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("BackgroundDim:color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(0.454902, 0.454902, 0.454902, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_2xo72"]
+_data = {
+"FadeIn": SubResource("Animation_iir5i"),
+"RESET": SubResource("Animation_u1hjn")
+}
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_setk4"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+
+[sub_resource type="Theme" id="Theme_hn8qe"]
+default_font = ExtResource("11_b8xsk")
+default_font_size = 64
+Button/colors/font_color = Color(0.875, 0.875, 0.875, 1)
+Button/colors/font_hover_color = Color(0.577008, 0.577008, 0.577008, 1)
+Button/colors/font_outline_color = Color(0, 0, 0, 1)
+Button/colors/font_pressed_color = Color(0.393086, 0.393086, 0.393085, 1)
+Button/constants/outline_size = 15
+Button/styles/pressed = SubResource("StyleBoxFlat_setk4")
+
+[sub_resource type="LabelSettings" id="LabelSettings_mny6e"]
+font = ExtResource("11_b8xsk")
+font_size = 64
+font_color = Color(0.89843, 0.898348, 3.85046e-07, 1)
+outline_size = 15
+outline_color = Color(0, 0, 0, 1)
+
 [node name="Menu" type="Control" node_paths=PackedStringArray("BootUpScreen", "MainMenuScreen", "LevelSelectScreen")]
 layout_mode = 3
 anchors_preset = 15
@@ -449,7 +515,7 @@ sprite_frames = SubResource("SpriteFrames_ycmhe")
 autoplay = "default"
 frame_progress = 0.23442
 
-[node name="MainMenu" type="Control" parent="."]
+[node name="MainMenu" type="Control" parent="." node_paths=PackedStringArray("IntroScreen", "MenuScreen")]
 visible = false
 layout_mode = 1
 anchors_preset = 15
@@ -457,6 +523,9 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("6_ad7gf")
+IntroScreen = NodePath("Intro")
+MenuScreen = NodePath("Menu")
 
 [node name="Background" type="Node3D" parent="MainMenu"]
 script = ExtResource("6_pn0og")
@@ -484,13 +553,119 @@ skeleton = NodePath("../..")
 environment = SubResource("Environment_thck6")
 
 [node name="Camera" type="Camera3D" parent="MainMenu/Background"]
-transform = Transform3D(-0.650655, 0, -0.759373, 0, 1, 0, 0.759373, 0, -0.650655, -1.98235, 1.13801, -1.68706)
+transform = Transform3D(-0.650652, 0, -0.759375, 0, 1, 0, 0.759375, 0, -0.650652, -1.98235, 1.13801, -1.68706)
 
 [node name="Animation" type="AnimationPlayer" parent="MainMenu/Background"]
 root_node = NodePath("../..")
 libraries = {
 "": SubResource("AnimationLibrary_4lwbx")
 }
+
+[node name="Intro" type="Control" parent="MainMenu"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="StartMessage" type="Label" parent="MainMenu/Intro"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -206.0
+offset_top = -98.0
+offset_right = 206.0
+offset_bottom = -58.0
+grow_horizontal = 2
+grow_vertical = 0
+text = "Press To Start"
+label_settings = SubResource("LabelSettings_lkftj")
+
+[node name="FlickerTimer" type="Timer" parent="MainMenu/Intro"]
+wait_time = 0.75
+autostart = true
+
+[node name="Menu" type="Control" parent="MainMenu"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Fade" type="AnimationPlayer" parent="MainMenu/Menu"]
+libraries = {
+"": SubResource("AnimationLibrary_2xo72")
+}
+
+[node name="BackgroundDim" type="ColorRect" parent="MainMenu/Menu"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.454902, 0.454902, 0.454902, 0)
+metadata/_edit_lock_ = true
+
+[node name="Play" type="Button" parent="MainMenu/Menu"]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -99.5
+offset_top = -37.5
+offset_right = 99.5
+offset_bottom = 37.5
+grow_horizontal = 2
+grow_vertical = 2
+focus_mode = 0
+theme = SubResource("Theme_hn8qe")
+theme_type_variation = &"FlatButton"
+disabled = true
+text = "Play"
+
+[node name="Quit" type="Button" parent="MainMenu/Menu"]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -102.5
+offset_top = 101.0
+offset_right = 102.5
+offset_bottom = 176.0
+grow_horizontal = 2
+grow_vertical = 2
+focus_mode = 0
+theme = SubResource("Theme_hn8qe")
+theme_type_variation = &"FlatButton"
+disabled = true
+text = "Quit"
+
+[node name="Title" type="Label" parent="MainMenu"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -458.5
+offset_top = 60.0
+offset_right = 458.5
+offset_bottom = 127.0
+grow_horizontal = 2
+text = "DUCK HUNT AT HOME"
+label_settings = SubResource("LabelSettings_mny6e")
 
 [node name="LevelSelect" type="Control" parent="."]
 visible = false
@@ -500,3 +675,4 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("12_atf7j")
