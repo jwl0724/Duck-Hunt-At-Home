@@ -3,7 +3,7 @@ using System;
 using System.Diagnostics;
 
 public partial class MenuHandler : Control {
-	public enum MenuScreen { MainMenu, LevelSelect, InGame }
+	public enum MenuScreen { MainMenu, LevelSelect }
 	
 	[Export] Control MainMenuScreen;
 	[Export] Control LevelSelectScreen;
@@ -20,9 +20,16 @@ public partial class MenuHandler : Control {
 	}
 
 	private void StartGame(int levelIndex) {
-		if (levelIndex == 0) GetTree().ChangeSceneToFile("res://Scenes/Screens/CityLevel.tscn");
-		else if (levelIndex == 1) GetTree().ChangeSceneToFile("res://Scenes/Screens/PlainsLevel.tscn");
-		else if (levelIndex == 2) GetTree().ChangeSceneToFile("res://Scenes/Screens/SpaceLevel.tscn");
+		if (levelIndex == 0) {
+			GetTree().ChangeSceneToFile("res://Scenes/Screens/CityLevel.tscn");
+
+		} else if (levelIndex == 1) {
+			GetTree().ChangeSceneToFile("res://Scenes/Screens/PlainsLevel.tscn");
+
+		} else if (levelIndex == 2) {
+			GetTree().ChangeSceneToFile("res://Scenes/Screens/SpaceLevel.tscn");
+
+		}
 	}
 
 	private void TransitionScreen(MenuScreen screen) {
