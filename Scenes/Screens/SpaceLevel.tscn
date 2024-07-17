@@ -4162,6 +4162,7 @@ wait_time = 30.0
 wait_time = 2.0
 
 [node name="MusicCollection" type="Node3D" parent="."]
+process_mode = 3
 script = ExtResource("7_222ny")
 
 [node name="InGame" type="AudioStreamPlayer" parent="MusicCollection"]
