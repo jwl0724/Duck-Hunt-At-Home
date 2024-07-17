@@ -25,6 +25,7 @@ public partial class GameManager : Node {
 		// connect signals
 		EnemySpawnTimer.Connect("timeout", Callable.From(() => OnEnemySpawn()));
 		BossSpawnTimer.Connect("timeout", Callable.From(() => OnBossSpawn()));
+		player.MenuManager.Connect("RestartGame", Callable.From(() => RestartGame()));
 
 		StartGame();
 	}
@@ -80,10 +81,19 @@ public partial class GameManager : Node {
 		);
 	}
 
+	private void RestartGame() {
+		GetTree().CallGroup("enemies", "DeleteEnemy");
+		GetTree().CallGroup("projectiles", "DeleteBubble");
+		Score = 0;
+		TimeElapsed = 0;
+		StartGame();
+	}
+
 	private void StartGame() {
 		EnemySpawnTimer.Start();
 		BossSpawnTimer.Start();
 		
+		MusicCollection.Stop("InGame");
 		MusicCollection.Stop("GameOverJingle");
 		MusicCollection.Stop("GameOver");
 		MusicCollection.Play("InGame");
