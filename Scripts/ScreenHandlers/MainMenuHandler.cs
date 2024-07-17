@@ -19,8 +19,8 @@ public partial class MainMenuHandler : Control {
 
 		// set up menu screen
 		MenuScreen.GetNode<AnimationPlayer>("Fade").Connect("animation_finished", Callable.From((StringName name) => OnMenuFadeIn()));
-		MenuScreen.GetNode<Button>("Play").Connect("button_up", Callable.From(() => EmitSignal(SignalName.LeaveMainMenu)));
-		MenuScreen.GetNode<Button>("Quit").Connect("button_up", Callable.From(() => GetTree().Quit()));
+		MenuScreen.GetNode<Button>("Play").Connect("button_up", Callable.From(() => OnClickPlay()));
+		MenuScreen.GetNode<Button>("Quit").Connect("button_up", Callable.From(() => OnClickQuit()));
 	}
 
 	public override void _Input(InputEvent inputEvent) {
@@ -34,6 +34,16 @@ public partial class MainMenuHandler : Control {
 				MenuScreen.Visible = true;
 			}
 		}
+	}
+
+	private void OnClickPlay() {
+		(GetParent() as MenuHandler).SoundCollection.Play("Click", overlapMusic: true);
+		EmitSignal(SignalName.LeaveMainMenu);
+	}
+
+	private void OnClickQuit() {
+		(GetParent() as MenuHandler).SoundCollection.Play("Click", overlapMusic: true);
+		GetTree().Quit();
 	}
 
 	private void OnMenuFadeIn() {
