@@ -65,6 +65,7 @@ public partial class Player : CharacterBody3D {
 		foreach(Vector3 force in forceList) {
 			Velocity += force;
 		}
+		if (Velocity.Y > Gravity * 10 && !Grappled) Velocity = new Vector3(Velocity.X, Gravity * 10, Velocity.Z);
 		forceList.Clear();
 		MoveAndSlide();
 	}
@@ -89,11 +90,12 @@ public partial class Player : CharacterBody3D {
 		Health -= damage;
 		if (Health <= 0) {
 			HandlePlayerDeath();
+			ToggleMasks(false);
 			EmitSignal(SignalName.PlayerDied);
 
 		} else {
 			EmitSignal(SignalName.PlayerDamaged);
-			TogglePhysicsMasks(false);
+			TogglePhysics(false);
 			IFrameTimer.Start();
 		}
 	}
@@ -114,6 +116,7 @@ public partial class Player : CharacterBody3D {
 		Reloading = false;
 		HUD.Visible = true;
 		
+		TogglePhysics(true);
 		forceList.Clear();
 		IFrameTimer.Stop();
 	}
@@ -126,16 +129,23 @@ public partial class Player : CharacterBody3D {
 	}
 
 	private void OnIFrameTimeout() {
-		TogglePhysicsMasks(true);
+		TogglePhysics(true);
 	}
 
 	// HELPER FUNCTIONS
 	private void HandlePlayerDeath() {
 		Input.MouseMode = Input.MouseModeEnum.Visible;
 		HUD.Visible = false;
+		Grappled = false;
+		GrapplePoint = Vector3.Zero;
 	}
 
-	private void TogglePhysicsMasks(bool state) {
+	private void ToggleMasks(bool state) {
+		SetCollisionMaskValue(2, state);
+		SetCollisionMaskValue(3, state);
+	}
+
+	private void TogglePhysics(bool state) {
 		SetCollisionLayerValue(4, state);
 		SetCollisionMaskValue(2, state);
 		SetCollisionMaskValue(3, state);
