@@ -2,9 +2,6 @@ using Godot;
 using System;
 using System.Collections.Generic;
 
-// TODO:
-// MAKE MENU SCREEN (NEW SCENE WITH PANNING BACKGROUND)
-// MAKE GAME OVER SCREEN (REGULAR SCREEN)
 public partial class Player : CharacterBody3D {	
 	// exported variables
 	[Export] public Timer IFrameTimer;
@@ -12,6 +9,7 @@ public partial class Player : CharacterBody3D {
 	[Export] public GrappleVisual GrappleGunModel;
 	[Export] public HUD HUD;
 	[Export] public InputManager InputManager;
+	[Export] public PlayerMenuManager PlayerMenuManager;
 
 	// signals
 	[Signal] public delegate void PlayerDiedEventHandler();
@@ -22,7 +20,7 @@ public partial class Player : CharacterBody3D {
 	private static readonly float frictionCoefficient = 0.4f;
 
 	// instance variables
-	public int MaxHealth { get; private set; } = 50000000;
+	public int MaxHealth { get; private set; } = 500;
 	public int Health { get; private set; }
 	public float Gravity { get; set; } = 25;
 	public int Attack { get; private set; } = 1;
@@ -35,9 +33,9 @@ public partial class Player : CharacterBody3D {
 	public bool Grappled { get; set; } = false;
 	public bool Reloading { get; private set; } = false;
 	public Vector3 GrapplePoint = new();
+	private Vector3 movementDirection = new();
 	private Node3D RotationalHelper;
 	private readonly LinkedList<Vector3> forceList = new();
-	private Vector3 movementDirection = new();
 
 	public override void _Ready() {
 		RotationalHelper = GetNode<Node3D>("RotationalHelper");
@@ -48,6 +46,7 @@ public partial class Player : CharacterBody3D {
 		InputManager.Connect("PlayerShoot", Callable.From(() => Bullets--));
 		InputManager.Connect("PlayerReload", Callable.From(() => Reloading = true));
 		IFrameTimer.Connect("timeout", Callable.From(() => OnIFrameTimeout()));
+		PlayerMenuManager.Connect("RestartGame", Callable.From(() => ResetPlayerState()));
 
 		ResetPlayerState();
 	}
@@ -88,8 +87,11 @@ public partial class Player : CharacterBody3D {
 	public void DamagePlayer(int damage) {
 		if (IFrameTimer.TimeLeft != 0) return;
 		Health -= damage;
-		if (Health <= 0) EmitSignal(SignalName.PlayerDied);
-		else {
+		if (Health <= 0) {
+			HandlePlayerDeath();
+			EmitSignal(SignalName.PlayerDied);
+
+		} else {
 			EmitSignal(SignalName.PlayerDamaged);
 			TogglePhysicsMasks(false);
 			IFrameTimer.Start();
@@ -97,10 +99,23 @@ public partial class Player : CharacterBody3D {
 	}
 
 	public void ResetPlayerState() {
-		// TODO, ADD MORE STUFF HERE THAT NEEDS TO BE RESET
+		Input.MouseMode = Input.MouseModeEnum.Captured;
 		Health = MaxHealth;
 		ClipSize = defaultClipSize;
 		Bullets = defaultClipSize;
+
+		RotationalHelper.Rotation = Vector3.Zero;
+		Position = Vector3.Zero;
+		Velocity = Vector3.Zero;
+		movementDirection = Vector3.Zero;
+		GrapplePoint = Vector3.Zero;
+
+		Grappled = false;
+		Reloading = false;
+		HUD.Visible = true;
+		
+		forceList.Clear();
+		IFrameTimer.Stop();
 	}
 
 	// SIGNAL HANDLERS
@@ -117,6 +132,7 @@ public partial class Player : CharacterBody3D {
 	// HELPER FUNCTIONS
 	private void HandlePlayerDeath() {
 		Input.MouseMode = Input.MouseModeEnum.Visible;
+		HUD.Visible = false;
 	}
 
 	private void TogglePhysicsMasks(bool state) {
