@@ -4,6 +4,7 @@ using System;
 public partial class PlayerMenuManager : Control {
 	[Export] private Control pauseMenu;
 	[Export] private Control gameOverMenu;
+	[Export] private AudioStreamPlayer clickSFX;
 
 	[Signal] public delegate void RestartGameEventHandler();
 
@@ -36,8 +37,8 @@ public partial class PlayerMenuManager : Control {
 
 	private void SetUpPauseMenu() {
 		// connect buttons
-		pauseMenu.GetNode<Button>("ResumeButton").Connect("button_up", Callable.From(() => PauseGame(false)));
-		pauseMenu.GetNode<Button>("RestartButton").Connect("button_up", Callable.From(() => ResetState()));
+		pauseMenu.GetNode<Button>("ResumeButton").Connect("button_up", Callable.From(() => { PauseGame(false); clickSFX.Play(); }));
+		pauseMenu.GetNode<Button>("RestartButton").Connect("button_up", Callable.From(() => { ResetState(); clickSFX.Play(); }));
 		pauseMenu.GetNode<Button>("MenuButton").Connect("button_up", Callable.From(() => BackToMenu()));
 		pauseMenu.Visible = false;
 	}
@@ -47,7 +48,7 @@ public partial class PlayerMenuManager : Control {
 		AnimationPlayer gameOverAnimator = gameOverMenu.GetNode<AnimationPlayer>("Fade");
 		gameOverAnimator.Stop();
 		gameOverAnimator.Connect("animation_finished", Callable.From((StringName name) => DisplayTexts(true)));
-		gameOverMenu.GetNode<Button>("RetryButton").Connect("button_up", Callable.From(() => ResetState()));
+		gameOverMenu.GetNode<Button>("RetryButton").Connect("button_up", Callable.From(() => { ResetState(); clickSFX.Play(); }));
 		gameOverMenu.GetNode<Button>("MenuButton").Connect("button_up", Callable.From(() => BackToMenu()));
 		DisplayTexts(false);
 	}
