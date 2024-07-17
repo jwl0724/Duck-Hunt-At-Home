@@ -413,7 +413,7 @@ font_size = 40
 outline_size = 10
 outline_color = Color(0, 0, 0, 1)
 
-[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("IFrameTimer", "GunModel", "GrappleGunModel", "HUD", "InputManager", "PlayerMenuManager")]
+[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("IFrameTimer", "GunModel", "GrappleGunModel", "HUD", "InputManager", "MenuManager")]
 collision_layer = 8
 collision_mask = 7
 script = ExtResource("1_auq8a")
@@ -422,7 +422,7 @@ GunModel = NodePath("RotationalHelper/Gun/Model")
 GrappleGunModel = NodePath("RotationalHelper/GrappleGun/Model")
 HUD = NodePath("HUD")
 InputManager = NodePath("InputManager")
-PlayerMenuManager = NodePath("MenuManager")
+MenuManager = NodePath("MenuManager")
 metadata/_edit_group_ = true
 metadata/_edit_horizontal_guides_ = [693.0]
 metadata/_edit_vertical_guides_ = [1632.0]
