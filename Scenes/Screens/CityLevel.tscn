@@ -285,8 +285,6 @@ transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -50, 4
 [node name="Building10" parent="Buildings" instance=ExtResource("2_cmv82")]
 transform = Transform3D(-1.2, 0, -1.04907e-07, 0, 1.2, 0, 1.04907e-07, 0, -1.2, -130, 48, -54)
 
-[node name="Player" parent="." instance=ExtResource("3_77cuk")]
-
 [node name="LevelHandler" type="Node3D" parent="." node_paths=PackedStringArray("Barrier")]
 script = ExtResource("4_7yrtj")
 Barrier = NodePath("../Barrier")
@@ -584,3 +582,5 @@ stream = ExtResource("11_7c762")
 transform = Transform3D(1, 0, 0, 0, 0.438104, 0.898924, 0, -0.898924, 0.438104, 0, 280.751, 267.534)
 mesh = SubResource("SphereMesh_8mdyx")
 skeleton = NodePath("")
+
+[node name="Player" parent="." instance=ExtResource("3_77cuk")]
