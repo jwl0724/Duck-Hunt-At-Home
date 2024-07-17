@@ -13,18 +13,21 @@ public partial class InputManager : Node3D {
 	[Signal] public delegate void PlayerGrappleReleasedEventHandler();
 
 	private Player player;
+	private bool reading = false;
 
 	public override void _Ready() {
 		player = GetParent() as Player;
+		GetTree().CurrentScene.Connect("ready", Callable.From(() => WaitFrames()));
 	}
 
 	public override void _Process(double delta) {
+		if (!reading) return;
 		ProcessMovementInputs();
 		ProcessGrappleInput();
 	}
 
 	public override void _Input(InputEvent inputEvent) {
-		if (player.Health <= 0) return;
+		if (player.Health <= 0 || !reading) return;
 		if (inputEvent is InputEventMouseMotion && Input.MouseMode == Input.MouseModeEnum.Captured)
 			ProcessMouse(inputEvent as InputEventMouseMotion);
 
@@ -34,6 +37,11 @@ public partial class InputManager : Node3D {
 		if (inputEvent is InputEventKey) {
 			ProcessReload();
 		}
+	}
+
+	async private void WaitFrames() {
+		await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
+		reading = true;
 	}
 
 	private void ProcessMouse(InputEventMouseMotion movement) {
