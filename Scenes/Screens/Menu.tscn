@@ -1,4 +1,4 @@
-[gd_scene load_steps=52 format=3 uid="uid://bbk2wh3ddq1rx"]
+[gd_scene load_steps=55 format=3 uid="uid://bbk2wh3ddq1rx"]
 
 [ext_resource type="Script" path="res://Scripts/ScreenHandlers/MenuHandler.cs" id="1_hxx3p"]
 [ext_resource type="Script" path="res://Scripts/ScreenHandlers/MainMenuHandler.cs" id="6_ad7gf"]
@@ -9,9 +9,12 @@
 [ext_resource type="FontFile" uid="uid://1tlgwild87np" path="res://Assets/Fonts/fs-a-pixel-away.ttf" id="11_b8xsk"]
 [ext_resource type="Script" path="res://Scripts/ScreenHandlers/LevelSelectHandler.cs" id="12_atf7j"]
 [ext_resource type="Script" path="res://Scripts/ScreenHandlers/LevelPreviewHandler.cs" id="13_5pjbe"]
+[ext_resource type="Script" path="res://Scripts/SoundCollection.cs" id="13_ci7uo"]
+[ext_resource type="AudioStream" uid="uid://dhvlrhd3kp7sm" path="res://Assets/SFX/ClickSFX.mp3" id="14_74q5c"]
 [ext_resource type="Texture2D" uid="uid://frujlwpgyhp1" path="res://Assets/Images/LevelPreviews/CityLevelPreview.png" id="14_kejgs"]
 [ext_resource type="Texture2D" uid="uid://cb0cxdnrrqx2t" path="res://Assets/Images/LevelPreviews/PlainsLevelPreview.png" id="15_2rsun"]
 [ext_resource type="Texture2D" uid="uid://ctgrhxlgwp42x" path="res://Assets/Images/LevelPreviews/SpaceLevelPreview.png" id="16_6xp7s"]
+[ext_resource type="AudioStream" uid="uid://bww8am5g060r7" path="res://Assets/Music/MenuMusic.mp3" id="16_adlhh"]
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_38v5g"]
 
@@ -440,7 +443,7 @@ font_size = 64
 outline_size = 32
 outline_color = Color(0, 0, 0, 1)
 
-[node name="Menu" type="Control" node_paths=PackedStringArray("MainMenuScreen", "LevelSelectScreen")]
+[node name="Menu" type="Control" node_paths=PackedStringArray("SoundCollection", "MainMenuScreen", "LevelSelectScreen")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -448,6 +451,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_hxx3p")
+SoundCollection = NodePath("SoundCollection")
 MainMenuScreen = NodePath("MainMenu")
 LevelSelectScreen = NodePath("LevelSelect")
 
@@ -802,3 +806,13 @@ grow_horizontal = 2
 grow_vertical = 2
 text = "NOW LOADING..."
 label_settings = SubResource("LabelSettings_v5dw7")
+
+[node name="SoundCollection" type="Node3D" parent="."]
+visible = false
+script = ExtResource("13_ci7uo")
+
+[node name="Click" type="AudioStreamPlayer" parent="SoundCollection"]
+stream = ExtResource("14_74q5c")
+
+[node name="Menu" type="AudioStreamPlayer" parent="SoundCollection"]
+stream = ExtResource("16_adlhh")
