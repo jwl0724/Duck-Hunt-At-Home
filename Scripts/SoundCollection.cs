@@ -12,9 +12,10 @@ public partial class SoundCollection : Node3D {
 		}
 	}
 
-	public void Play(string name, Vector3 Position = new(), bool overlap = true) {
+	public void Play(string name, Vector3 Position = new(), bool overlap = true, bool overlapMusic = false) {
 		if (MusicCollection.TryGetValue(name, out AudioStreamPlayer music)) {
-			if (!music.Playing) music.Play();
+			if (music.Playing && overlapMusic) music.Play();
+			else if (!music.Playing) music.Play();
 
 		} else if (SFXCollection.TryGetValue(name, out AudioStreamPlayer3D sfx)) {
             if (!Position.IsZeroApprox()) sfx.Position = Position;
