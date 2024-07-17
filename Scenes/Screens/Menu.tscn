@@ -1,4 +1,4 @@
-[gd_scene load_steps=51 format=3 uid="uid://bbk2wh3ddq1rx"]
+[gd_scene load_steps=52 format=3 uid="uid://bbk2wh3ddq1rx"]
 
 [ext_resource type="Script" path="res://Scripts/ScreenHandlers/MenuHandler.cs" id="1_hxx3p"]
 [ext_resource type="Script" path="res://Scripts/ScreenHandlers/MainMenuHandler.cs" id="6_ad7gf"]
@@ -369,7 +369,7 @@ _data = {
 "RESET": SubResource("Animation_u1hjn")
 }
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_setk4"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_kgie8"]
 bg_color = Color(0.6, 0.6, 0.6, 0)
 
 [sub_resource type="Theme" id="Theme_hn8qe"]
@@ -380,7 +380,7 @@ Button/colors/font_hover_color = Color(0.577008, 0.577008, 0.577008, 1)
 Button/colors/font_outline_color = Color(0, 0, 0, 1)
 Button/colors/font_pressed_color = Color(0.393086, 0.393086, 0.393085, 1)
 Button/constants/outline_size = 15
-Button/styles/pressed = SubResource("StyleBoxFlat_setk4")
+Button/styles/pressed = SubResource("StyleBoxFlat_kgie8")
 
 [sub_resource type="LabelSettings" id="LabelSettings_mny6e"]
 font = ExtResource("11_b8xsk")
@@ -400,6 +400,9 @@ font = ExtResource("11_b8xsk")
 font_size = 25
 outline_size = 10
 outline_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_setk4"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
 
 [sub_resource type="Theme" id="Theme_pa0vv"]
 default_font = ExtResource("11_b8xsk")
@@ -601,6 +604,7 @@ text = "DUCK HUNT AT HOME"
 label_settings = SubResource("LabelSettings_mny6e")
 
 [node name="LevelSelect" type="Control" parent="."]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
