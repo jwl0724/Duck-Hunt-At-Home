@@ -77,6 +77,8 @@ public partial class InputManager : Node3D {
 	}
 
 	private void ProcessGrappleInput() {
+		if (player.Health <= 0) return; // check if player is dead
+
 		if (Input.IsActionPressed("grapple")) {
 			if (player.Grappled) return;
 			player.Grappled = true;
@@ -90,6 +92,8 @@ public partial class InputManager : Node3D {
 	}
 
 	private void ProcessMovementInputs() {
+		if (player.Health <= 0) return; // check if player is dead
+
 		// check if player jumped
 		if (player.IsOnFloor()) {
 			if (Input.IsActionJustPressed("jump") && player.GrapplePoint.IsZeroApprox()) 
