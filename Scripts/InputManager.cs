@@ -24,10 +24,7 @@ public partial class InputManager : Node3D {
 	}
 
 	public override void _Input(InputEvent inputEvent) {
-		if (player.Health <= 0) {
-			ProcessDeathMenu();
-			return;
-		}
+		if (player.Health <= 0) return;
 		if (inputEvent is InputEventMouseMotion && Input.MouseMode == Input.MouseModeEnum.Captured)
 			ProcessMouse(inputEvent as InputEventMouseMotion);
 
@@ -36,12 +33,7 @@ public partial class InputManager : Node3D {
 
 		if (inputEvent is InputEventKey) {
 			ProcessReload();
-			ProcessKeyInputs();
 		}
-	}
-
-	private void ProcessDeathMenu() {
-
 	}
 
 	private void ProcessMouse(InputEventMouseMotion movement) {
@@ -109,15 +101,5 @@ public partial class InputManager : Node3D {
 		Vector3 movementDirection = new(forwardVector.X, 0, forwardVector.Z);
 		
 		player.ApplyForce(movementDirection, true);
-	}
-
-	private void ProcessKeyInputs() {
-		// pause game (free cursor)
-		if (Input.IsActionJustPressed("pause")) {
-			if (Input.MouseMode == Input.MouseModeEnum.Visible)
-				Input.MouseMode = Input.MouseModeEnum.Captured;
-			else Input.MouseMode = Input.MouseModeEnum.Visible;
-			return;
-		}
 	}
 }
