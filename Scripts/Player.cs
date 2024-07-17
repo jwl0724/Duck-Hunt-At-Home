@@ -85,7 +85,7 @@ public partial class Player : CharacterBody3D {
 	}
 
 	public void DamagePlayer(int damage) {
-		if (IFrameTimer.TimeLeft != 0) return;
+		if (IFrameTimer.TimeLeft != 0 || Health <= 0) return;
 		Health -= damage;
 		if (Health <= 0) {
 			HandlePlayerDeath();
