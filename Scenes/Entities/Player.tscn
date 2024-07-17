@@ -1,4 +1,4 @@
-[gd_scene load_steps=77 format=3 uid="uid://bjxi3yjg0rb46"]
+[gd_scene load_steps=88 format=3 uid="uid://bjxi3yjg0rb46"]
 
 [ext_resource type="Script" path="res://Scripts/Player.cs" id="1_auq8a"]
 [ext_resource type="PackedScene" uid="uid://bghcfb4t3i5p7" path="res://Scenes/Models/GunModel.tscn" id="2_i0g63"]
@@ -44,6 +44,8 @@
 [ext_resource type="AudioStream" uid="uid://y74k54u73tw3" path="res://Assets/SFX/PlayerReloadSFX.mp3" id="41_vhca1"]
 [ext_resource type="AudioStream" uid="uid://cstddsb4mk5r" path="res://Assets/SFX/PlayerDeathSFX.mp3" id="42_gb5l6"]
 [ext_resource type="Script" path="res://Scripts/InputManager.cs" id="43_3yoye"]
+[ext_resource type="Script" path="res://Scripts/ScreenHandlers/PlayerMenuManager.cs" id="45_2onmo"]
+[ext_resource type="FontFile" uid="uid://1tlgwild87np" path="res://Assets/Fonts/fs-a-pixel-away.ttf" id="46_076ty"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_56r0q"]
 
@@ -336,7 +338,82 @@ font_size = 45
 font = ExtResource("32_ao81m")
 font_size = 45
 
-[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("IFrameTimer", "GunModel", "GrappleGunModel", "HUD", "InputManager")]
+[sub_resource type="LabelSettings" id="LabelSettings_cq5st"]
+font = ExtResource("46_076ty")
+font_size = 96
+font_color = Color(1, 0.870588, 0, 1)
+outline_size = 30
+outline_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_setk4"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+
+[sub_resource type="Theme" id="Theme_h5348"]
+default_font = ExtResource("46_076ty")
+default_font_size = 64
+Button/colors/font_color = Color(0.875, 0.875, 0.875, 1)
+Button/colors/font_hover_color = Color(0.577008, 0.577008, 0.577008, 1)
+Button/colors/font_outline_color = Color(0, 0, 0, 1)
+Button/colors/font_pressed_color = Color(0.393086, 0.393086, 0.393085, 1)
+Button/constants/outline_size = 15
+Button/styles/pressed = SubResource("StyleBoxFlat_setk4")
+
+[sub_resource type="Animation" id="Animation_2w6gk"]
+resource_name = "FadeIn"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("BackgroundDim:color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(0, 0, 0, 0), Color(0, 0, 0, 0.411765)]
+}
+
+[sub_resource type="Animation" id="Animation_iwtt5"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("BackgroundDim:color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(0, 0, 0, 0.411765)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_ok0mw"]
+_data = {
+"FadeIn": SubResource("Animation_2w6gk"),
+"RESET": SubResource("Animation_iwtt5")
+}
+
+[sub_resource type="LabelSettings" id="LabelSettings_gpqp6"]
+font = ExtResource("46_076ty")
+font_size = 64
+font_color = Color(0.909804, 0, 0, 1)
+outline_size = 15
+outline_color = Color(0, 0, 0, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_vdmmc"]
+font = ExtResource("46_076ty")
+font_size = 40
+outline_size = 10
+outline_color = Color(0, 0, 0, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_0wmll"]
+font = ExtResource("46_076ty")
+font_size = 40
+outline_size = 10
+outline_color = Color(0, 0, 0, 1)
+
+[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("IFrameTimer", "GunModel", "GrappleGunModel", "HUD", "InputManager", "PlayerMenuManager")]
 collision_layer = 8
 collision_mask = 7
 script = ExtResource("1_auq8a")
@@ -345,6 +422,7 @@ GunModel = NodePath("RotationalHelper/Gun/Model")
 GrappleGunModel = NodePath("RotationalHelper/GrappleGun/Model")
 HUD = NodePath("HUD")
 InputManager = NodePath("InputManager")
+PlayerMenuManager = NodePath("MenuManager")
 metadata/_edit_group_ = true
 metadata/_edit_horizontal_guides_ = [693.0]
 metadata/_edit_vertical_guides_ = [1632.0]
@@ -371,6 +449,7 @@ transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, -0.216
 mesh = SubResource("CylinderMesh_dxv43")
 
 [node name="Camera" type="Camera3D" parent="RotationalHelper" node_paths=PackedStringArray("Player", "HitscanLine", "BulletTrail", "Animator")]
+process_mode = 3
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.634554, 0)
 attributes = SubResource("CameraAttributesPractical_w1wl2")
 doppler_tracking = 2
@@ -601,6 +680,7 @@ text = "60:00"
 label_settings = SubResource("LabelSettings_4qijx")
 
 [node name="SoundManager" type="Node3D" parent="." node_paths=PackedStringArray("Player", "HitscanLine", "SoundCollection")]
+process_mode = 3
 script = ExtResource("34_erl5d")
 Player = NodePath("..")
 HitscanLine = NodePath("../RotationalHelper/HitscanLine")
@@ -636,3 +716,202 @@ script = ExtResource("43_3yoye")
 RotationalHelper = NodePath("../RotationalHelper")
 GunModel = NodePath("../RotationalHelper/Gun/Model")
 GrappleModel = NodePath("../RotationalHelper/GrappleGun/Model")
+
+[node name="MenuManager" type="Control" parent="." node_paths=PackedStringArray("pauseMenu", "gameOverMenu")]
+process_mode = 3
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("45_2onmo")
+pauseMenu = NodePath("PauseMenu")
+gameOverMenu = NodePath("GameOverMenu")
+
+[node name="PauseMenu" type="Control" parent="MenuManager"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="BackgroundDim" type="ColorRect" parent="MenuManager/PauseMenu"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.411765)
+
+[node name="PauseLabel" type="Label" parent="MenuManager/PauseMenu"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -174.0
+offset_top = 50.0
+offset_right = 174.0
+offset_bottom = 117.0
+grow_horizontal = 2
+text = "PAUSED"
+label_settings = SubResource("LabelSettings_cq5st")
+horizontal_alignment = 1
+
+[node name="ResumeButton" type="Button" parent="MenuManager/PauseMenu"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -175.0
+offset_top = -94.0
+offset_right = 175.0
+offset_bottom = -19.0
+grow_horizontal = 2
+grow_vertical = 2
+focus_mode = 0
+theme = SubResource("Theme_h5348")
+theme_type_variation = &"FlatButton"
+text = "Resume"
+
+[node name="RestartButton" type="Button" parent="MenuManager/PauseMenu"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -135.5
+offset_top = 26.0
+offset_right = 135.5
+offset_bottom = 101.0
+grow_horizontal = 2
+grow_vertical = 2
+focus_mode = 0
+theme = SubResource("Theme_h5348")
+theme_type_variation = &"FlatButton"
+text = "Restart Level"
+
+[node name="MenuButton" type="Button" parent="MenuManager/PauseMenu"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -304.0
+offset_top = 151.0
+offset_right = 304.0
+offset_bottom = 226.0
+grow_horizontal = 2
+grow_vertical = 2
+focus_mode = 0
+theme = SubResource("Theme_h5348")
+theme_type_variation = &"FlatButton"
+text = "Back To Menu"
+
+[node name="GameOverMenu" type="Control" parent="MenuManager"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Fade" type="AnimationPlayer" parent="MenuManager/GameOverMenu"]
+libraries = {
+"": SubResource("AnimationLibrary_ok0mw")
+}
+
+[node name="BackgroundDim" type="ColorRect" parent="MenuManager/GameOverMenu"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.411765)
+
+[node name="GameOverLabel" type="Label" parent="MenuManager/GameOverMenu"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -252.5
+offset_top = 35.0
+offset_right = 252.5
+offset_bottom = 102.0
+grow_horizontal = 2
+text = "GAME OVER"
+label_settings = SubResource("LabelSettings_gpqp6")
+horizontal_alignment = 1
+
+[node name="Score" type="Label" parent="MenuManager/GameOverMenu"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -189.0
+offset_top = 150.0
+offset_right = 189.0
+offset_bottom = 192.0
+grow_horizontal = 2
+text = "Score: 50000"
+label_settings = SubResource("LabelSettings_vdmmc")
+horizontal_alignment = 1
+
+[node name="Time" type="Label" parent="MenuManager/GameOverMenu"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -168.0
+offset_top = 225.0
+offset_right = 168.0
+offset_bottom = 267.0
+grow_horizontal = 2
+text = "Time: 00:00"
+label_settings = SubResource("LabelSettings_0wmll")
+horizontal_alignment = 1
+
+[node name="RetryButton" type="Button" parent="MenuManager/GameOverMenu"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -135.5
+offset_top = 26.0
+offset_right = 135.5
+offset_bottom = 101.0
+grow_horizontal = 2
+grow_vertical = 2
+focus_mode = 0
+theme = SubResource("Theme_h5348")
+theme_type_variation = &"FlatButton"
+text = "Retry"
+
+[node name="MenuButton" type="Button" parent="MenuManager/GameOverMenu"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -304.0
+offset_top = 151.0
+offset_right = 304.0
+offset_bottom = 226.0
+grow_horizontal = 2
+grow_vertical = 2
+focus_mode = 0
+theme = SubResource("Theme_h5348")
+theme_type_variation = &"FlatButton"
+text = "Back To Menu"
