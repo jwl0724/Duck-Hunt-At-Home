@@ -23,6 +23,7 @@ public partial class GrappleVisual : Node3D {
 		// connect signals
 		Player.InputManager.Connect("PlayerGrapple", Callable.From(() => OnPlayerGrapple()));
 		Player.InputManager.Connect("PlayerGrappleReleased", Callable.From(() => OnGrappleRelease()));
+		Player.Connect("PlayerDied", Callable.From(() => OnGrappleRelease()));
 		Animator.Connect("animation_finished", Callable.From((StringName name) => OnAnimationFinished(name)));
 		
 		// get left and right sides of line for rendering
