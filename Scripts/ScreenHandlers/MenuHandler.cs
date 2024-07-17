@@ -1,12 +1,12 @@
 using Godot;
 using System;
-using System.Diagnostics;
 
 public partial class MenuHandler : Control {
 	public enum MenuScreen { MainMenu, LevelSelect }
 	
-	[Export] Control MainMenuScreen;
-	[Export] Control LevelSelectScreen;
+	[Export] public SoundCollection SoundCollection;
+	[Export] private Control MainMenuScreen;
+	[Export] private Control LevelSelectScreen;
 
 	[Signal] public delegate void ScreenChangeEventHandler();
 
@@ -17,6 +17,7 @@ public partial class MenuHandler : Control {
 		LevelSelectScreen.Connect("SelectedLevel", Callable.From((int levelIndex) => StartGame(levelIndex)));
 		LevelSelectScreen.Connect("BackToMainMenu", Callable.From(() => TransitionScreen(MenuScreen.MainMenu)));
 		TransitionScreen(MenuScreen.MainMenu);
+		SoundCollection.Play("Menu");
 	}
 
 	private void StartGame(int levelIndex) {
@@ -28,13 +29,13 @@ public partial class MenuHandler : Control {
 
 		} else if (levelIndex == 2) {
 			GetTree().ChangeSceneToFile("res://Scenes/Screens/SpaceLevel.tscn");
-
 		}
 	}
 
 	private void TransitionScreen(MenuScreen screen) {
 		CurrentScreen = screen;
-		foreach (Control menu in GetChildren()) {
+		foreach (var child in GetChildren()) {
+			if (child is not Control menu) continue;
 			if (menu.Name == Enum.GetName(CurrentScreen)) menu.Visible = true;
 			else menu.Visible = false;
 		}
