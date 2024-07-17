@@ -9,7 +9,7 @@ public partial class Player : CharacterBody3D {
 	[Export] public GrappleVisual GrappleGunModel;
 	[Export] public HUD HUD;
 	[Export] public InputManager InputManager;
-	[Export] public PlayerMenuManager PlayerMenuManager;
+	[Export] public PlayerMenuManager MenuManager;
 
 	// signals
 	[Signal] public delegate void PlayerDiedEventHandler();
@@ -46,7 +46,7 @@ public partial class Player : CharacterBody3D {
 		InputManager.Connect("PlayerShoot", Callable.From(() => Bullets--));
 		InputManager.Connect("PlayerReload", Callable.From(() => Reloading = true));
 		IFrameTimer.Connect("timeout", Callable.From(() => OnIFrameTimeout()));
-		PlayerMenuManager.Connect("RestartGame", Callable.From(() => ResetPlayerState()));
+		MenuManager.Connect("RestartGame", Callable.From(() => ResetPlayerState()));
 
 		ResetPlayerState();
 	}
