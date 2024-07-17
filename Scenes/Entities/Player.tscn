@@ -1,4 +1,4 @@
-[gd_scene load_steps=88 format=3 uid="uid://bjxi3yjg0rb46"]
+[gd_scene load_steps=89 format=3 uid="uid://bjxi3yjg0rb46"]
 
 [ext_resource type="Script" path="res://Scripts/Player.cs" id="1_auq8a"]
 [ext_resource type="PackedScene" uid="uid://bghcfb4t3i5p7" path="res://Scenes/Models/GunModel.tscn" id="2_i0g63"]
@@ -46,6 +46,7 @@
 [ext_resource type="Script" path="res://Scripts/InputManager.cs" id="43_3yoye"]
 [ext_resource type="Script" path="res://Scripts/ScreenHandlers/PlayerMenuManager.cs" id="45_2onmo"]
 [ext_resource type="FontFile" uid="uid://1tlgwild87np" path="res://Assets/Fonts/fs-a-pixel-away.ttf" id="46_076ty"]
+[ext_resource type="AudioStream" uid="uid://dhvlrhd3kp7sm" path="res://Assets/SFX/ClickSFX.mp3" id="47_xml5s"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_56r0q"]
 
@@ -704,6 +705,7 @@ volume_db = -30.0
 
 [node name="Shoot" type="AudioStreamPlayer3D" parent="SoundManager/SoundCollection"]
 stream = ExtResource("40_h1ftp")
+volume_db = 10.0
 
 [node name="Reload" type="AudioStreamPlayer3D" parent="SoundManager/SoundCollection"]
 stream = ExtResource("41_vhca1")
@@ -711,13 +713,7 @@ stream = ExtResource("41_vhca1")
 [node name="Dead" type="AudioStreamPlayer3D" parent="SoundManager/SoundCollection"]
 stream = ExtResource("42_gb5l6")
 
-[node name="InputManager" type="Node3D" parent="." node_paths=PackedStringArray("RotationalHelper", "GunModel", "GrappleModel")]
-script = ExtResource("43_3yoye")
-RotationalHelper = NodePath("../RotationalHelper")
-GunModel = NodePath("../RotationalHelper/Gun/Model")
-GrappleModel = NodePath("../RotationalHelper/GrappleGun/Model")
-
-[node name="MenuManager" type="Control" parent="." node_paths=PackedStringArray("pauseMenu", "gameOverMenu")]
+[node name="MenuManager" type="Control" parent="." node_paths=PackedStringArray("pauseMenu", "gameOverMenu", "clickSFX")]
 process_mode = 3
 layout_mode = 3
 anchors_preset = 15
@@ -728,6 +724,7 @@ grow_vertical = 2
 script = ExtResource("45_2onmo")
 pauseMenu = NodePath("PauseMenu")
 gameOverMenu = NodePath("GameOverMenu")
+clickSFX = NodePath("Click")
 
 [node name="PauseMenu" type="Control" parent="MenuManager"]
 visible = false
@@ -915,3 +912,12 @@ focus_mode = 0
 theme = SubResource("Theme_h5348")
 theme_type_variation = &"FlatButton"
 text = "Back To Menu"
+
+[node name="Click" type="AudioStreamPlayer" parent="MenuManager"]
+stream = ExtResource("47_xml5s")
+
+[node name="InputManager" type="Node3D" parent="." node_paths=PackedStringArray("RotationalHelper", "GunModel", "GrappleModel")]
+script = ExtResource("43_3yoye")
+RotationalHelper = NodePath("../RotationalHelper")
+GunModel = NodePath("../RotationalHelper/Gun/Model")
+GrappleModel = NodePath("../RotationalHelper/GrappleGun/Model")
