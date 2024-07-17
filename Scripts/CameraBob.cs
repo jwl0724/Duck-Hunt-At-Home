@@ -19,6 +19,7 @@ public partial class CameraBob : Camera3D {
 	public override void _Ready() {
 		Player.Connect("PlayerDamaged", Callable.From(() => Animator.Play("damaged")));
 		Player.Connect("PlayerDied", Callable.From(() => Animator.Play("dead")));
+		Player.MenuManager.Connect("RestartGame", Callable.From(() => Animator.Stop()));
 	}
 
 	public override void _Process(double delta) {
