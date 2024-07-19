@@ -1,4 +1,4 @@
-[gd_scene load_steps=89 format=3 uid="uid://bjxi3yjg0rb46"]
+[gd_scene load_steps=90 format=3 uid="uid://bjxi3yjg0rb46"]
 
 [ext_resource type="Script" path="res://Scripts/Player.cs" id="1_auq8a"]
 [ext_resource type="PackedScene" uid="uid://bghcfb4t3i5p7" path="res://Scenes/Models/GunModel.tscn" id="2_i0g63"]
@@ -6,7 +6,7 @@
 [ext_resource type="Script" path="res://Scripts/ShootVisualEffects.cs" id="3_kvw6a"]
 [ext_resource type="Script" path="res://Scripts/CameraBob.cs" id="3_vnrey"]
 [ext_resource type="Script" path="res://Scripts/HUD.cs" id="4_3c0q6"]
-[ext_resource type="Shader" path="res://Assets/Shaders/Muzzleflash.gdshader" id="4_h5n5u"]
+[ext_resource type="Texture2D" uid="uid://b3adxc0ok1xuf" path="res://Assets/Images/Textures/MuzzleFlashTexture.png" id="4_7hlgl"]
 [ext_resource type="PackedScene" uid="uid://chxaw8ej02n74" path="res://Scenes/Models/GrappleGunModel.tscn" id="7_t5rts"]
 [ext_resource type="Texture2D" uid="uid://ck2h3v1ujsjpo" path="res://Assets/Images/ReticleFrames/Reticle1.png" id="9_ma58q"]
 [ext_resource type="Texture2D" uid="uid://cstyoeha8c2xr" path="res://Assets/Images/ReticleFrames/Reticle2.png" id="10_ptpjr"]
@@ -50,17 +50,30 @@
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_56r0q"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_u7xc2"]
-render_priority = 0
-shader = ExtResource("4_h5n5u")
-shader_parameter/particles_anim_h_frames = null
-shader_parameter/particles_anim_v_frames = null
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_6utgq"]
+transparency = 1
+blend_mode = 1
+shading_mode = 0
+diffuse_mode = 3
+specular_mode = 2
+disable_ambient_light = true
+disable_fog = true
+albedo_color = Color(1.957, 1.922, 0.255, 1)
+albedo_texture = ExtResource("4_7hlgl")
+billboard_mode = 3
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
 
-[sub_resource type="CylinderMesh" id="CylinderMesh_dxv43"]
-material = SubResource("ShaderMaterial_u7xc2")
-top_radius = 0.02
-bottom_radius = 0.01
-height = 0.05
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_rd4bl"]
+emission_shape_offset = Vector3(-0.2, -0.01, 0)
+angle_min = -85.0
+angle_max = -60.0
+gravity = Vector3(0, 0, 0)
+
+[sub_resource type="QuadMesh" id="QuadMesh_omjwy"]
+lightmap_size_hint = Vector2i(4, 4)
+size = Vector2(0.5, 0.5)
 
 [sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_w1wl2"]
 exposure_multiplier = 2.0
@@ -440,14 +453,19 @@ transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0.2952
 Player = NodePath("../../..")
 HitscanLine = NodePath("../../HitscanLine")
 
-[node name="BulletTrail" type="Node3D" parent="RotationalHelper/Gun" node_paths=PackedStringArray("Player", "MuzzleFlashModel")]
+[node name="BulletTrail" type="Node3D" parent="RotationalHelper/Gun" node_paths=PackedStringArray("Player")]
 script = ExtResource("3_kvw6a")
 Player = NodePath("../../..")
-MuzzleFlashModel = NodePath("MuzzleFlash")
 
-[node name="MuzzleFlash" type="MeshInstance3D" parent="RotationalHelper/Gun/BulletTrail"]
-transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, -0.216497, 0.0196694, 0)
-mesh = SubResource("CylinderMesh_dxv43")
+[node name="MuzzleFlash" type="GPUParticles3D" parent="RotationalHelper/Gun/BulletTrail"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.207, 0, 0)
+material_override = SubResource("StandardMaterial3D_6utgq")
+amount = 1
+lifetime = 0.15
+interp_to_end = 0.99
+preprocess = 0.99
+process_material = SubResource("ParticleProcessMaterial_rd4bl")
+draw_pass_1 = SubResource("QuadMesh_omjwy")
 
 [node name="Camera" type="Camera3D" parent="RotationalHelper" node_paths=PackedStringArray("Player", "HitscanLine", "BulletTrail", "Animator")]
 process_mode = 3
