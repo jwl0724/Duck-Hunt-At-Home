@@ -4,27 +4,22 @@ using System;
 public partial class ShootVisualEffects : Node3D {
 	// exported variables
 	[Export] public Player Player;
-	[Export] public MeshInstance3D MuzzleFlashModel;
 
 	// static variables
-	private static readonly float muzzleFlashDuration = 0.1f;
+	private GpuParticles3D muzzleFlash;
 
 	// timers
 	private float muzzleFlashTimer = 0;
 
 	public override void _Ready() {
-		MuzzleFlashModel.Visible = false;
+		muzzleFlash = GetNode<GpuParticles3D>("MuzzleFlash");
+		muzzleFlash.Emitting = false;
 		Player.InputManager.Connect("PlayerShoot", Callable.From(() => OnPlayerShoot()));
 	}
 
-	public override void _Process(double delta) {
-		if (MuzzleFlashModel.Visible && muzzleFlashTimer >= muzzleFlashDuration) {
-			muzzleFlashTimer = 0;
-			MuzzleFlashModel.Visible = false;
-		} else if (MuzzleFlashModel.Visible) muzzleFlashTimer += (float) delta;
-	}
-
-	private void OnPlayerShoot() {
-		MuzzleFlashModel.Visible = true;
+	async private void OnPlayerShoot() {
+		muzzleFlash.Emitting = true;
+		await ToSignal(GetTree().CreateTimer(0.15), Timer.SignalName.Timeout);
+		muzzleFlash.Emitting = false;
 	}
 }
