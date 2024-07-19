@@ -54,7 +54,13 @@ public partial class Enemy : CharacterBody3D {
 
 		if (IsOnFloor()) SetMoveState(MoveState.Walking);
 		else SetMoveState(MoveState.Falling);
+		EnemyCount++;
     }
+
+	public static void ResetStatics() {
+		BossScale = 2;
+		EnemyCount = 0;
+	}
 
 	public void SetEnemyProperties(EnemyType type, bool alwaysGlow = false) {
 		AlwaysGlow = alwaysGlow;
@@ -109,6 +115,7 @@ public partial class Enemy : CharacterBody3D {
 	}
 
 	public void DeleteEnemy() {
+		EnemyCount--;
 		foreach(var child in GetChildren()) {
 			child.QueueFree();
 		}
