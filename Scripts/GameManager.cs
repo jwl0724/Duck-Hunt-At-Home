@@ -51,7 +51,7 @@ public partial class GameManager : Node {
 	}
 
 	private void OnEnemySpawn() {
-		if (!GameRunning) return;
+		if (!GameRunning || Enemy.EnemyCount > 50) return;
 		Enemy enemy = EnemyScene.Instantiate<Enemy>();
 		Enemy.EnemyType[] enemyTypes = (Enemy.EnemyType[]) Enum.GetValues(typeof(Enemy.EnemyType));
 		Enemy.EnemyType type = enemyTypes[GD.Randi() % (enemyTypes.Length - 1)]; // assumes boss is at bottom of enum
@@ -82,6 +82,7 @@ public partial class GameManager : Node {
 	}
 
 	private void RestartGame() {
+		Enemy.ResetStatics();
 		GetTree().CallGroup("enemies", "DeleteEnemy");
 		GetTree().CallGroup("projectiles", "DeleteBubble");
 		Score = 0;
