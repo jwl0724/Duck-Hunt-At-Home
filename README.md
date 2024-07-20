@@ -91,7 +91,7 @@ Esc: Open Pause Menu
 - Enemy Ambience 1 SFX: *MacOS* - Macintosh Quack Sound
 - Enemy Ambience 2 SFX: Duck [(Source)](https://www.myinstants.com/en/instant/duck/)
 - Enemy Ambience 3 SFX: *Terraria* - Duck Sound Easter Egg
-- Enemy Ambience 4 SFX: [(Source)](https://www.myinstants.com/en/instant/quack-reverb-80246/)
+- Enemy Ambience 4 SFX: Quack Reverb [(Source)](https://www.myinstants.com/en/instant/quack-reverb-80246/)
 - Enemy Charge SFX: Donald Drug [(Source)](https://www.myinstants.com/en/instant/donald-drug-1660/)
 - Enemy Damage SFX: *Super Smash Bros.* - Yoshi Damaged Sound
 - Enemy Died SFX: *Duck Hunt* - Got Duck(s) Sound
