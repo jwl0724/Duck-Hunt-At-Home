@@ -2,7 +2,7 @@
 
 ## Preview
 
-**Main Menu**
+**Start Screen**
 
 ![Main Menu Preview](Preview/MenuPreview.gif)
 
